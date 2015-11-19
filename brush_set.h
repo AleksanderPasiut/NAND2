@@ -20,12 +20,12 @@ public:
 	~BRUSH_SET();
 
 public:
-	const ID2D1SolidColorBrush* Azure()		const { return brush[0]; }
-	const ID2D1SolidColorBrush* Black()		const { return brush[1]; }
-	const ID2D1SolidColorBrush* DarkGray()  const { return brush[2]; }
-	const ID2D1SolidColorBrush* Gray()		const { return brush[3]; }
-	const ID2D1SolidColorBrush* LightGray() const { return brush[4]; }
-	const ID2D1SolidColorBrush* DarkRed()	const { return brush[5]; }
-	const ID2D1SolidColorBrush* Red()		const { return brush[6]; }
-	const ID2D1SolidColorBrush* Yellow()	const { return brush[7]; }
+	ID2D1SolidColorBrush* Azure()		const { return brush[0]; }
+	ID2D1SolidColorBrush* Black()		const { return brush[1]; }
+	ID2D1SolidColorBrush* DarkGray()	const { return brush[2]; }
+	ID2D1SolidColorBrush* Gray()		const { return brush[3]; }
+	ID2D1SolidColorBrush* LightGray()	const { return brush[4]; }
+	ID2D1SolidColorBrush* DarkRed()		const { return brush[5]; }
+	ID2D1SolidColorBrush* Red()			const { return brush[6]; }
+	ID2D1SolidColorBrush* Yellow()		const { return brush[7]; }
 };

@@ -2,7 +2,9 @@
 
 #include <Windows.h>
 #include <d2d1.h>
+#include <dwrite.h>
 #pragma comment(lib,"d2d1.lib")
+#pragma comment(lib,"dwrite.lib")
 
 #include "brush_set.h"
 #include "elements_set.h"
@@ -16,12 +18,14 @@ private:
 private:
 	HWND hwnd;
 	ID2D1Factory* factory;
+	IDWriteFactory* dwfactory;
 	ID2D1HwndRenderTarget* target;
 	BRUSH_SET* brush_set;
-	
-	ELEMENTS_SET* elements_set;
-
+	IDWriteTextFormat* text_format;
+	ELEMENTS_SET elements_set;
 	MENU* menu;
+
+	ELEMENT* element_moved;
 
 private:
 	// master_create.cpp

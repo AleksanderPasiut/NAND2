@@ -20,4 +20,6 @@ public:
 	bool add(ELEMENT*);
 	bool remove(ELEMENT*);
 	ELEMENT* operator[] (unsigned);
+
+	unsigned RetAmount() const { return amount; }
 };

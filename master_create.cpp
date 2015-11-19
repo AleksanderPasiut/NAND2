@@ -16,27 +16,39 @@ MASTER* MASTER::Create(HWND hwnd)
 	{
 		if (S_OK == D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &ret->factory))
 		{
-			if (S_OK == ret->factory->CreateHwndRenderTarget(D2D1::RenderTargetProperties(),
-															 D2D1::HwndRenderTargetProperties(hwnd, RetHwndClientSize(hwnd)), 
-															 &ret->target))
+			if (S_OK == DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), reinterpret_cast<IUnknown**>(&ret->dwfactory)))
 			{
-				if (ret->brush_set = BRUSH_SET::Create(ret->target))
+				if (S_OK == ret->factory->CreateHwndRenderTarget(D2D1::RenderTargetProperties(),
+																 D2D1::HwndRenderTargetProperties(hwnd, RetHwndClientSize(hwnd)), 
+																 &ret->target))
 				{
-					if (ret->elements_set = new ELEMENTS_SET())
+					if (ret->brush_set = BRUSH_SET::Create(ret->target))
 					{
-						if (ret->menu = MENU::Create(hwnd))
+						if (S_OK == ret->dwfactory->CreateTextFormat(L"Verdana",
+																	 0,
+																	 DWRITE_FONT_WEIGHT_NORMAL,
+																	 DWRITE_FONT_STYLE_NORMAL,
+																	 DWRITE_FONT_STRETCH_NORMAL,
+																	 11.0f,
+																	 L"pl-utf8",
+																	 &ret->text_format))
 						{
-							ret->ok = true;
-							ret->hwnd = hwnd;
-							return ret;
+							if (ret->menu = MENU::Create(hwnd))
+							{
+								ret->ok = true;
+								ret->hwnd = hwnd;
+								ret->element_moved = 0;
+								return ret;
 
-							delete ret->menu;
+								delete ret->menu;
+							}
+							ret->text_format->Release();
 						}
-						delete ret->elements_set;
+						delete ret->brush_set;
 					}
-					delete ret->brush_set;
+					ret->target->Release();
 				}
-				ret->target->Release();
+				ret->dwfactory->Release();
 			}	
 			ret->factory->Release();
 		}
@@ -49,7 +61,11 @@ MASTER::~MASTER()
 {
 	if (ok)
 	{
+		delete menu;
+		text_format->Release();
+		delete brush_set;
 		target->Release();
+		dwfactory->Release();
 		factory->Release();
 	}
 }

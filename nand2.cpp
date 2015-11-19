@@ -32,6 +32,13 @@ LRESULT CALLBACK WindowEventProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 
 			break;
 		}
+	case WM_COMMAND:
+		{
+			if (Master)
+				Master->MenuInput(wParam, lParam);
+
+			break;
+		}
 	case WM_DESTROY:
 		{
 			PostQuitMessage(0);
