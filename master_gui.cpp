@@ -7,11 +7,15 @@ void MASTER::MouseInput(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 	case WM_LBUTTONDOWN:
 		{
+			if (!elements_set.RetAmount())
+				break;
+
 			click = D2D1::Point2F(static_cast<float>(GET_X_LPARAM(lParam)),
 									static_cast<float>(GET_Y_LPARAM(lParam)));
 
 			ELEMENT* element = 0;
 			EVPV evpv;
+
 			for (unsigned i = elements_set.RetAmount()-1; ; i--)
 			{
 				if ((evpv = elements_set[i]->MouseInput(click)).type != EVPV_NONE)
@@ -107,25 +111,44 @@ void MASTER::MenuInput(WPARAM wParam, LPARAM lParam)
 
 	D2D1_SIZE_F ts = target->GetSize();
 
-	ELEMENT* new_element = new ELEMENT(target,
-									   brush_set,
-									   text_format,
-									   static_cast<float>(GET_X_LPARAM(menu->RetPos()))/ts.width,
-									   static_cast<float>(GET_Y_LPARAM(menu->RetPos()))/ts.height,
-									   0.2f,
-									   0.2f);
+	ELEMENT* element = 0;
 
-	elements_set.add(new_element);
-	Paint();
-	/*
 	switch(LOWORD(wParam))
 	{
-	case MENU_ADD_SOURCE: MessageBox(hwnd, "Dodanie Ÿród³a", "Tmp", MB_OK); break;
+	case MENU_ADD_SOURCE:
+		{
+			element = ELEMENT_SOURCE::Create(target,
+											 brush_set,
+											 text_format,
+											 static_cast<float>(GET_X_LPARAM(menu->RetPos()))/ts.width,
+											 static_cast<float>(GET_Y_LPARAM(menu->RetPos()))/ts.height,
+											 0.1f,
+											 0.15f);
+
+			break;
+		}
 	case MENU_ADD_CLOCK: MessageBox(hwnd, "Dodanie zegara", "Tmp", MB_OK); break;
 	case MENU_ADD_NAND2: MessageBox(hwnd, "Dodanie NAND2", "Tmp", MB_OK); break;
 	case MENU_ADD_NAND3: MessageBox(hwnd, "Dodanie NAND3", "Tmp", MB_OK); break;
 	case MENU_ADD_NAND4: MessageBox(hwnd, "Dodanie NAND4", "Tmp", MB_OK); break;
 	case MENU_ADD_NAND: MessageBox(hwnd, "Dodanie NAND", "Tmp", MB_OK); break;
-	}*/
+	case MENU_ADD_OUTPUT:
+		{
+			element = ELEMENT_OUTPUT::Create(target,
+											 brush_set,
+											 text_format,
+											 static_cast<float>(GET_X_LPARAM(menu->RetPos()))/ts.width,
+											 static_cast<float>(GET_Y_LPARAM(menu->RetPos()))/ts.height,
+											 0.1f,
+											 0.15f);
+
+			break;
+		}
+	}
+
+	if (element)
+		elements_set.add(element);
+
+	Paint();
 	return;
 }

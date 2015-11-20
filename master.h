@@ -10,6 +10,9 @@
 #include "elements_set.h"
 #include "menu.h"
 
+#include "element_source.h"
+#include "element_output.h"
+
 class MASTER
 {
 private:

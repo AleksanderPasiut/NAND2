@@ -45,6 +45,7 @@ bool ELEMENTS_SET::remove(ELEMENT* element)
 		unsigned i = 0;
 		for (; i < index; i++)
 			new_set[i] = set[i];
+		delete element;
 		for (; i < amount; i++)
 			new_set[i] = set[i+1];
 

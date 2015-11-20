@@ -13,8 +13,6 @@ ELEMENT::ELEMENT(ID2D1HwndRenderTarget* in_target,
 	pos(D2D1::Point2F(pos_x, pos_y)),
 	size(D2D1::SizeF(width, height)) {}
 
-ELEMENT::~ELEMENT() {}
-
 bool ELEMENT::PointInRect(const D2D1_RECT_F& rect, const D2D1_POINT_2F& pt)
 {
 	if (pt.x < rect.left || rect.right < pt.x || pt.y < rect.top || rect.bottom < pt.y)

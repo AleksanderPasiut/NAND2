@@ -17,11 +17,12 @@ protected:
 	D2D1_SIZE_F size;
 
 protected:
-	// konstruktor chroniony - tworzenie odbywa siê poprzez Create() klas pochodnych
+	// konstruktory chronione - tworzenie odbywa siê poprzez Create() klas pochodnych
+	ELEMENT() {}
 	ELEMENT(ID2D1HwndRenderTarget*, BRUSH_SET*, IDWriteTextFormat*, float pos_x, float pos_y, float width, float height);
 
 	// destruktor chroniony - usuwanie odbywa siê poprzez ELEMENTS_SET::remove(ELEMENT*)
-	virtual ~ELEMENT();
+	~ELEMENT() {}
 
 private:
 	ELEMENT(const ELEMENT&) {}
@@ -40,5 +41,4 @@ public:
 	D2D1_POINT_2F RetPos() const { return pos; }
 
 	friend class ELEMENTS_SET;
-	friend class MASTER; // TEMP
 };
