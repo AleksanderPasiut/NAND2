@@ -27,12 +27,17 @@ private:
 	ELEMENT(const ELEMENT&) {}
 	ELEMENT* operator= (const ELEMENT&) {}
 
+protected:
+	static bool PointInRect(const D2D1_RECT_F&, const D2D1_POINT_2F&);
+	static bool PointInCircle(const D2D1_ELLIPSE&, const D2D1_POINT_2F&);
+	void RetElementRect(D2D1_RECT_F&) const;
+	void RetCrossRect(D2D1_RECT_F&) const;
+
 public:
 	virtual EVPV MouseInput(const D2D1_POINT_2F&);
 	virtual void Paint();
-	void SetPos(const D2D1_POINT_2F&);
+	void SetPos(D2D1_POINT_2F);
 	D2D1_POINT_2F RetPos() const { return pos; }
-	bool MouseOn(const D2D1_POINT_2F&) const;
 
 	friend class ELEMENTS_SET;
 	friend class MASTER; // TEMP

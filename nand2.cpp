@@ -11,6 +11,8 @@ LRESULT CALLBACK WindowEventProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 	{
 	case WM_LBUTTONDOWN:
 	case WM_MOUSEMOVE:
+	case WM_LBUTTONUP:
+	case WM_CAPTURECHANGED:
 	case WM_RBUTTONDOWN:
 		{
 			if (Master)

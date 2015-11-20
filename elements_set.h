@@ -19,6 +19,7 @@ public:
 public:
 	bool add(ELEMENT*);
 	bool remove(ELEMENT*);
+	bool set_on_top(ELEMENT*);
 	ELEMENT* operator[] (unsigned);
 
 	unsigned RetAmount() const { return amount; }

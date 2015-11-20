@@ -5,13 +5,10 @@
 class BRUSH_SET
 {
 private:
-	bool ok;
-
-private:
 	static const unsigned int BRUSH_AMOUNT = 8;
 	ID2D1SolidColorBrush* brush[BRUSH_AMOUNT];
 
-	BRUSH_SET() : ok(false) {}
+	BRUSH_SET() {}
 	BRUSH_SET(const BRUSH_SET&) {}
 	BRUSH_SET& operator= (const BRUSH_SET&) {}
 

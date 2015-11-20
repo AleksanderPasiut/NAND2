@@ -13,15 +13,13 @@
 class MENU
 {
 private:
-	bool ok;
-
-private:
 	HWND hwnd;
 	HMENU hMenu;
 	HMENU hSubMenu;
+	LPARAM lParam;
 
 private:
-	MENU() : ok(false) {}
+	MENU() {}
 	MENU(const MENU&) {}
 	MENU* operator= (const MENU&) {}
 
@@ -30,4 +28,5 @@ public:
 	~MENU();
 
 	void Show(LPARAM);
+	LPARAM RetPos() const { return lParam; }
 };

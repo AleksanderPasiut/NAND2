@@ -13,9 +13,6 @@
 class MASTER
 {
 private:
-	bool ok;
-
-private:
 	HWND hwnd;
 	ID2D1Factory* factory;
 	IDWriteFactory* dwfactory;
@@ -26,13 +23,15 @@ private:
 	MENU* menu;
 
 	ELEMENT* element_moved;
+	D2D1_POINT_2F old_pos;
+	D2D1_POINT_2F click;
 
 private:
 	// master_create.cpp
 	static D2D1_SIZE_U RetHwndClientSize(HWND); 
 
 private:
-	MASTER() : ok(false) {}
+	MASTER() {}
 	MASTER(const MASTER&) {}
 	MASTER& operator= (const MASTER&) {}
 

@@ -55,6 +55,23 @@ bool ELEMENTS_SET::remove(ELEMENT* element)
 	}
 	return false;
 }
+bool ELEMENTS_SET::set_on_top(ELEMENT* element)
+{
+	unsigned index;
+	for (index = 0; index < amount; index++)
+		if (set[index] == element)
+			break;
+
+	if (index == amount)
+		return false;
+	
+	unsigned i;
+	for (i = index; i < amount-1; i++)
+		set[i] = set[i+1];
+
+	set[i] = element;
+	return true;
+}
 ELEMENT* ELEMENTS_SET::operator[] (unsigned arg)
 {
 	if (arg >= amount)

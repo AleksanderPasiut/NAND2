@@ -35,22 +35,27 @@ MASTER* MASTER::Create(HWND hwnd)
 						{
 							if (ret->menu = MENU::Create(hwnd))
 							{
-								ret->ok = true;
 								ret->hwnd = hwnd;
 								ret->element_moved = 0;
 								return ret;
 
 								delete ret->menu;
+								ret->menu = 0;
 							}
 							ret->text_format->Release();
+							ret->text_format = 0;
 						}
 						delete ret->brush_set;
+						ret->brush_set = 0;
 					}
 					ret->target->Release();
+					ret->target = 0;
 				}
 				ret->dwfactory->Release();
+				ret->dwfactory = 0;
 			}	
 			ret->factory->Release();
+			ret->factory = 0;
 		}
 		delete ret;
 	}
@@ -59,14 +64,11 @@ MASTER* MASTER::Create(HWND hwnd)
 
 MASTER::~MASTER()
 {
-	if (ok)
-	{
-		delete menu;
-		text_format->Release();
-		delete brush_set;
-		target->Release();
-		dwfactory->Release();
-		factory->Release();
-	}
+	delete menu;
+	delete brush_set;
+	if (text_format)	text_format->Release();
+	if (target)			target->Release();
+	if (dwfactory)		dwfactory->Release();
+	if (factory)		factory->Release();
 }
 

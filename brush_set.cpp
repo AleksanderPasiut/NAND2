@@ -22,12 +22,12 @@ BRUSH_SET* BRUSH_SET::Create(ID2D1HwndRenderTarget* target)
 				for (int j = 0; j < i; j++)
 				{
 					ret->brush[j]->Release();
+					ret->brush[0] = 0;
 
 					delete ret;
 					return 0;
 				}
 
-		ret->ok = true;
 		return ret;
 	}
 
@@ -36,7 +36,7 @@ BRUSH_SET* BRUSH_SET::Create(ID2D1HwndRenderTarget* target)
 
 BRUSH_SET::~BRUSH_SET()
 {
-	if (ok)
+	if (brush[0])
 		for (int i = 0; i < BRUSH_AMOUNT; i++)
 			brush[i]->Release();
 }

@@ -15,39 +15,82 @@ ELEMENT::ELEMENT(ID2D1HwndRenderTarget* in_target,
 
 ELEMENT::~ELEMENT() {}
 
+bool ELEMENT::PointInRect(const D2D1_RECT_F& rect, const D2D1_POINT_2F& pt)
+{
+	if (pt.x < rect.left || rect.right < pt.x || pt.y < rect.top || rect.bottom < pt.y)
+		return false;
+	else return true;
+}
+bool ELEMENT::PointInCircle(const D2D1_ELLIPSE& circle, const D2D1_POINT_2F& pt)
+{
+	if ((pt.x-circle.point.x)*(pt.x-circle.point.x)+(pt.y-circle.point.y)*(pt.y-circle.point.y) <= circle.radiusX*circle.radiusY)
+		return true;
+	else return false;
+}
+void ELEMENT::RetElementRect(D2D1_RECT_F& out) const
+{
+	D2D1_SIZE_F ts = target->GetSize();
+	out.left	= pos.x*ts.width;
+	out.top		= pos.y*ts.height;
+	out.right	= (pos.x+size.width)*ts.width;
+	out.bottom	= (pos.y+size.height)*ts.height;
+	return;
+}
+void ELEMENT::RetCrossRect(D2D1_RECT_F& out) const
+{
+	D2D1_SIZE_F ts = target->GetSize();
+	static const float ds = 0.035f;
+	static const float s = 0.01f;
+	float multiplier = min(ts.height, ts.width);
+	out.left	= (pos.x+size.width)*ts.width-ds*multiplier;
+	out.top		= (pos.y)*ts.height+s*multiplier;
+	out.right	= (pos.x+size.width)*ts.width-s*multiplier;
+	out.bottom	= (pos.y)*ts.height+ds*multiplier;
+	return;
+}
+
 EVPV ELEMENT::MouseInput(const D2D1_POINT_2F& click)
 {
-	if (MouseOn(click))
+	D2D1_RECT_F rect;
+
+	RetCrossRect(rect);
+	if (PointInRect(rect, click))
+		return EVPV(EVPV_CROSS);
+
+	RetElementRect(rect);
+	if (PointInRect(rect, click))
 		return EVPV(EVPV_BODY);
 
 	return EVPV(EVPV_NONE);
 }
 void ELEMENT::Paint()
 {
-	D2D1_SIZE_F ts = target->GetSize();
-	const D2D1_RECT_F rect = D2D1::RectF(pos.x*ts.width, 
-										 pos.y*ts.height,
-										 (pos.x+size.width)*ts.width,
-										 (pos.y+size.height)*ts.height);
+	D2D1_RECT_F rect;
+	RetElementRect(rect);
+	target->FillRectangle(rect, brush->LightGray());
+	target->DrawRectangle(rect, brush->Gray());
 
-	target->FillRectangle(&rect, brush->Gray());
-	target->DrawRectangle(&rect, brush->DarkGray());
+	RetCrossRect(rect);
+	target->FillRectangle(rect, brush->DarkGray());
+	target->DrawRectangle(rect, brush->Gray());
+	target->DrawLine(D2D1::Point2F(rect.left, rect.top), D2D1::Point2F(rect.right, rect.bottom), brush->Gray());
+	target->DrawLine(D2D1::Point2F(rect.left, rect.bottom), D2D1::Point2F(rect.right, rect.top), brush->Gray());
+
 	return;
 }
-void ELEMENT::SetPos(const D2D1_POINT_2F& new_pos)
+void ELEMENT::SetPos(D2D1_POINT_2F new_pos)
 {
+	// ogranicznik przed usuniêciem poza ekran
+	if (new_pos.x < -size.width/2)
+		new_pos.x = -size.width/2;
+	else if (1.0f-size.width/2 < new_pos.x)
+		new_pos.x = 1.0f-size.width/2;
+
+	if (new_pos.y < -size.height/2)
+		new_pos.y = -size.height/2;
+	else if (1.0f-size.height/2 < new_pos.y)
+		new_pos.y = 1.0f-size.height/2;
+
 	pos = new_pos;
-
-	Paint();
 	return;
-}
-bool ELEMENT::MouseOn(const D2D1_POINT_2F& pt) const
-{
-	D2D1_SIZE_F ts = target->GetSize();
-	if (pt.x < pos.x*ts.width ||
-		pt.y < pos.y*ts.height ||
-		pt.x > (pos.x+size.width)*ts.width,
-		pt.y > (pos.y+size.height)*ts.height)
-		return false;
-	else return true;
 }
