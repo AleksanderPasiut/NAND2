@@ -65,12 +65,6 @@ ELEMENT_OUTPUT* ELEMENT_OUTPUT::Create(ID2D1HwndRenderTarget* target,
 
 EVPV ELEMENT_OUTPUT::MouseInput(const D2D1_POINT_2F& click)
 {
-	D2D1_ELLIPSE ellipse;
-	RetControlEllipse(ellipse);
-	if (PointInCircle(ellipse, click))
-	{	state = !state;
-		return EVPV(EVPV_CONTROL); }
-
 	return ELEMENT::MouseInput(click);
 }
 void ELEMENT_OUTPUT::Paint()

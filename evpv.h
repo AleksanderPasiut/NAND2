@@ -20,3 +20,11 @@ struct EVPV
 		type(arg),
 		param(p) {}
 };
+
+enum EL_STATE
+{
+	EL_STATE_NO_INPUT,
+	EL_STATE_UNKNOWN,
+	EL_STATE_TRUE,
+	EL_STATE_FALSE
+};

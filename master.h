@@ -11,6 +11,7 @@
 #include "menu.h"
 
 #include "element_source.h"
+#include "element_nand.h"
 #include "element_output.h"
 
 class MASTER
@@ -47,5 +48,6 @@ public:
 	void MouseInput(UINT, WPARAM, LPARAM);
 	void Paint();
 	void Size(WPARAM, LPARAM);
+	ELEMENT* Nand(unsigned);
 	void MenuInput(WPARAM, LPARAM);
 };

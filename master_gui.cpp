@@ -104,6 +104,17 @@ void MASTER::Size(WPARAM wParam, LPARAM lParam)
 	Paint();
 	return;
 }
+ELEMENT* MASTER::Nand(unsigned input_amount)
+{
+	return ELEMENT_NAND::Create(target,
+								brush_set,
+								text_format,
+								static_cast<float>(GET_X_LPARAM(menu->RetPos()))/ts.width,
+								static_cast<float>(GET_Y_LPARAM(menu->RetPos()))/ts.height,
+								0.14f,
+								0.17f,
+								input_amount);
+}
 void MASTER::MenuInput(WPARAM wParam, LPARAM lParam)
 {
 	if (HIWORD(wParam) || lParam)
@@ -124,13 +135,24 @@ void MASTER::MenuInput(WPARAM wParam, LPARAM lParam)
 											 static_cast<float>(GET_Y_LPARAM(menu->RetPos()))/ts.height,
 											 0.1f,
 											 0.15f);
-
 			break;
 		}
 	case MENU_ADD_CLOCK: MessageBox(hwnd, "Dodanie zegara", "Tmp", MB_OK); break;
-	case MENU_ADD_NAND2: MessageBox(hwnd, "Dodanie NAND2", "Tmp", MB_OK); break;
-	case MENU_ADD_NAND3: MessageBox(hwnd, "Dodanie NAND3", "Tmp", MB_OK); break;
-	case MENU_ADD_NAND4: MessageBox(hwnd, "Dodanie NAND4", "Tmp", MB_OK); break;
+	case MENU_ADD_NAND2:
+		{
+			element = Nand(2);
+			break;
+		}
+	case MENU_ADD_NAND3:
+		{
+			element = Nand(3);
+			break;
+		}
+	case MENU_ADD_NAND4:
+		{
+			element = Nand(4);
+			break;
+		}
 	case MENU_ADD_NAND: MessageBox(hwnd, "Dodanie NAND", "Tmp", MB_OK); break;
 	case MENU_ADD_OUTPUT:
 		{
@@ -141,7 +163,6 @@ void MASTER::MenuInput(WPARAM wParam, LPARAM lParam)
 											 static_cast<float>(GET_Y_LPARAM(menu->RetPos()))/ts.height,
 											 0.1f,
 											 0.15f);
-
 			break;
 		}
 	}
