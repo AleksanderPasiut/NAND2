@@ -10,15 +10,15 @@ void MASTER::MouseInput(UINT uMsg, WPARAM wParam, LPARAM lParam)
 			if (!elements_set.RetAmount())
 				break;
 
-			click = D2D1::Point2F(static_cast<float>(GET_X_LPARAM(lParam)),
-									static_cast<float>(GET_Y_LPARAM(lParam)));
+			moving.click = D2D1::Point2F(static_cast<float>(GET_X_LPARAM(lParam)),
+										 static_cast<float>(GET_Y_LPARAM(lParam)));
 
 			ELEMENT* element = 0;
 			EVPV evpv;
 
 			for (unsigned i = elements_set.RetAmount()-1; ; i--)
 			{
-				if ((evpv = elements_set[i]->MouseInput(click)).type != EVPV_NONE)
+				if ((evpv = elements_set[i]->MouseInput(moving.click)).type != EVPV_NONE)
 				{	element = elements_set[i];
 					break;	}
 
@@ -33,8 +33,8 @@ void MASTER::MouseInput(UINT uMsg, WPARAM wParam, LPARAM lParam)
 			case EVPV_NONE: break;
 			case EVPV_BODY:	
 				{
-					element_moved = element;
-					old_pos = element_moved->RetPos();
+					moving.element = element;
+					moving.old_pos = moving.element->RetPos();
 					SetCapture(hwnd);
 					break;
 				}
@@ -44,21 +44,9 @@ void MASTER::MouseInput(UINT uMsg, WPARAM wParam, LPARAM lParam)
 					break;
 				}
 			case EVPV_INPUT:
-				{
-					if (input.target)
-						break;
-
-					input.target = element;
-					input.id = evpv.param;
-					break;
-				}
 			case EVPV_OUTPUT:
 				{
-					if (!input.target)
-						break;
-
-					input.target->SetInput(element, evpv.param, input.id);
-					input = EL_INPUT();
+					Link(element, evpv);
 					break;
 				}
 			}
@@ -68,15 +56,15 @@ void MASTER::MouseInput(UINT uMsg, WPARAM wParam, LPARAM lParam)
 		}
 	case WM_MOUSEMOVE:
 		{
-			if (element_moved)
+			if (moving.element)
 			{
 				D2D1_SIZE_F ts = target->GetSize();
 				D2D1_POINT_2F new_pos;
 
-				new_pos.x = old_pos.x + (static_cast<float>(GET_X_LPARAM(lParam))-click.x)/ts.width;
-				new_pos.y = old_pos.y + (static_cast<float>(GET_Y_LPARAM(lParam))-click.y)/ts.height;
+				new_pos.x = moving.old_pos.x + (static_cast<float>(GET_X_LPARAM(lParam))-moving.click.x)/ts.width;
+				new_pos.y = moving.old_pos.y + (static_cast<float>(GET_Y_LPARAM(lParam))-moving.click.y)/ts.height;
 
-				element_moved->SetPos(new_pos);
+				moving.element->SetPos(new_pos);
 				
 				Paint();
 			}
@@ -90,7 +78,7 @@ void MASTER::MouseInput(UINT uMsg, WPARAM wParam, LPARAM lParam)
 		}
 	case WM_CAPTURECHANGED:
 		{
-			element_moved = 0;
+			moving.element = 0;
 			break;
 		}
 	case WM_RBUTTONDOWN:
@@ -113,6 +101,12 @@ void MASTER::Paint()
 
 	for (unsigned i = 0; i < elements_set.RetAmount(); i++)
 		elements_set[i]->PaintWires();
+
+	if (linking.mark_all_inputs)
+		PaintInputs();
+
+	if (linking.mark_all_outputs)
+		PaintOutputs();
 
 	target->EndDraw();
 	EndPaint(hwnd, 0);

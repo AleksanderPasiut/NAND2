@@ -16,6 +16,8 @@ BRUSH_SET* BRUSH_SET::Create(ID2D1HwndRenderTarget* target)
 		color[5] = ColorF(ColorF::DarkRed);
 		color[6] = ColorF(ColorF::Red);
 		color[7] = ColorF(ColorF::Yellow);
+		color[8] = ColorF(ColorF::Green);
+		color[9] = ColorF(ColorF::Orange);
 
 		for (int i = 0; i < BRUSH_AMOUNT; i++)
 			if (S_OK != target->CreateSolidColorBrush(color[i], &ret->brush[i]))

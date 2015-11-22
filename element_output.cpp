@@ -103,3 +103,11 @@ void ELEMENT_OUTPUT::SetInput(ELEMENT* target, unsigned target_id, unsigned id)
 	input.id = target_id;
 	return;
 }
+bool ELEMENT_OUTPUT::RetInputPoint(D2D1_POINT_2F& out, unsigned id) const
+{
+	if (id)
+		return false;
+
+	out = RetInputPoint();
+	return true;
+}

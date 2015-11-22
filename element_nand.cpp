@@ -136,6 +136,14 @@ void ELEMENT_NAND::SetInput(ELEMENT* target, unsigned target_id, unsigned id)
 	input[id].id = target_id;
 	return;
 }
+bool ELEMENT_NAND::RetInputPoint(D2D1_POINT_2F& out, unsigned id) const
+{
+	if (id >= ia)
+		return false;
+
+	out = RetInputPoint(id);
+	return true;
+}
 bool ELEMENT_NAND::RetOutputPoint(D2D1_POINT_2F& out, unsigned id) const
 {
 	if (id)

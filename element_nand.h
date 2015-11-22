@@ -35,6 +35,7 @@ public:
 	void PaintWires();
 
 	void SetInput(ELEMENT* target, unsigned target_id, unsigned input_id);
+	bool RetInputPoint(D2D1_POINT_2F& out, unsigned id) const;
 	bool RetOutputPoint(D2D1_POINT_2F& out, unsigned id) const;
 
 	friend class ELEMENTS_SET;

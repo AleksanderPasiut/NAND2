@@ -36,7 +36,6 @@ MASTER* MASTER::Create(HWND hwnd)
 							if (ret->menu = MENU::Create(hwnd))
 							{
 								ret->hwnd = hwnd;
-								ret->element_moved = 0;
 								return ret;
 
 								delete ret->menu;
