@@ -23,8 +23,19 @@ struct EVPV
 
 enum EL_STATE
 {
-	EL_STATE_NO_INPUT,
-	EL_STATE_UNKNOWN,
-	EL_STATE_TRUE,
-	EL_STATE_FALSE
+	EL_STATE_UNKNOWN = -1,
+	EL_STATE_TRUE = 1,
+	EL_STATE_FALSE = 0
+};
+
+class ELEMENT;
+struct EL_INPUT
+{
+	ELEMENT* target;
+	unsigned id;
+
+	EL_INPUT(ELEMENT* in_target = 0,
+			 unsigned in_id = 0) :
+			target(in_target),
+			id(in_id) {}
 };

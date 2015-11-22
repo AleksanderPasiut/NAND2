@@ -1,14 +1,16 @@
 #pragma once
 
 #include "element.h"
-#include "output_list.h"
 
 class ELEMENT_NAND : public ELEMENT
 {
+public:
+	static const unsigned max_input = 10;
+
 private:
 	unsigned ia;
-	bool state;
-	OUTPUT_LIST output_list;
+	EL_STATE state;
+	EL_INPUT input[max_input];
 
 private:
 	ELEMENT_NAND(const ELEMENT_NAND&) {}
@@ -30,6 +32,10 @@ public:
 
 	EVPV MouseInput(const D2D1_POINT_2F&);
 	void Paint();
+	void PaintWires();
+
+	void SetInput(ELEMENT* target, unsigned target_id, unsigned input_id);
+	bool RetOutputPoint(D2D1_POINT_2F& out, unsigned id) const;
 
 	friend class ELEMENTS_SET;
 };

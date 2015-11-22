@@ -1,13 +1,12 @@
 #pragma once
 
 #include "element.h"
-#include "output_list.h"
 
 class ELEMENT_OUTPUT : public ELEMENT
 {
 private:
-	bool state;
-	OUTPUT_LIST output_list;
+	EL_STATE state;
+	EL_INPUT input;
 
 private:
 	ELEMENT_OUTPUT(const ELEMENT_OUTPUT&) {}
@@ -27,6 +26,9 @@ public:
 
 	EVPV MouseInput(const D2D1_POINT_2F&);
 	void Paint();
+	void PaintWires();
+
+	void SetInput(ELEMENT* target, unsigned target_id, unsigned input_id);
 
 	friend class ELEMENTS_SET;
 };

@@ -11,7 +11,7 @@ ELEMENT_NAND::ELEMENT_NAND(ID2D1HwndRenderTarget* target,
 	: ELEMENT(target, brush_set, text_format, pos_x, pos_y, width, height)
 {
 	ia = input_amount;
-	state = false;
+	state = EL_STATE_UNKNOWN;
 }
 
 D2D1_POINT_2F ELEMENT_NAND::RetControlPoint() const
@@ -82,6 +82,16 @@ ELEMENT_NAND* ELEMENT_NAND::Create(ID2D1HwndRenderTarget* target,
 
 EVPV ELEMENT_NAND::MouseInput(const D2D1_POINT_2F& click)
 {
+	D2D1_ELLIPSE ellipse;
+	for (unsigned i = 0; i < ia; i++)
+	{	RetInputEllipse(ellipse, i);
+		if (PointInCircle(ellipse, click))
+			return EVPV(EVPV_INPUT, i);		}
+
+	RetOutputEllipse(ellipse);
+	if (PointInCircle(ellipse, click))
+		return EVPV(EVPV_OUTPUT);
+
 	return ELEMENT::MouseInput(click);
 }
 void ELEMENT_NAND::Paint()
@@ -91,7 +101,11 @@ void ELEMENT_NAND::Paint()
 	D2D1_ELLIPSE ellipse;
 
 	RetControlEllipse(ellipse);
-	target->FillEllipse(ellipse, state ? brush->Red() : brush->DarkRed());
+	target->FillEllipse(ellipse, state == EL_STATE_TRUE ? brush->Red() : brush->DarkRed());
+	target->DrawEllipse(ellipse, brush->Gray());
+
+	RetOutputEllipse(ellipse);
+	target->FillEllipse(ellipse, brush->Black());
 	target->DrawEllipse(ellipse, brush->Gray());
 
 	for (unsigned i = 0; i < ia; i++)
@@ -101,8 +115,32 @@ void ELEMENT_NAND::Paint()
 		target->DrawEllipse(ellipse, brush->Gray());
 	}
 
-	RetOutputEllipse(ellipse);
-	target->FillEllipse(ellipse, brush->Black());
-	target->DrawEllipse(ellipse, brush->Gray());
 	return;
+}
+void ELEMENT_NAND::PaintWires()
+{
+	for (unsigned i = 0; i < ia; i++)
+		if (input[i].target)
+		{	D2D1_POINT_2F end;
+			input[i].target->RetOutputPoint(end, input[i].id);
+			target->DrawLine(RetInputPoint(i), end, brush->Red(), 2.0f, 0);	}
+	return;
+}
+
+void ELEMENT_NAND::SetInput(ELEMENT* target, unsigned target_id, unsigned id)
+{
+	if (id >= ia)
+		return;
+
+	input[id].target = target;
+	input[id].id = target_id;
+	return;
+}
+bool ELEMENT_NAND::RetOutputPoint(D2D1_POINT_2F& out, unsigned id) const
+{
+	if (id)
+		return false;
+
+	out = RetOutputPoint();
+	return true;
 }

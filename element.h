@@ -37,8 +37,12 @@ protected:
 public:
 	virtual EVPV MouseInput(const D2D1_POINT_2F&);
 	virtual void Paint();
+	virtual void PaintWires() {}
 	void SetPos(D2D1_POINT_2F);
 	D2D1_POINT_2F RetPos() const { return pos; }
+
+	virtual void SetInput(ELEMENT* target, unsigned target_id, unsigned input_id) {}
+	virtual bool RetOutputPoint(D2D1_POINT_2F& out, unsigned id) const { return false; }
 
 	friend class ELEMENTS_SET;
 };

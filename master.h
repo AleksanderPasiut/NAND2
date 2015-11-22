@@ -30,6 +30,8 @@ private:
 	D2D1_POINT_2F old_pos;
 	D2D1_POINT_2F click;
 
+	EL_INPUT input;
+
 private:
 	// master_create.cpp
 	static D2D1_SIZE_U RetHwndClientSize(HWND); 

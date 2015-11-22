@@ -43,6 +43,24 @@ void MASTER::MouseInput(UINT uMsg, WPARAM wParam, LPARAM lParam)
 					elements_set.remove(element);
 					break;
 				}
+			case EVPV_INPUT:
+				{
+					if (input.target)
+						break;
+
+					input.target = element;
+					input.id = evpv.param;
+					break;
+				}
+			case EVPV_OUTPUT:
+				{
+					if (!input.target)
+						break;
+
+					input.target->SetInput(element, evpv.param, input.id);
+					input = EL_INPUT();
+					break;
+				}
 			}
 
 			Paint();
@@ -93,6 +111,9 @@ void MASTER::Paint()
 	for (unsigned i = 0; i < elements_set.RetAmount(); i++)
 		elements_set[i]->Paint();
 
+	for (unsigned i = 0; i < elements_set.RetAmount(); i++)
+		elements_set[i]->PaintWires();
+
 	target->EndDraw();
 	EndPaint(hwnd, 0);
 	return;
@@ -106,6 +127,7 @@ void MASTER::Size(WPARAM wParam, LPARAM lParam)
 }
 ELEMENT* MASTER::Nand(unsigned input_amount)
 {
+	D2D1_SIZE_F ts = target->GetSize();
 	return ELEMENT_NAND::Create(target,
 								brush_set,
 								text_format,

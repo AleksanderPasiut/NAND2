@@ -9,7 +9,7 @@ ELEMENT_SOURCE::ELEMENT_SOURCE(ID2D1HwndRenderTarget* target,
 							   float height)
 	: ELEMENT(target, brush_set, text_format, pos_x, pos_y, width, height)
 {
-	state = false;
+	state = EL_STATE_FALSE;
 }
 
 D2D1_POINT_2F ELEMENT_SOURCE::RetControlPoint() const
@@ -68,8 +68,12 @@ EVPV ELEMENT_SOURCE::MouseInput(const D2D1_POINT_2F& click)
 	D2D1_ELLIPSE ellipse;
 	RetControlEllipse(ellipse);
 	if (PointInCircle(ellipse, click))
-	{	state = !state;
+	{	state = static_cast<EL_STATE>(!static_cast<int>(state));
 		return EVPV(EVPV_CONTROL); }
+
+	RetOutputEllipse(ellipse);
+	if (PointInCircle(ellipse, click))
+		return EVPV(EVPV_OUTPUT);
 
 	return ELEMENT::MouseInput(click);
 }
@@ -80,11 +84,20 @@ void ELEMENT_SOURCE::Paint()
 	D2D1_ELLIPSE ellipse;
 
 	RetControlEllipse(ellipse);
-	target->FillEllipse(ellipse, state ? brush->Red() : brush->DarkRed());
+	target->FillEllipse(ellipse, state == EL_STATE_TRUE ? brush->Red() : brush->DarkRed());
 	target->DrawEllipse(ellipse, brush->Gray());
 
 	RetOutputEllipse(ellipse);
 	target->FillEllipse(ellipse, brush->Black());
 	target->DrawEllipse(ellipse, brush->Gray());
 	return;
+}
+
+bool ELEMENT_SOURCE::RetOutputPoint(D2D1_POINT_2F& out, unsigned id) const
+{
+	if (id)
+		return false;
+
+	out = RetOutputPoint();
+	return true;
 }
