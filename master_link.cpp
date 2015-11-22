@@ -68,23 +68,31 @@ void MASTER::Link(ELEMENT* element, EVPV evpv)
 void MASTER::PaintInputs()
 {
 	D2D1_POINT_2F pt;
+	D2D1_SIZE_F ts = target->GetSize();
+	float radius = 0.018f*min(ts.width, ts.height);
+
 	if (linking.element->RetOutputPoint(pt, linking.id))
-		target->DrawEllipse(D2D1::Ellipse(pt, 10.0f, 10.0f), brush_set->Red(), 2.0f);
+		target->DrawEllipse(D2D1::Ellipse(pt, radius, radius), brush_set->Red(), 2.0f);
 
 	for (unsigned i = 0; i < elements_set.RetAmount(); i++)
 		for (unsigned j = 0; elements_set[i]->RetInputPoint(pt, j); j++)
-			target->DrawEllipse(D2D1::Ellipse(pt, 10.0f, 10.0f), brush_set->Green(), 2.0f);
+			if (linking.element != elements_set[i])
+				target->DrawEllipse(D2D1::Ellipse(pt, radius, radius), brush_set->Green(), 2.0f);
 	return;
 }
 
 void MASTER::PaintOutputs()
 {
 	D2D1_POINT_2F pt;
+	D2D1_SIZE_F ts = target->GetSize();
+	float radius = 0.018f*min(ts.width, ts.height);
+
 	if (linking.element->RetInputPoint(pt, linking.id))
-		target->DrawEllipse(D2D1::Ellipse(pt, 10.0f, 10.0f), brush_set->Red(), 2.0f);
+		target->DrawEllipse(D2D1::Ellipse(pt, radius, radius), brush_set->Red(), 2.0f);
 
 	for (unsigned i = 0; i < elements_set.RetAmount(); i++)
 		for (unsigned j = 0; elements_set[i]->RetOutputPoint(pt, j); j++)
-			target->DrawEllipse(D2D1::Ellipse(pt, 10.0f, 10.0f), brush_set->Green(), 2.0f);
+			if (linking.element != elements_set[i])
+				target->DrawEllipse(D2D1::Ellipse(pt, radius, radius), brush_set->Green(), 2.0f);
 	return;
 }

@@ -7,6 +7,7 @@
 #define MENU_ADD_NAND4 0x105
 #define MENU_ADD_NAND 0x106
 #define MENU_ADD_OUTPUT 0x107
+#define MENU_ADD_TEXTBOX 0x108
 
 #include <Windows.h>
 

@@ -16,13 +16,13 @@ D2D1_POINT_2F ELEMENT_SOURCE::RetControlPoint() const
 {
 	D2D1_SIZE_F ts = target->GetSize();
 	return D2D1::Point2F(ts.width*(pos.x+0.3f*size.width),
-						 ts.height*(pos.y+size.height/2));
+						 ts.height*(pos.y+0.6f*size.height));
 }
 D2D1_POINT_2F ELEMENT_SOURCE::RetOutputPoint() const
 {
 	D2D1_SIZE_F ts = target->GetSize();
 	return D2D1::Point2F(ts.width*(pos.x+0.7f*size.width),
-						 ts.height*(pos.y+size.height/2));
+						 ts.height*(pos.y+0.6f*size.height));
 }
 void ELEMENT_SOURCE::RetControlEllipse(D2D1_ELLIPSE& out) const
 {
@@ -77,7 +77,7 @@ EVPV ELEMENT_SOURCE::MouseInput(const D2D1_POINT_2F& click)
 
 	return ELEMENT::MouseInput(click);
 }
-void ELEMENT_SOURCE::Paint()
+void ELEMENT_SOURCE::Paint() const
 {
 	ELEMENT::Paint();
 

@@ -37,7 +37,7 @@ void ELEMENT::RetElementRect(D2D1_RECT_F& out) const
 void ELEMENT::RetCrossRect(D2D1_RECT_F& out) const
 {
 	D2D1_SIZE_F ts = target->GetSize();
-	static const float ds = 0.035f;
+	static const float ds = 0.03f;
 	static const float s = 0.01f;
 	float multiplier = min(ts.height, ts.width);
 	out.left	= (pos.x+size.width)*ts.width-ds*multiplier;
@@ -46,7 +46,6 @@ void ELEMENT::RetCrossRect(D2D1_RECT_F& out) const
 	out.bottom	= (pos.y)*ts.height+ds*multiplier;
 	return;
 }
-
 EVPV ELEMENT::MouseInput(const D2D1_POINT_2F& click)
 {
 	D2D1_RECT_F rect;
@@ -61,7 +60,7 @@ EVPV ELEMENT::MouseInput(const D2D1_POINT_2F& click)
 
 	return EVPV(EVPV_NONE);
 }
-void ELEMENT::Paint()
+void ELEMENT::Paint() const
 {
 	D2D1_RECT_F rect;
 	RetElementRect(rect);

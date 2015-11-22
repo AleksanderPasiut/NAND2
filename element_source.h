@@ -24,7 +24,7 @@ public:
 	static ELEMENT_SOURCE* Create(ID2D1HwndRenderTarget*, BRUSH_SET*, IDWriteTextFormat*, float pos_x, float pos_y, float width, float height);
 
 	EVPV MouseInput(const D2D1_POINT_2F&);
-	void Paint();
+	void Paint() const;
 
 	bool RetOutputPoint(D2D1_POINT_2F& out, unsigned id) const;
 

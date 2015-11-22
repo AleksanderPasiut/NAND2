@@ -24,13 +24,13 @@ D2D1_POINT_2F ELEMENT_NAND::RetInputPoint(unsigned i) const
 {
 	D2D1_SIZE_F ts = target->GetSize();
 	return D2D1::Point2F(ts.width*(pos.x+0.16f*size.width),
-						 ts.height*(pos.y+size.height*static_cast<float>(i+1)/static_cast<float>(ia+1)));
+						 ts.height*(pos.y+size.height*(1.2f*static_cast<float>(i+1)/static_cast<float>(ia+1)-0.1f)));
 }
 D2D1_POINT_2F ELEMENT_NAND::RetOutputPoint() const
 {
 	D2D1_SIZE_F ts = target->GetSize();
 	return D2D1::Point2F(ts.width*(pos.x+0.84f*size.width),
-						 ts.height*(pos.y+size.height/2));
+						 ts.height*(pos.y+0.6f*size.height));
 }
 void ELEMENT_NAND::RetControlEllipse(D2D1_ELLIPSE& out) const
 {
@@ -94,7 +94,7 @@ EVPV ELEMENT_NAND::MouseInput(const D2D1_POINT_2F& click)
 
 	return ELEMENT::MouseInput(click);
 }
-void ELEMENT_NAND::Paint()
+void ELEMENT_NAND::Paint() const
 {
 	ELEMENT::Paint();
 
@@ -117,7 +117,7 @@ void ELEMENT_NAND::Paint()
 
 	return;
 }
-void ELEMENT_NAND::PaintWires()
+void ELEMENT_NAND::PaintWires() const
 {
 	for (unsigned i = 0; i < ia; i++)
 		if (input[i].target)

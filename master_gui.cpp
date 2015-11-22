@@ -1,5 +1,6 @@
 #include <WindowsX.h>
 #include "master.h"
+#include "dialog_resources.h"
 
 void MASTER::MouseInput(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -127,8 +128,8 @@ ELEMENT* MASTER::Nand(unsigned input_amount)
 								text_format,
 								static_cast<float>(GET_X_LPARAM(menu->RetPos()))/ts.width,
 								static_cast<float>(GET_Y_LPARAM(menu->RetPos()))/ts.height,
-								0.14f,
-								0.17f,
+								0.11f,
+								input_amount*0.04f,
 								input_amount);
 }
 void MASTER::MenuInput(WPARAM wParam, LPARAM lParam)
@@ -149,11 +150,18 @@ void MASTER::MenuInput(WPARAM wParam, LPARAM lParam)
 											 text_format,
 											 static_cast<float>(GET_X_LPARAM(menu->RetPos()))/ts.width,
 											 static_cast<float>(GET_Y_LPARAM(menu->RetPos()))/ts.height,
-											 0.1f,
-											 0.15f);
+											 0.08f,
+											 0.1f);
 			break;
 		}
-	case MENU_ADD_CLOCK: MessageBox(hwnd, "Dodanie zegara", "Tmp", MB_OK); break;
+	case MENU_ADD_CLOCK:
+		{
+			if (DialogBox(0, "res_dialog_add_clock", hwnd, reinterpret_cast<DLGPROC>(AddClockDialogProc)) == IDOK)
+			{
+
+			}
+			break;
+		}
 	case MENU_ADD_NAND2:
 		{
 			element = Nand(2);
@@ -169,7 +177,14 @@ void MASTER::MenuInput(WPARAM wParam, LPARAM lParam)
 			element = Nand(4);
 			break;
 		}
-	case MENU_ADD_NAND: MessageBox(hwnd, "Dodanie NAND", "Tmp", MB_OK); break;
+	case MENU_ADD_NAND:
+		{
+			if (DialogBox(0, "res_dialog_add_nand", hwnd, reinterpret_cast<DLGPROC>(AddNandDialogProc)) == IDOK)
+			{
+
+			}
+			break;
+		}
 	case MENU_ADD_OUTPUT:
 		{
 			element = ELEMENT_OUTPUT::Create(target,
@@ -177,8 +192,16 @@ void MASTER::MenuInput(WPARAM wParam, LPARAM lParam)
 											 text_format,
 											 static_cast<float>(GET_X_LPARAM(menu->RetPos()))/ts.width,
 											 static_cast<float>(GET_Y_LPARAM(menu->RetPos()))/ts.height,
-											 0.1f,
-											 0.15f);
+											 0.08f,
+											 0.1f);
+			break;
+		}
+	case MENU_ADD_TEXTBOX:
+		{
+			if (DialogBox(0, "res_dialog_add_textbox", hwnd, reinterpret_cast<DLGPROC>(AddTextboxDialogProc)) == IDOK)
+			{
+
+			}
 			break;
 		}
 	}
