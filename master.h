@@ -78,4 +78,7 @@ public:
 	void Size(WPARAM, LPARAM);
 	ELEMENT* Nand(unsigned);
 	void MenuInput(WPARAM, LPARAM);
+
+	// master_proceed.cpp
+	void Proceed();
 };

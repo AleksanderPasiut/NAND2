@@ -29,7 +29,7 @@ MASTER* MASTER::Create(HWND hwnd)
 																	 DWRITE_FONT_WEIGHT_NORMAL,
 																	 DWRITE_FONT_STYLE_NORMAL,
 																	 DWRITE_FONT_STRETCH_NORMAL,
-																	 11.0f,
+																	 1.0f,
 																	 L"pl-utf8",
 																	 &ret->text_format))
 						{
