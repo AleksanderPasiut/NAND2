@@ -103,6 +103,13 @@ void ELEMENT_OUTPUT::SetInput(ELEMENT* target, unsigned target_id, unsigned id)
 	input.id = target_id;
 	return;
 }
+void ELEMENT_OUTPUT::RemoveInput(ELEMENT* target)
+{
+	if (input.target == target)
+	{	input.target = 0;
+		input.id = 0;	}
+	return;
+}
 bool ELEMENT_OUTPUT::RetInputPoint(D2D1_POINT_2F& out, unsigned id) const
 {
 	if (id)

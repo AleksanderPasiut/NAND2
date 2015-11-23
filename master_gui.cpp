@@ -41,7 +41,7 @@ void MASTER::MouseInput(UINT uMsg, WPARAM wParam, LPARAM lParam)
 				}
 			case EVPV_CROSS:
 				{
-					elements_set.remove(element);
+					RemoveElement(element);
 					break;
 				}
 			case EVPV_INPUT:
@@ -158,7 +158,13 @@ void MASTER::MenuInput(WPARAM wParam, LPARAM lParam)
 		{
 			if (DialogBox(0, "res_dialog_add_clock", hwnd, reinterpret_cast<DLGPROC>(AddClockDialogProc)))
 			{
-
+				element = ELEMENT_CLOCK::Create(target,
+												brush_set,
+												text_format,
+												static_cast<float>(GET_X_LPARAM(menu->RetPos()))/ts.width,
+												static_cast<float>(GET_Y_LPARAM(menu->RetPos()))/ts.height,
+												0.08f,
+												0.15f);
 			}
 			break;
 		}
@@ -177,9 +183,9 @@ void MASTER::MenuInput(WPARAM wParam, LPARAM lParam)
 			element = Nand(4);
 			break;
 		}
-	case MENU_ADD_NAND:
+	case MENU_ADD_NAND: 
 		{
-			if (unsigned i = DialogBox(0, "res_dialog_add_nand", hwnd, reinterpret_cast<DLGPROC>(AddNandDialogProc)))
+			if (unsigned i = static_cast<unsigned>(DialogBox(0, "res_dialog_add_nand", hwnd, reinterpret_cast<DLGPROC>(AddNandDialogProc))))
 				element = Nand(i);
 			break;
 		}

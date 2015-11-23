@@ -12,6 +12,8 @@
 
 #include "element_source.h"
 #include "element_nand.h"
+#include "element_textbox.h"
+#include "element_clock.h"
 #include "element_output.h"
 
 class MASTER
@@ -63,6 +65,7 @@ private:
 	void Link(ELEMENT*, EVPV);
 	void PaintInputs();
 	void PaintOutputs();
+	void RemoveElement(ELEMENT*);
 
 public:
 	// master_create.cpp

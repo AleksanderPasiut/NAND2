@@ -2,6 +2,7 @@
 
 #define CTRL_NUMB 100
 #define CTRL_EDIT 101
+#define CTRL_CHECKBOX 102
 
 #include <Windows.h>
 

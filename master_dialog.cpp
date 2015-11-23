@@ -19,7 +19,7 @@ BOOL CALLBACK AddClockDialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 					char buffer[4];
 					GetDlgItemText(hwnd, CTRL_EDIT, buffer, 4);
 					unsigned value = static_cast<unsigned>(atoi(buffer));
-					EndDialog(hwnd, value);
+					EndDialog(hwnd, 50 <= value && value <= 60000 ? value : 0);
 					return TRUE;
 				}
 			case IDCANCEL:

@@ -96,3 +96,12 @@ void MASTER::PaintOutputs()
 				target->DrawEllipse(D2D1::Ellipse(pt, radius, radius), brush_set->Green(), 2.0f);
 	return;
 }
+
+void MASTER::RemoveElement(ELEMENT* element)
+{
+	for (unsigned i = 0; i < elements_set.RetAmount(); i++)
+		elements_set[i]->RemoveInput(element);
+
+	elements_set.remove(element);
+	return;
+}
