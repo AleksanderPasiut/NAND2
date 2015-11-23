@@ -24,7 +24,7 @@ D2D1_POINT_2F ELEMENT_NAND::RetInputPoint(unsigned i) const
 {
 	D2D1_SIZE_F ts = target->GetSize();
 	return D2D1::Point2F(ts.width*(pos.x+0.16f*size.width),
-						 ts.height*(pos.y+size.height*(1.2f*static_cast<float>(i+1)/static_cast<float>(ia+1)-0.1f)));
+						 ts.height*(pos.y+size.height*(1.1f*static_cast<float>(i+1)/static_cast<float>(ia+1)-0.05f)));
 }
 D2D1_POINT_2F ELEMENT_NAND::RetOutputPoint() const
 {

@@ -156,7 +156,7 @@ void MASTER::MenuInput(WPARAM wParam, LPARAM lParam)
 		}
 	case MENU_ADD_CLOCK:
 		{
-			if (DialogBox(0, "res_dialog_add_clock", hwnd, reinterpret_cast<DLGPROC>(AddClockDialogProc)) == IDOK)
+			if (DialogBox(0, "res_dialog_add_clock", hwnd, reinterpret_cast<DLGPROC>(AddClockDialogProc)))
 			{
 
 			}
@@ -179,10 +179,8 @@ void MASTER::MenuInput(WPARAM wParam, LPARAM lParam)
 		}
 	case MENU_ADD_NAND:
 		{
-			if (DialogBox(0, "res_dialog_add_nand", hwnd, reinterpret_cast<DLGPROC>(AddNandDialogProc)) == IDOK)
-			{
-
-			}
+			if (unsigned i = DialogBox(0, "res_dialog_add_nand", hwnd, reinterpret_cast<DLGPROC>(AddNandDialogProc)))
+				element = Nand(i);
 			break;
 		}
 	case MENU_ADD_OUTPUT:

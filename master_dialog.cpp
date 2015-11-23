@@ -1,4 +1,5 @@
 #include "dialog_resources.h"
+#include <stdlib.h>
 
 BOOL CALLBACK AddClockDialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -15,12 +16,15 @@ BOOL CALLBACK AddClockDialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 			{
 			case IDOK: 
 				{
-					EndDialog(hwnd, wParam);
+					char buffer[4];
+					GetDlgItemText(hwnd, CTRL_EDIT, buffer, 4);
+					unsigned value = static_cast<unsigned>(atoi(buffer));
+					EndDialog(hwnd, value);
 					return TRUE;
 				}
 			case IDCANCEL:
 				{
-					EndDialog(hwnd, wParam);
+					EndDialog(hwnd, 0);
 					return TRUE;
 				}
 			}
@@ -45,12 +49,15 @@ BOOL CALLBACK AddNandDialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 			{
 			case IDOK: 
 				{
-					EndDialog(hwnd, wParam);
+					char buffer[4];
+					GetDlgItemText(hwnd, CTRL_EDIT, buffer, 4);
+					unsigned value = static_cast<unsigned>(atoi(buffer));
+					EndDialog(hwnd, 2 <= value && value <= 10 ? value : 0);
 					return TRUE;
 				}
 			case IDCANCEL:
 				{
-					EndDialog(hwnd, wParam);
+					EndDialog(hwnd, 0);
 					return TRUE;
 				}
 			}
