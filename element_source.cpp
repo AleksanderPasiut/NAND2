@@ -67,12 +67,12 @@ EVPV ELEMENT_SOURCE::MouseInput(const D2D1_POINT_2F& click)
 {
 	D2D1_ELLIPSE ellipse;
 	RetControlEllipse(ellipse);
-	if (PointInCircle(ellipse, click))
+	if (PointInEllipse(ellipse, click))
 	{	state = static_cast<EL_STATE>(!static_cast<int>(state));
 		return EVPV(EVPV_CONTROL); }
 
 	RetOutputEllipse(ellipse);
-	if (PointInCircle(ellipse, click))
+	if (PointInEllipse(ellipse, click))
 		return EVPV(EVPV_OUTPUT);
 
 	return ELEMENT::MouseInput(click);

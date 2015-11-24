@@ -79,14 +79,21 @@ BOOL CALLBACK AddTextboxDialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
 		{
 			switch(LOWORD(wParam))
 			{
+			case CTRL_CHECKBOX:
+				{
+					return TRUE;
+				}
 			case IDOK: 
 				{
-					EndDialog(hwnd, wParam);
+					static ADD_TEXTBOX_RV rv;
+					GetDlgItemText(hwnd, CTRL_EDIT, rv.text, 256);
+					rv.pointer = IsDlgButtonChecked(hwnd, CTRL_CHECKBOX) == BST_CHECKED;
+					EndDialog(hwnd, reinterpret_cast<INT_PTR>(&rv));
 					return TRUE;
 				}
 			case IDCANCEL:
 				{
-					EndDialog(hwnd, wParam);
+					EndDialog(hwnd, 0);
 					return TRUE;
 				}
 			}

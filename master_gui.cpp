@@ -204,9 +204,20 @@ void MASTER::MenuInput(WPARAM wParam, LPARAM lParam)
 		}
 	case MENU_ADD_TEXTBOX:
 		{
-			if (DialogBox(0, "res_dialog_add_textbox", hwnd, reinterpret_cast<DLGPROC>(AddTextboxDialogProc)) == IDOK)
+			if (ADD_TEXTBOX_RV* rv = reinterpret_cast<ADD_TEXTBOX_RV*>(DialogBox(0, "res_dialog_add_textbox", hwnd, reinterpret_cast<DLGPROC>(AddTextboxDialogProc))))
 			{
-
+				if (rv->text[0])
+				{
+					element = ELEMENT_TEXTBOX::Create(target,
+													  brush_set,
+													  text_format,
+													  static_cast<float>(GET_X_LPARAM(menu->RetPos()))/ts.width,
+													  static_cast<float>(GET_Y_LPARAM(menu->RetPos()))/ts.height,
+													  0.08f,
+													  0.1f,
+													  rv->pointer,
+													  rv->text);
+				}
 			}
 			break;
 		}

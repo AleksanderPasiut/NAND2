@@ -1,3 +1,4 @@
+#include <math.h>
 #include "element.h"
 
 ELEMENT::ELEMENT(ID2D1HwndRenderTarget* in_target,
@@ -19,9 +20,17 @@ bool ELEMENT::PointInRect(const D2D1_RECT_F& rect, const D2D1_POINT_2F& pt)
 		return false;
 	else return true;
 }
-bool ELEMENT::PointInCircle(const D2D1_ELLIPSE& circle, const D2D1_POINT_2F& pt)
+bool ELEMENT::PointInEllipse(const D2D1_ELLIPSE& ellipse, const D2D1_POINT_2F& pt)
 {
-	if ((pt.x-circle.point.x)*(pt.x-circle.point.x)+(pt.y-circle.point.y)*(pt.y-circle.point.y) <= circle.radiusX*circle.radiusY)
+	const float a = min(ellipse.radiusX, ellipse.radiusY); // pó³oœ ma³a elipsy
+	const float b = max(ellipse.radiusX, ellipse.radiusY); // pó³oœ wielka elipsy
+	const float c = 2*b; // suma odleg³oœci od ognisk elipsy (sta³a elipsy)
+	const float u = sqrt(b*b-a*a); // odleg³oœæ ogniska od œrodka elipsy
+	const float c1 = ellipse.radiusX > ellipse.radiusY ? sqrt((ellipse.point.x-u-pt.x)*(ellipse.point.x-u-pt.x)+(ellipse.point.y-pt.y)*(ellipse.point.y-pt.y))
+													   : sqrt((ellipse.point.y-u-pt.y)*(ellipse.point.y-u-pt.y)+(ellipse.point.x-pt.x)*(ellipse.point.x-pt.x));
+	const float c2 = ellipse.radiusX > ellipse.radiusY ? sqrt((ellipse.point.x+u-pt.x)*(ellipse.point.x+u-pt.x)+(ellipse.point.y-pt.y)*(ellipse.point.y-pt.y))
+													   : sqrt((ellipse.point.y+u-pt.y)*(ellipse.point.y+u-pt.y)+(ellipse.point.x-pt.x)*(ellipse.point.x-pt.x));
+	if (c1+c2 <= c)
 		return true;
 	else return false;
 }

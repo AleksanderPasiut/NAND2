@@ -9,3 +9,9 @@
 BOOL CALLBACK AddClockDialogProc(HWND, UINT, WPARAM, LPARAM);
 BOOL CALLBACK AddNandDialogProc(HWND, UINT, WPARAM, LPARAM);
 BOOL CALLBACK AddTextboxDialogProc(HWND, UINT, WPARAM, LPARAM);
+
+struct ADD_TEXTBOX_RV
+{
+	char text[256];
+	bool pointer;
+};

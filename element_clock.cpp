@@ -83,7 +83,7 @@ EVPV ELEMENT_CLOCK::MouseInput(const D2D1_POINT_2F& click)
 {
 	D2D1_ELLIPSE ellipse;
 	RetOutputEllipse(ellipse);
-	if (PointInCircle(ellipse, click))
+	if (PointInEllipse(ellipse, click))
 		return EVPV(EVPV_OUTPUT);
 
 	return ELEMENT::MouseInput(click);
