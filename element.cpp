@@ -3,14 +3,12 @@
 
 ELEMENT::ELEMENT(ID2D1HwndRenderTarget* in_target,
 				 BRUSH_SET* brush_set,
-				 IDWriteTextFormat* in_text_format,
 				 float pos_x,
 				 float pos_y,
 				 float width,
 				 float height) :
 	target(in_target),
 	brush(brush_set),
-	text_format(in_text_format),
 	pos(D2D1::Point2F(pos_x, pos_y)),
 	size(D2D1::SizeF(width, height)) {}
 

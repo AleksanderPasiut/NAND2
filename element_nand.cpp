@@ -2,13 +2,12 @@
 
 ELEMENT_NAND::ELEMENT_NAND(ID2D1HwndRenderTarget* target,
 							   BRUSH_SET* brush_set,
-							   IDWriteTextFormat* text_format,
 							   float pos_x,
 							   float pos_y,
 							   float width,
 							   float height,
 							   unsigned input_amount)
-	: ELEMENT(target, brush_set, text_format, pos_x, pos_y, width, height)
+	: ELEMENT(target, brush_set, pos_x, pos_y, width, height)
 {
 	ia = input_amount;
 	state = EL_STATE_UNKNOWN;
@@ -56,7 +55,6 @@ void ELEMENT_NAND::RetOutputEllipse(D2D1_ELLIPSE& out) const
 
 ELEMENT_NAND* ELEMENT_NAND::Create(ID2D1HwndRenderTarget* target,
 									   BRUSH_SET* brush_set,
-									   IDWriteTextFormat* text_format,
 									   float pos_x,
 									   float pos_y,
 									   float width,
@@ -65,7 +63,6 @@ ELEMENT_NAND* ELEMENT_NAND::Create(ID2D1HwndRenderTarget* target,
 {
 	ELEMENT_NAND* ret = new ELEMENT_NAND(target,
 											 brush_set,
-											 text_format,
 											 pos_x,
 											 pos_y,
 											 width,

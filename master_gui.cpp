@@ -125,7 +125,6 @@ ELEMENT* MASTER::Nand(unsigned input_amount)
 	D2D1_SIZE_F ts = target->GetSize();
 	return ELEMENT_NAND::Create(target,
 								brush_set,
-								text_format,
 								static_cast<float>(GET_X_LPARAM(menu->RetPos()))/ts.width,
 								static_cast<float>(GET_Y_LPARAM(menu->RetPos()))/ts.height,
 								0.11f,
@@ -147,7 +146,6 @@ void MASTER::MenuInput(WPARAM wParam, LPARAM lParam)
 		{
 			element = ELEMENT_SOURCE::Create(target,
 											 brush_set,
-											 text_format,
 											 static_cast<float>(GET_X_LPARAM(menu->RetPos()))/ts.width,
 											 static_cast<float>(GET_Y_LPARAM(menu->RetPos()))/ts.height,
 											 0.08f,
@@ -160,7 +158,6 @@ void MASTER::MenuInput(WPARAM wParam, LPARAM lParam)
 			{
 				element = ELEMENT_CLOCK::Create(target,
 												brush_set,
-												text_format,
 												static_cast<float>(GET_X_LPARAM(menu->RetPos()))/ts.width,
 												static_cast<float>(GET_Y_LPARAM(menu->RetPos()))/ts.height,
 												0.08f,
@@ -195,7 +192,6 @@ void MASTER::MenuInput(WPARAM wParam, LPARAM lParam)
 		{
 			element = ELEMENT_OUTPUT::Create(target,
 											 brush_set,
-											 text_format,
 											 static_cast<float>(GET_X_LPARAM(menu->RetPos()))/ts.width,
 											 static_cast<float>(GET_Y_LPARAM(menu->RetPos()))/ts.height,
 											 0.08f,
@@ -210,7 +206,6 @@ void MASTER::MenuInput(WPARAM wParam, LPARAM lParam)
 				{
 					element = ELEMENT_TEXTBOX::Create(target,
 													  brush_set,
-													  text_format,
 													  static_cast<float>(GET_X_LPARAM(menu->RetPos()))/ts.width,
 													  static_cast<float>(GET_Y_LPARAM(menu->RetPos()))/ts.height,
 													  0.08f,

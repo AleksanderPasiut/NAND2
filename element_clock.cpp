@@ -4,14 +4,13 @@
 
 ELEMENT_CLOCK::ELEMENT_CLOCK(ID2D1HwndRenderTarget* target,
 							   BRUSH_SET* brush_set,
-							   IDWriteTextFormat* text_format,
 							   float pos_x,
 							   float pos_y,
 							   float width,
 							   float height,
 							   unsigned in_elapse,
 							   MASTER* in_Master)
-	: ELEMENT(target, brush_set, text_format, pos_x, pos_y, width, height)
+	: ELEMENT(target, brush_set, pos_x, pos_y, width, height)
 {
 	state = EL_STATE_FALSE;
 	elapse = in_elapse;
@@ -53,7 +52,6 @@ void ELEMENT_CLOCK::RetOutputEllipse(D2D1_ELLIPSE& out) const
 
 ELEMENT_CLOCK* ELEMENT_CLOCK::Create(ID2D1HwndRenderTarget* target,
 									   BRUSH_SET* brush_set,
-									   IDWriteTextFormat* text_format,
 									   float pos_x,
 									   float pos_y,
 									   float width,
@@ -63,7 +61,6 @@ ELEMENT_CLOCK* ELEMENT_CLOCK::Create(ID2D1HwndRenderTarget* target,
 {
 	ELEMENT_CLOCK* ret = new ELEMENT_CLOCK(target,
 											 brush_set,
-											 text_format,
 											 pos_x,
 											 pos_y,
 											 width,
@@ -107,17 +104,6 @@ void ELEMENT_CLOCK::Paint() const
 }
 void ELEMENT_CLOCK::PaintElapse() const
 {
-	D2D1_RECT_F rect = D2D1::RectF(0.0f, 0.0f, 4.0f, 1.f);
-	D2D1_SIZE_F ts = target->GetSize();
-	float scale = min(ts.width*size.width/4.0f, ts.height*size.height*0.24f);
-	target->SetTransform(D2D1::Matrix3x2F::Scale(scale, scale, D2D1::Point2F())*
-						 D2D1::Matrix3x2F::Translation(D2D1::SizeF(ts.width*pos.x+(ts.width*size.width/4.0f-scale)*2.0f,
-																   ts.height*(pos.y+0.66f*size.height))));
-	wchar_t text[6];
-	_itow_s(elapse, text, 6, 10);
-	text_format->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
-	target->DrawTextA(text, static_cast<unsigned>(wcslen(text)), text_format, rect, brush->Black());
-	target->SetTransform(D2D1::IdentityMatrix());
 	return;
 }
 

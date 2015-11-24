@@ -10,7 +10,6 @@ class ELEMENT
 protected:
 	ID2D1HwndRenderTarget* target;
 	BRUSH_SET* brush;
-	IDWriteTextFormat* text_format;
 
 	// pozycja i rozmiar wyra¿one poprzez u³amek okna (od 0.0 do 1.0)
 	D2D1_POINT_2F pos;
@@ -19,7 +18,7 @@ protected:
 protected:
 	// konstruktory chronione - tworzenie odbywa siê poprzez Create() klas pochodnych
 	ELEMENT() {}
-	ELEMENT(ID2D1HwndRenderTarget*, BRUSH_SET*, IDWriteTextFormat*, float pos_x, float pos_y, float width, float height);
+	ELEMENT(ID2D1HwndRenderTarget*, BRUSH_SET*, float pos_x, float pos_y, float width, float height);
 
 	// destruktor chroniony - usuwanie odbywa siê poprzez ELEMENTS_SET::remove(ELEMENT*)
 	~ELEMENT() {}

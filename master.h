@@ -24,7 +24,6 @@ private:
 	IDWriteFactory* dwfactory;
 	ID2D1HwndRenderTarget* target;
 	BRUSH_SET* brush_set;
-	IDWriteTextFormat* text_format;
 	ELEMENTS_SET elements_set;
 	MENU* menu;
 

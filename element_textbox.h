@@ -14,7 +14,7 @@ private:
 	ELEMENT_TEXTBOX(const ELEMENT_TEXTBOX&) {}
 	ELEMENT_TEXTBOX& operator= (const ELEMENT_TEXTBOX&) {}
 
-	ELEMENT_TEXTBOX(ID2D1HwndRenderTarget*, BRUSH_SET*, IDWriteTextFormat*, float pos_x, float pos_y, float radiusX, float radiusY, bool in_pointer);
+	ELEMENT_TEXTBOX(ID2D1HwndRenderTarget*, BRUSH_SET*, float pos_x, float pos_y, float radiusX, float radiusY, bool in_pointer);
 	~ELEMENT_TEXTBOX() {}
 
 private:
@@ -25,7 +25,7 @@ private:
 	void PaintPointer() const;
 
 public:
-	static ELEMENT_TEXTBOX* Create(ID2D1HwndRenderTarget*, BRUSH_SET*, IDWriteTextFormat*, float pos_x, float pos_y, float radiusX, float radiusY, bool in_pointer, char* text);
+	static ELEMENT_TEXTBOX* Create(ID2D1HwndRenderTarget*, BRUSH_SET*, float pos_x, float pos_y, float radiusX, float radiusY, bool in_pointer, char* text);
 
 	EVPV MouseInput(const D2D1_POINT_2F&);
 	void Paint() const;

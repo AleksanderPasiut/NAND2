@@ -4,13 +4,12 @@
 
 ELEMENT_TEXTBOX::ELEMENT_TEXTBOX(ID2D1HwndRenderTarget* target,
 							   BRUSH_SET* brush_set,
-							   IDWriteTextFormat* text_format,
 							   float pos_x,
 							   float pos_y,
 							   float radiusX,
 							   float radiusY,
 							   bool in_pointer)
-	: ELEMENT(target, brush_set, text_format, pos_x, pos_y, radiusX, radiusY)
+	: ELEMENT(target, brush_set, pos_x, pos_y, radiusX, radiusY)
 {
 	pointer = in_pointer;
 	text[0] = 0;
@@ -45,16 +44,6 @@ void ELEMENT_TEXTBOX::RetCrossRect(D2D1_RECT_F& out) const
 }
 void ELEMENT_TEXTBOX::PaintText() const
 {
-	D2D1_RECT_F rect = D2D1::RectF(0.0f, 0.0f, 3.0f, 1.f);
-	D2D1_SIZE_F ts = target->GetSize();
-	float scale = min(ts.width*size.width/3.0f, ts.height*size.height*0.4f);
-	target->SetTransform(D2D1::Matrix3x2F::Scale(scale, scale, D2D1::Point2F())*
-						 D2D1::Matrix3x2F::Translation(D2D1::SizeF(ts.width*(pos.x-size.width/2)+(ts.width*size.width/3.0f-scale)*1.5f,
-																   ts.height*(pos.y-0.1f*size.height))));
-
-	text_format->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
-	target->DrawTextA(text, static_cast<unsigned int>(wcslen(text)), text_format, rect, brush->Black());
-	target->SetTransform(D2D1::IdentityMatrix());
 	return;
 }
 void ELEMENT_TEXTBOX::PaintPointer() const
@@ -70,7 +59,6 @@ void ELEMENT_TEXTBOX::PaintPointer() const
 
 ELEMENT_TEXTBOX* ELEMENT_TEXTBOX::Create(ID2D1HwndRenderTarget* target,
 									   BRUSH_SET* brush_set,
-									   IDWriteTextFormat* text_format,
 									   float pos_x,
 									   float pos_y,
 									   float radiusX,
@@ -80,7 +68,6 @@ ELEMENT_TEXTBOX* ELEMENT_TEXTBOX::Create(ID2D1HwndRenderTarget* target,
 {
 	ELEMENT_TEXTBOX* ret = new ELEMENT_TEXTBOX(target,
 											 brush_set,
-											 text_format,
 											 pos_x,
 											 pos_y,
 											 radiusX,
@@ -109,10 +96,6 @@ EVPV ELEMENT_TEXTBOX::MouseInput(const D2D1_POINT_2F& click)
 	RetBodyEllipse(ellipse);
 	if (PointInEllipse(ellipse, click))
 		return EVPV(EVPV_BODY);
-
-	RetPointerAreaEllipse(ellipse);
-	if (PointInEllipse(ellipse, click))
-		return EVPV(EVPV_POINTER_AREA);
 
 	return EVPV(EVPV_NONE);
 }
