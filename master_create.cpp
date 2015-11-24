@@ -24,13 +24,25 @@ MASTER* MASTER::Create(HWND hwnd)
 				{
 					if (ret->brush_set = BRUSH_SET::Create(ret->target))
 					{
-						if (ret->menu = MENU::Create(hwnd))
+						if (S_OK == ret->dwfactory->CreateTextFormat(L"Verdana",
+																	 0,
+																	 DWRITE_FONT_WEIGHT_NORMAL,
+																	 DWRITE_FONT_STYLE_NORMAL,
+																	 DWRITE_FONT_STRETCH_NORMAL,
+																	 1.0f,
+																	 L"pl-utf8",
+																	 &ret->text_format))
 						{
-							ret->hwnd = hwnd;
-							return ret;
+							if (ret->menu = MENU::Create(hwnd))
+							{
+								ret->hwnd = hwnd;
+								return ret;
 
-							delete ret->menu;
-							ret->menu = 0;
+								delete ret->menu;
+								ret->menu = 0;
+							}
+							ret->text_format->Release();
+							ret->text_format = 0;
 						}
 						delete ret->brush_set;
 						ret->brush_set = 0;
@@ -52,6 +64,7 @@ MASTER* MASTER::Create(HWND hwnd)
 MASTER::~MASTER()
 {
 	delete menu;
+	if (text_format)	text_format->Release();
 	delete brush_set;
 	if (target)			target->Release();
 	if (dwfactory)		dwfactory->Release();

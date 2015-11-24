@@ -154,7 +154,7 @@ void MASTER::MenuInput(WPARAM wParam, LPARAM lParam)
 		}
 	case MENU_ADD_CLOCK:
 		{
-			if (unsigned u = static_cast<unsigned>(DialogBox(0, "res_dialog_add_clock", hwnd, reinterpret_cast<DLGPROC>(AddClockDialogProc))))
+			if (unsigned elapse = static_cast<unsigned>(DialogBox(0, "res_dialog_add_clock", hwnd, reinterpret_cast<DLGPROC>(AddClockDialogProc))))
 			{
 				element = ELEMENT_CLOCK::Create(target,
 												brush_set,
@@ -162,8 +162,9 @@ void MASTER::MenuInput(WPARAM wParam, LPARAM lParam)
 												static_cast<float>(GET_Y_LPARAM(menu->RetPos()))/ts.height,
 												0.08f,
 												0.15f,
-												u,
-												this);
+												elapse,
+												this,
+												text_format);
 			}
 			break;
 		}

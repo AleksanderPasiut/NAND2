@@ -1,4 +1,5 @@
 #include <dwrite.h>
+#include <stdlib.h>
 #include "element_clock.h"
 #include "master.h"
 
@@ -9,18 +10,22 @@ ELEMENT_CLOCK::ELEMENT_CLOCK(ID2D1HwndRenderTarget* target,
 							   float width,
 							   float height,
 							   unsigned in_elapse,
-							   MASTER* in_Master)
+							   MASTER* in_Master,
+							   IDWriteTextFormat* in_text_format)
 	: ELEMENT(target, brush_set, pos_x, pos_y, width, height)
 {
 	state = EL_STATE_FALSE;
 	elapse = in_elapse;
 	Master = in_Master;
+	text_format = in_text_format;
 
 	SetTimer(target->GetHwnd(), reinterpret_cast<UINT_PTR>(this), elapse, ClockElementTimerProc);
 }
 ELEMENT_CLOCK::~ELEMENT_CLOCK()
 {
 	KillTimer(target->GetHwnd(), reinterpret_cast<UINT_PTR>(this));
+
+	if (text_format) text_format->Release();
 }
 
 D2D1_POINT_2F ELEMENT_CLOCK::RetControlPoint() const
@@ -57,7 +62,8 @@ ELEMENT_CLOCK* ELEMENT_CLOCK::Create(ID2D1HwndRenderTarget* target,
 									   float width,
 									   float height,
 									   unsigned in_elapse,
-									   MASTER* Master)
+									   MASTER* Master,
+									   IDWriteTextFormat* text_format)
 {
 	ELEMENT_CLOCK* ret = new ELEMENT_CLOCK(target,
 											 brush_set,
@@ -66,7 +72,8 @@ ELEMENT_CLOCK* ELEMENT_CLOCK::Create(ID2D1HwndRenderTarget* target,
 											 width,
 											 height,
 											 in_elapse,
-											 Master);
+											 Master,
+											 text_format);
 
 	if (ret)
 	{
@@ -104,6 +111,17 @@ void ELEMENT_CLOCK::Paint() const
 }
 void ELEMENT_CLOCK::PaintElapse() const
 {
+	D2D1_RECT_F rect = D2D1::RectF(0.0f, 0.0f, 4.0f, 1.f);		
+	D2D1_SIZE_F ts = target->GetSize();		
+	float scale = min(ts.width*size.width/4.0f, ts.height*size.height*0.24f);		
+	target->SetTransform(D2D1::Matrix3x2F::Scale(scale, scale, D2D1::Point2F())*		
+						 D2D1::Matrix3x2F::Translation(D2D1::SizeF(ts.width*pos.x+(ts.width*size.width/4.0f-scale)*2.0f,		
+																   ts.height*(pos.y+0.66f*size.height))));		
+	wchar_t text[6];		
+	_itow_s(elapse, text, 6, 10);		
+	text_format->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);		
+	target->DrawTextA(text, static_cast<unsigned>(wcslen(text)), text_format, rect, brush->Black());		
+	target->SetTransform(D2D1::IdentityMatrix());
 	return;
 }
 
