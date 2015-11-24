@@ -1,4 +1,5 @@
 #include <dwrite.h>
+#include <math.h>
 #include "element_textbox.h"
 
 ELEMENT_TEXTBOX::ELEMENT_TEXTBOX(ID2D1HwndRenderTarget* target,
@@ -15,12 +16,19 @@ ELEMENT_TEXTBOX::ELEMENT_TEXTBOX(ID2D1HwndRenderTarget* target,
 	text[0] = 0;
 	text[1] = 0;
 	text[2] = 0;
+	angle = 0.0f;
 }
 
 void ELEMENT_TEXTBOX::RetBodyEllipse(D2D1_ELLIPSE& out) const
 {
 	D2D1_SIZE_F ts = target->GetSize();
 	out = D2D1::Ellipse(D2D1::Point2F(pos.x*ts.width, pos.y*ts.height), size.width*ts.width/2, size.height*ts.height/2);
+	return;
+}
+void ELEMENT_TEXTBOX::RetPointerAreaEllipse(D2D1_ELLIPSE& out) const
+{
+	D2D1_SIZE_F ts = target->GetSize();
+	out = D2D1::Ellipse(D2D1::Point2F(pos.x*ts.width, pos.y*ts.height), 1.5f*size.width*ts.width/2, 1.5f*size.height*ts.height/2);
 	return;
 }
 void ELEMENT_TEXTBOX::RetCrossRect(D2D1_RECT_F& out) const
@@ -47,6 +55,16 @@ void ELEMENT_TEXTBOX::PaintText() const
 	text_format->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
 	target->DrawTextA(text, static_cast<unsigned int>(wcslen(text)), text_format, rect, brush->Black());
 	target->SetTransform(D2D1::IdentityMatrix());
+	return;
+}
+void ELEMENT_TEXTBOX::PaintPointer() const
+{
+	D2D1_SIZE_F ts = target->GetSize();
+	D2D1_POINT_2F begin = D2D1::Point2F(pos.x*ts.width,
+										pos.y*ts.height);
+	D2D1_POINT_2F end = D2D1::Point2F((pos.x+1.2f*size.width*cos(angle))*ts.width,
+									  (pos.y+1.2f*size.height*sin(angle))*ts.height);
+	target->DrawLine(begin, end, brush->DarkGray(), 2.0f);
 	return;
 }
 
@@ -92,10 +110,17 @@ EVPV ELEMENT_TEXTBOX::MouseInput(const D2D1_POINT_2F& click)
 	if (PointInEllipse(ellipse, click))
 		return EVPV(EVPV_BODY);
 
+	RetPointerAreaEllipse(ellipse);
+	if (PointInEllipse(ellipse, click))
+		return EVPV(EVPV_POINTER_AREA);
+
 	return EVPV(EVPV_NONE);
 }
 void ELEMENT_TEXTBOX::Paint() const
 {
+	if (pointer)
+		PaintPointer();
+
 	D2D1_ELLIPSE ellipse;
 	RetBodyEllipse(ellipse);
 	target->FillEllipse(ellipse, brush->LightGray());
@@ -109,6 +134,7 @@ void ELEMENT_TEXTBOX::Paint() const
 	target->DrawLine(D2D1::Point2F(rect.left, rect.bottom), D2D1::Point2F(rect.right, rect.top), brush->Gray());
 
 	PaintText();
+
 	return;
 }
 void ELEMENT_TEXTBOX::SetPos(D2D1_POINT_2F new_pos)

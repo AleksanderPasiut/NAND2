@@ -8,6 +8,7 @@ private:
 	static const unsigned int text_size = 3;
 	wchar_t text[text_size];
 	bool pointer;
+	float angle;
 
 private:
 	ELEMENT_TEXTBOX(const ELEMENT_TEXTBOX&) {}
@@ -18,8 +19,10 @@ private:
 
 private:
 	void RetBodyEllipse(D2D1_ELLIPSE&) const;
+	void RetPointerAreaEllipse(D2D1_ELLIPSE&) const;
 	void RetCrossRect(D2D1_RECT_F&) const;
 	void PaintText() const;
+	void PaintPointer() const;
 
 public:
 	static ELEMENT_TEXTBOX* Create(ID2D1HwndRenderTarget*, BRUSH_SET*, IDWriteTextFormat*, float pos_x, float pos_y, float radiusX, float radiusY, bool in_pointer, char* text);
