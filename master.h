@@ -51,6 +51,8 @@ private:
 	};
 	LINKING linking;
 
+	bool algorithm_stable;
+
 private:
 	// master_create.cpp
 	static D2D1_SIZE_U RetHwndClientSize(HWND); 

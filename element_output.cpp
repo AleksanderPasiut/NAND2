@@ -8,7 +8,7 @@ ELEMENT_OUTPUT::ELEMENT_OUTPUT(ID2D1HwndRenderTarget* target,
 							   float height)
 	: ELEMENT(target, brush_set, pos_x, pos_y, width, height)
 {
-	state = EL_STATE_UNKNOWN;
+	state = EL_STATE_FALSE;
 }
 
 D2D1_POINT_2F ELEMENT_OUTPUT::RetControlPoint() const
@@ -118,17 +118,14 @@ bool ELEMENT_OUTPUT::RetInputPoint(D2D1_POINT_2F& out, unsigned id) const
 
 bool ELEMENT_OUTPUT::ComputeState()
 {
+	EL_STATE old_state = state;
+
 	if (input.target)
 	{
-		EL_STATE el_state = input.target->RetState(input.id);
-		if (el_state != EL_STATE_UNKNOWN)
-		{
-			state = el_state;
-			return true;
-		}
-		else return false;
+		state = input.target->RetState(input.id);
+		return old_state != state;
 	}
 	
 	state = EL_STATE_FALSE;
-	return true;
+	return old_state != state;
 }

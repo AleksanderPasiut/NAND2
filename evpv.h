@@ -23,7 +23,6 @@ struct EVPV
 
 enum EL_STATE
 {
-	EL_STATE_UNKNOWN = -1,
 	EL_STATE_TRUE = 1,
 	EL_STATE_FALSE = 0
 };

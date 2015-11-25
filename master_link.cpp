@@ -103,6 +103,5 @@ void MASTER::RemoveElement(ELEMENT* element)
 		elements_set[i]->RemoveInput(element);
 
 	elements_set.remove(element);
-	Proceed();
 	return;
 }
