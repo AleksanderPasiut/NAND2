@@ -28,5 +28,7 @@ public:
 
 	bool RetOutputPoint(D2D1_POINT_2F& out, unsigned id) const;
 
+	EL_STATE RetState(unsigned output_id = 0) const { return state; }
+
 	friend class ELEMENTS_SET;
 };

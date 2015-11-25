@@ -52,7 +52,7 @@ void MASTER::MouseInput(UINT uMsg, WPARAM wParam, LPARAM lParam)
 				}
 			}
 
-			Paint();
+			Proceed();
 			break;
 		}
 	case WM_MOUSEMOVE:

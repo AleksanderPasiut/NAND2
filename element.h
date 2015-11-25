@@ -45,5 +45,9 @@ public:
 	virtual bool RetInputPoint(D2D1_POINT_2F& out, unsigned id) const { return false; }
 	virtual bool RetOutputPoint(D2D1_POINT_2F& out, unsigned id) const { return false; }
 
+	virtual void ResetState() {}
+	virtual bool ComputeState() { return true; }
+	virtual EL_STATE RetState(unsigned output_id = 0) const { return EL_STATE_UNKNOWN; }
+
 	friend class ELEMENTS_SET;
 };

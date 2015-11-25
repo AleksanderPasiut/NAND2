@@ -115,3 +115,20 @@ bool ELEMENT_OUTPUT::RetInputPoint(D2D1_POINT_2F& out, unsigned id) const
 	out = RetInputPoint();
 	return true;
 }
+
+bool ELEMENT_OUTPUT::ComputeState()
+{
+	if (input.target)
+	{
+		EL_STATE el_state = input.target->RetState(input.id);
+		if (el_state != EL_STATE_UNKNOWN)
+		{
+			state = el_state;
+			return true;
+		}
+		else return false;
+	}
+	
+	state = EL_STATE_FALSE;
+	return true;
+}

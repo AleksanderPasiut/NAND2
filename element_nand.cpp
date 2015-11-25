@@ -157,3 +157,31 @@ bool ELEMENT_NAND::RetOutputPoint(D2D1_POINT_2F& out, unsigned id) const
 	out = RetOutputPoint();
 	return true;
 }
+
+bool ELEMENT_NAND::ComputeState()
+{
+	bool active_input = false;
+	bool unknown_input = false;
+
+	for (unsigned i = 0; i < ia; i++)
+		if (input[i].target)
+		{
+			active_input = true;
+
+			switch(input[i].target->RetState(input[i].id))
+			{
+			case EL_STATE_UNKNOWN: unknown_input = true; break;
+			case EL_STATE_FALSE: 
+				state = EL_STATE_TRUE; return true;
+			}
+		}
+	
+	if (unknown_input)
+	{
+		state = EL_STATE_UNKNOWN;
+		return false;
+	}
+
+	state = EL_STATE_FALSE;
+	return false;
+}
