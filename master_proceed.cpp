@@ -6,18 +6,15 @@ void MASTER::Proceed()
 	unsigned elements_amount = elements_set.RetAmount();
 
 	// utworzenie listy startowej
-	OUTPUT_LIST initial_table;
-	for (unsigned i = 0; i < elements_amount; i++)
-	{
-		elements_set[i]->SetComputationFlag();
+	OUTPUT_LIST compute_list;
 
+	for (unsigned i = 0; i < elements_amount; i++)
 		if(elements_set[i]->RetSourceFlag())
-			initial_table.add(elements_set[i], 0);
-	}
+			compute_list.add(elements_set[i], 0);
 
 	// uruchomienie obliczania
-	for (unsigned i = 0; i < initial_table.retAmount(); i++)
-		initial_table[i]->element->Proceed(0, elements_amount);
+	for (unsigned i = 0; i < 2*elements_amount && compute_list.retAmount(); i++)
+		compute_list[0]->element->Proceed(compute_list);
 
 	Paint();
 	return;

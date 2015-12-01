@@ -20,9 +20,6 @@ protected:
 	// flaga Ÿród³a
 	bool source_flag;
 
-	// flaga obliczeñ
-	bool computation_flag;
-
 protected:
 	// konstruktory chronione - tworzenie odbywa siê poprzez Create() klas pochodnych
 	ELEMENT() {}
@@ -48,7 +45,6 @@ public:
 	virtual void SetPos(D2D1_POINT_2F);
 	D2D1_POINT_2F RetPos() const { return pos; }
 	bool RetSourceFlag() const { return source_flag; }
-	void SetComputationFlag() { computation_flag = true; }
 
 	virtual bool RetInputPoint(D2D1_POINT_2F& out, unsigned id) const { return false; }
 	virtual bool RetOutputPoint(D2D1_POINT_2F& out, unsigned id) const { return false; }
@@ -61,7 +57,7 @@ public:
 
 	virtual EL_STATE RetState(unsigned output_id = 0) const { return EL_STATE_FALSE; }
 
-	virtual void Proceed(unsigned level, unsigned limit) {}
+	virtual void Proceed(OUTPUT_LIST&) {}
 
 	friend class ELEMENTS_SET;
 };

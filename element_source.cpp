@@ -99,13 +99,15 @@ bool ELEMENT_SOURCE::RetOutputPoint(D2D1_POINT_2F& out, unsigned id) const
 	return true;
 }
 
-void ELEMENT_SOURCE::Proceed(unsigned level, unsigned limit)
+void ELEMENT_SOURCE::Proceed(OUTPUT_LIST& compute_list)
 {
-	if (level == limit)
+	// usuwa siebie z listy (je¿eli siebie nie by³o, to przerywa funkcje)
+	if (!compute_list.remove_first_element())
 		return;
 
+	// dodaje do listy wszystkie swoje outputy
 	for (unsigned i = 0; i < output_list.retAmount(); i++)
-		output_list[i]->element->Proceed(level+1, limit);
+		compute_list.add(output_list[i]->element, output_list[i]->input);
 
 	return;
 }

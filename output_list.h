@@ -22,8 +22,9 @@ public:
 	~OUTPUT_LIST();
 
 	bool add(ELEMENT*, unsigned);
-	bool remove(ELEMENT*);
-	bool remove(ELEMENT*, unsigned);
+	bool remove_first_element();
+	bool remove(ELEMENT* target);
+	bool remove(ELEMENT* target, unsigned id);
 	void clear();
 
 	OUTPUT* operator[] (unsigned arg) const { return arg < amount ? tab+arg : 0; }

@@ -48,7 +48,7 @@ public:
 
 	EL_STATE RetState(unsigned output_id = 0) const { return state; }
 
-	void Proceed(unsigned level, unsigned limit);
+	void Proceed(OUTPUT_LIST&);
 
 	friend class ELEMENTS_SET;
 };

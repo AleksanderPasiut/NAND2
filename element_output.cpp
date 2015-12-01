@@ -127,8 +127,14 @@ void ELEMENT_OUTPUT::RemoveLinkage(ELEMENT* target)
 	return;
 }
 
-void ELEMENT_OUTPUT::Proceed(unsigned level, unsigned limit)
+void ELEMENT_OUTPUT::Proceed(OUTPUT_LIST& compute_list)
 {
+	// usuwa siebie z listy (je¿eli siebie nie by³o, to przerywa funkcje)
+	if (!compute_list.remove_first_element())
+		return;
+	
+	// ustawia swój stan
 	state = input.target ? input.target->RetState(input.id) : EL_STATE_FALSE;
 	return;
 }
+

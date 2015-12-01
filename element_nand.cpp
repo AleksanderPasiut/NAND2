@@ -172,26 +172,21 @@ void ELEMENT_NAND::RemoveLinkage(ELEMENT* target)
 	return;
 }
 
-void ELEMENT_NAND::Proceed(unsigned level, unsigned limit)
+void ELEMENT_NAND::Proceed(OUTPUT_LIST& compute_list)
 {
-	if (level == limit)
+	// usuwa siebie z listy (je¿eli siebie nie by³o, to przerywa funkcje)
+	if (!compute_list.remove_first_element())
 		return;
 
-	//if (computation_flag)
-	{
-		state = EL_STATE_FALSE;
-		for (unsigned i = 0; i < ia; i++)
-			if (input[i].target && input[i].target->RetState(input[i].id) == EL_STATE_FALSE)
-				state = EL_STATE_TRUE;
+	// ustawia swój stan
+	state = EL_STATE_FALSE;
+	for (unsigned i = 0; i < ia; i++)
+		if (input[i].target && input[i].target->RetState(input[i].id) == EL_STATE_FALSE)
+			state = EL_STATE_TRUE;
 
-		computation_flag = false;
-	}
-
+	// dodaje do listy wszystkie swoje outputy
 	for (unsigned i = 0; i < output_list.retAmount(); i++)
-		output_list[i]->element->Proceed(level+1, limit);
+		compute_list.add(output_list[i]->element, output_list[i]->input);
 
 	return;
 }
-
-
-
