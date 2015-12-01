@@ -21,14 +21,16 @@ void MASTER::Link(ELEMENT* element, EVPV evpv)
 				}
 			case EVPV_INPUT:
 				{
+					// podwójne klikniêcie na wejœciu: kasowanie po³¹czenia
 					if (element == linking.element && linking.id == evpv.param)
-					{	element->SetInput(0, 0, linking.id);
+					{	element->SetInput(linking.id, 0, 0);
 						linking = LINKING();	}
 					break;
 				}
 			case EVPV_OUTPUT:
 				{
-					element->SetInput(linking.element, linking.id, evpv.param);
+					// klikniêcie na wyjœciu, potem na wejœciu: utworzenie po³¹czenia
+					element->SetInput(evpv.param, linking.element, linking.id);
 					linking = LINKING();
 					break;
 				}
@@ -49,12 +51,14 @@ void MASTER::Link(ELEMENT* element, EVPV evpv)
 				}
 			case EVPV_INPUT:
 				{
-					linking.element->SetInput(element, evpv.param, linking.id);
+					// klikniêcie na wejœciu, potem na wyjœciu: utworzenie po³¹czenia
+					linking.element->SetInput(linking.id, element, evpv.param);
 					linking = LINKING();
 					break;
 				}
 			case EVPV_OUTPUT:
 				{
+					// klikniêcie na wyjœciu, potem na wyjœciu: brak akcji
 					linking = LINKING();
 					break;
 				}
@@ -100,7 +104,7 @@ void MASTER::PaintOutputs()
 void MASTER::RemoveElement(ELEMENT* element)
 {
 	for (unsigned i = 0; i < elements_set.RetAmount(); i++)
-		elements_set[i]->RemoveInput(element);
+		elements_set[i]->RemoveLinkage(element);
 
 	elements_set.remove(element);
 	return;

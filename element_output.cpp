@@ -96,11 +96,21 @@ void ELEMENT_OUTPUT::PaintWires() const
 
 void ELEMENT_OUTPUT::SetInput(ELEMENT* target, unsigned target_id, unsigned id)
 {
+	// usuniêcie starego outputa
+	if (input.target)
+		input.target->DelOutput(input.id, this, 0);
+
+	// ustawienie nowego inputa
 	input.target = target;
 	input.id = target_id;
+
+	// ustawienie nowego outputa
+	if (input.target)
+		input.target->AddOutput(input.id, this, 0);
+
 	return;
 }
-void ELEMENT_OUTPUT::RemoveInput(ELEMENT* target)
+void ELEMENT_OUTPUT::RemoveLinkage(ELEMENT* target)
 {
 	if (input.target == target)
 	{	input.target = 0;
@@ -114,21 +124,4 @@ bool ELEMENT_OUTPUT::RetInputPoint(D2D1_POINT_2F& out, unsigned id) const
 
 	out = RetInputPoint();
 	return true;
-}
-
-void ELEMENT_OUTPUT::RecursiveStateCompute()
-{
-	if (!computation_flag)
-		return;
-
-	computation_flag = false;
-
-	if (input.target)
-	{
-		input.target->RecursiveStateCompute();
-
-		state = input.target->RetState(input.id);
-	}
-	
-	return;
 }

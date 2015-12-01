@@ -3,6 +3,7 @@
 #include <d2d1.h>
 
 #include "brush_set.h"
+#include "output_list.h"
 #include "evpv.h"
 
 class ELEMENT
@@ -14,9 +15,6 @@ protected:
 	// pozycja i rozmiar wyra¿one poprzez u³amek okna (od 0.0 do 1.0)
 	D2D1_POINT_2F pos;
 	D2D1_SIZE_F size;
-
-	// flaga liczenia
-	bool computation_flag;
 
 protected:
 	// konstruktory chronione - tworzenie odbywa siê poprzez Create() klas pochodnych
@@ -43,13 +41,15 @@ public:
 	virtual void SetPos(D2D1_POINT_2F);
 	D2D1_POINT_2F RetPos() const { return pos; }
 
-	virtual void SetInput(ELEMENT* target, unsigned target_id, unsigned input_id) {}
-	virtual void RemoveInput(ELEMENT* target) {}
 	virtual bool RetInputPoint(D2D1_POINT_2F& out, unsigned id) const { return false; }
 	virtual bool RetOutputPoint(D2D1_POINT_2F& out, unsigned id) const { return false; }
 
-	void SetComputationFlag() { computation_flag = true; }
-	virtual void RecursiveStateCompute() {}
+	virtual void SetInput(unsigned this_input_id, ELEMENT* target, unsigned input) {}
+
+	virtual void AddOutput(unsigned this_output_id, ELEMENT* target, unsigned input) {}
+	virtual void DelOutput(unsigned this_output_id, ELEMENT* target, unsigned input) {}
+	virtual void RemoveLinkage(ELEMENT* target) {}
+
 	virtual EL_STATE RetState(unsigned output_id = 0) const { return EL_STATE_FALSE; }
 
 	friend class ELEMENTS_SET;

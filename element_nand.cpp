@@ -124,23 +124,6 @@ void ELEMENT_NAND::PaintWires() const
 	return;
 }
 
-void ELEMENT_NAND::SetInput(ELEMENT* target, unsigned target_id, unsigned id)
-{
-	if (id >= ia)
-		return;
-
-	input[id].target = target;
-	input[id].id = target_id;
-	return;
-}
-void ELEMENT_NAND::RemoveInput(ELEMENT* target)
-{
-	for (unsigned i = 0; i < ia; i++)
-		if (input[i].target == target)
-		{	input[i].target = 0;
-			input[i].id = 0;	}
-	return;
-}
 bool ELEMENT_NAND::RetInputPoint(D2D1_POINT_2F& out, unsigned id) const
 {
 	if (id >= ia)
@@ -158,23 +141,36 @@ bool ELEMENT_NAND::RetOutputPoint(D2D1_POINT_2F& out, unsigned id) const
 	return true;
 }
 
-void ELEMENT_NAND::RecursiveStateCompute()
+void ELEMENT_NAND::SetInput(unsigned this_input_id, ELEMENT* target, unsigned id)
 {
-	if (!computation_flag)
+	// je¿eli zadany input jest spoza zakresu
+	if (this_input_id >= ia)
 		return;
 
-	computation_flag = false;
+	// reset starego outputa
+	if (input[this_input_id].target)
+		input[this_input_id].target->DelOutput(id, this, this_input_id);
 
-	for (unsigned i = 0; i < ia; i++)
-		if (input[i].target)
-			input[i].target->RecursiveStateCompute();
+	// ustawienie nowego inputa
+	input[this_input_id].target = target;
+	input[this_input_id].id = id;
 
-	for (unsigned i = 0; i < ia; i++)
-		if (input[i].target)
-			if (input[i].target->RetState(input[i].id) == EL_STATE_FALSE)
-			{	state = EL_STATE_TRUE;
-				return;	}
+	// ustawienie nowego outputa
+	if (input[this_input_id].target)
+		input[this_input_id].target->AddOutput(id, this, this_input_id);
 
-	state = EL_STATE_FALSE;
 	return;
 }
+void ELEMENT_NAND::RemoveLinkage(ELEMENT* target)
+{
+	for (unsigned i = 0; i < ia; i++)
+		if (input[i].target == target)
+		{	input[i].target = 0;
+			input[i].id = 0;	}
+
+	output_list.remove(target);
+	return;
+}
+
+
+

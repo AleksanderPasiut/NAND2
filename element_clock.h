@@ -12,6 +12,8 @@ private:
 	MASTER* Master;
 	IDWriteTextFormat* text_format;
 
+	OUTPUT_LIST output_list;
+
 private:
 	ELEMENT_CLOCK(const ELEMENT_CLOCK&) {}
 	ELEMENT_CLOCK& operator= (const ELEMENT_CLOCK&) {}
@@ -33,6 +35,11 @@ public:
 	void Paint() const;
 
 	bool RetOutputPoint(D2D1_POINT_2F& out, unsigned id) const;
+
+	void AddOutput(unsigned this_output_id, ELEMENT* target, unsigned input) { output_list.add(target, input); return; }
+	void DelOutput(unsigned this_output_id, ELEMENT* target, unsigned input) { output_list.remove(target, input); return; }
+	
+	void RemoveLinkage(ELEMENT* target) { output_list.remove(target); return; }
 
 	EL_STATE RetState(unsigned output_id = 0) const { return state; }
 

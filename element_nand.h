@@ -12,6 +12,8 @@ private:
 	EL_STATE state;
 	EL_INPUT input[max_input];
 
+	OUTPUT_LIST output_list;
+
 private:
 	ELEMENT_NAND(const ELEMENT_NAND&) {}
 	ELEMENT_NAND& operator= (const ELEMENT_NAND&) {}
@@ -32,12 +34,17 @@ public:
 
 	EVPV MouseInput(const D2D1_POINT_2F&);
 	void Paint() const;
-	void PaintWires() const;
 
-	void SetInput(ELEMENT* target, unsigned target_id, unsigned input_id);
-	void RemoveInput(ELEMENT* target);
+	void PaintWires() const;
 	bool RetInputPoint(D2D1_POINT_2F& out, unsigned id) const;
 	bool RetOutputPoint(D2D1_POINT_2F& out, unsigned id) const;
+
+	void SetInput(unsigned this_input_id, ELEMENT* target, unsigned input);
+
+	void AddOutput(unsigned this_output_id, ELEMENT* target, unsigned input) { output_list.add(target, input); return; }
+	void DelOutput(unsigned this_output_id, ELEMENT* target, unsigned input) { output_list.remove(target, input); return; }
+
+	void RemoveLinkage(ELEMENT* target);
 
 	void RecursiveStateCompute();
 	EL_STATE RetState(unsigned output_id = 0) const { return state; }
