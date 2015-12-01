@@ -12,7 +12,7 @@ ELEMENT_CLOCK::ELEMENT_CLOCK(ID2D1HwndRenderTarget* target,
 							 unsigned in_elapse,
 							 MASTER* in_Master,
 							 IDWriteTextFormat* in_text_format)
-	: ELEMENT(target, brush_set, pos_x, pos_y, width, height)
+	: ELEMENT(target, brush_set, pos_x, pos_y, width, height, true)
 {
 	state = EL_STATE_FALSE;
 	elapse = in_elapse;
@@ -137,5 +137,16 @@ VOID CALLBACK ClockElementTimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWOR
 	ELEMENT_CLOCK* elc = reinterpret_cast<ELEMENT_CLOCK*>(idEvent);
 	elc->state = static_cast<EL_STATE>(!static_cast<int>(elc->state));
 	elc->Master->Proceed();
+	return;
+}
+
+void ELEMENT_CLOCK::Proceed(unsigned level, unsigned limit)
+{
+	if (level == limit)
+		return;
+
+	for (unsigned i = 0; i < output_list.retAmount(); i++)
+		output_list[i]->element->Proceed(level+1, limit);
+
 	return;
 }

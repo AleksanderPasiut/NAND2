@@ -6,7 +6,7 @@ ELEMENT_OUTPUT::ELEMENT_OUTPUT(ID2D1HwndRenderTarget* target,
 							   float pos_y,
 							   float width,
 							   float height)
-	: ELEMENT(target, brush_set, pos_x, pos_y, width, height)
+	: ELEMENT(target, brush_set, pos_x, pos_y, width, height, false)
 {
 	state = EL_STATE_FALSE;
 }
@@ -94,7 +94,16 @@ void ELEMENT_OUTPUT::PaintWires() const
 	return;
 }
 
-void ELEMENT_OUTPUT::SetInput(ELEMENT* target, unsigned target_id, unsigned id)
+bool ELEMENT_OUTPUT::RetInputPoint(D2D1_POINT_2F& out, unsigned id) const
+{
+	if (id)
+		return false;
+
+	out = RetInputPoint();
+	return true;
+}
+
+void ELEMENT_OUTPUT::SetInput(unsigned id, ELEMENT* target, unsigned target_id)
 {
 	// usuniêcie starego outputa
 	if (input.target)
@@ -117,11 +126,9 @@ void ELEMENT_OUTPUT::RemoveLinkage(ELEMENT* target)
 		input.id = 0;	}
 	return;
 }
-bool ELEMENT_OUTPUT::RetInputPoint(D2D1_POINT_2F& out, unsigned id) const
-{
-	if (id)
-		return false;
 
-	out = RetInputPoint();
-	return true;
+void ELEMENT_OUTPUT::Proceed(unsigned level, unsigned limit)
+{
+	state = input.target ? input.target->RetState(input.id) : EL_STATE_FALSE;
+	return;
 }

@@ -9,7 +9,7 @@ ELEMENT_TEXTBOX::ELEMENT_TEXTBOX(ID2D1HwndRenderTarget* target,
 							   float radiusX,
 							   float radiusY,
 							   bool in_pointer)
-	: ELEMENT(target, brush_set, pos_x, pos_y, radiusX, radiusY)
+	: ELEMENT(target, brush_set, pos_x, pos_y, radiusX, radiusY, false)
 {
 	pointer = in_pointer;
 	text[0] = 0;

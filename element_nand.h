@@ -46,8 +46,9 @@ public:
 
 	void RemoveLinkage(ELEMENT* target);
 
-	void RecursiveStateCompute();
 	EL_STATE RetState(unsigned output_id = 0) const { return state; }
+
+	void Proceed(unsigned level, unsigned limit);
 
 	friend class ELEMENTS_SET;
 };

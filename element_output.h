@@ -30,12 +30,13 @@ public:
 	
 	bool RetInputPoint(D2D1_POINT_2F& out, unsigned id) const;
 
-	void SetInput(ELEMENT* target, unsigned target_id, unsigned input_id);
+	void SetInput(unsigned this_input_id, ELEMENT* target, unsigned input);
 
 	void RemoveLinkage(ELEMENT* target);
 
-	void RecursiveStateCompute();
 	EL_STATE RetState(unsigned output_id = 0) const { return state; }
+
+	void Proceed(unsigned level, unsigned limit);
 
 	friend class ELEMENTS_SET;
 };

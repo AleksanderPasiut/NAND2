@@ -26,6 +26,6 @@ public:
 	bool remove(ELEMENT*, unsigned);
 	void clear();
 
-	OUTPUT* retTab(unsigned arg) const { return arg < amount ? tab+arg : 0; }
+	OUTPUT* operator[] (unsigned arg) const { return arg < amount ? tab+arg : 0; }
 	unsigned retAmount() const { return amount; }
 };

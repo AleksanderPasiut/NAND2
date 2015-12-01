@@ -7,7 +7,7 @@ ELEMENT_NAND::ELEMENT_NAND(ID2D1HwndRenderTarget* target,
 							   float width,
 							   float height,
 							   unsigned input_amount)
-	: ELEMENT(target, brush_set, pos_x, pos_y, width, height)
+	: ELEMENT(target, brush_set, pos_x, pos_y, width, height, false)
 {
 	ia = input_amount;
 	state = EL_STATE_FALSE;
@@ -169,6 +169,27 @@ void ELEMENT_NAND::RemoveLinkage(ELEMENT* target)
 			input[i].id = 0;	}
 
 	output_list.remove(target);
+	return;
+}
+
+void ELEMENT_NAND::Proceed(unsigned level, unsigned limit)
+{
+	if (level == limit)
+		return;
+
+	//if (computation_flag)
+	{
+		state = EL_STATE_FALSE;
+		for (unsigned i = 0; i < ia; i++)
+			if (input[i].target && input[i].target->RetState(input[i].id) == EL_STATE_FALSE)
+				state = EL_STATE_TRUE;
+
+		computation_flag = false;
+	}
+
+	for (unsigned i = 0; i < output_list.retAmount(); i++)
+		output_list[i]->element->Proceed(level+1, limit);
+
 	return;
 }
 

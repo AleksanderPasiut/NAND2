@@ -6,7 +6,7 @@ ELEMENT_SOURCE::ELEMENT_SOURCE(ID2D1HwndRenderTarget* target,
 							   float pos_y,
 							   float width,
 							   float height)
-	: ELEMENT(target, brush_set, pos_x, pos_y, width, height)
+	: ELEMENT(target, brush_set, pos_x, pos_y, width, height, true)
 {
 	state = EL_STATE_FALSE;
 }
@@ -97,4 +97,15 @@ bool ELEMENT_SOURCE::RetOutputPoint(D2D1_POINT_2F& out, unsigned id) const
 
 	out = RetOutputPoint();
 	return true;
+}
+
+void ELEMENT_SOURCE::Proceed(unsigned level, unsigned limit)
+{
+	if (level == limit)
+		return;
+
+	for (unsigned i = 0; i < output_list.retAmount(); i++)
+		output_list[i]->element->Proceed(level+1, limit);
+
+	return;
 }

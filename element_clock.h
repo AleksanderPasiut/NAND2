@@ -43,6 +43,8 @@ public:
 
 	EL_STATE RetState(unsigned output_id = 0) const { return state; }
 
+	void Proceed(unsigned level, unsigned limit);
+
 	friend class ELEMENTS_SET;
 	friend VOID CALLBACK ClockElementTimerProc(HWND, UINT, UINT_PTR, DWORD);
 };

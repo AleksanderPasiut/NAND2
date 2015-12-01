@@ -6,11 +6,14 @@ ELEMENT::ELEMENT(ID2D1HwndRenderTarget* in_target,
 				 float pos_x,
 				 float pos_y,
 				 float width,
-				 float height) :
+				 float height,
+				 bool source_flag_in) :
 	target(in_target),
 	brush(brush_set),
 	pos(D2D1::Point2F(pos_x, pos_y)),
-	size(D2D1::SizeF(width, height)) {}
+	size(D2D1::SizeF(width, height)),
+	source_flag(source_flag_in),
+	computation_flag(false) {}
 
 bool ELEMENT::PointInRect(const D2D1_RECT_F& rect, const D2D1_POINT_2F& pt)
 {

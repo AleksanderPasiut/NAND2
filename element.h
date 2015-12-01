@@ -9,6 +9,7 @@
 class ELEMENT
 {
 protected:
+	// render_target i zestaw pêdzli
 	ID2D1HwndRenderTarget* target;
 	BRUSH_SET* brush;
 
@@ -16,10 +17,16 @@ protected:
 	D2D1_POINT_2F pos;
 	D2D1_SIZE_F size;
 
+	// flaga Ÿród³a
+	bool source_flag;
+
+	// flaga obliczeñ
+	bool computation_flag;
+
 protected:
 	// konstruktory chronione - tworzenie odbywa siê poprzez Create() klas pochodnych
 	ELEMENT() {}
-	ELEMENT(ID2D1HwndRenderTarget*, BRUSH_SET*, float pos_x, float pos_y, float width, float height);
+	ELEMENT(ID2D1HwndRenderTarget*, BRUSH_SET*, float pos_x, float pos_y, float width, float height, bool source_flag);
 
 	// destruktor chroniony - usuwanie odbywa siê poprzez ELEMENTS_SET::remove(ELEMENT*)
 	~ELEMENT() {}
@@ -40,6 +47,8 @@ public:
 	virtual void PaintWires() const {};
 	virtual void SetPos(D2D1_POINT_2F);
 	D2D1_POINT_2F RetPos() const { return pos; }
+	bool RetSourceFlag() const { return source_flag; }
+	void SetComputationFlag() { computation_flag = true; }
 
 	virtual bool RetInputPoint(D2D1_POINT_2F& out, unsigned id) const { return false; }
 	virtual bool RetOutputPoint(D2D1_POINT_2F& out, unsigned id) const { return false; }
@@ -51,6 +60,8 @@ public:
 	virtual void RemoveLinkage(ELEMENT* target) {}
 
 	virtual EL_STATE RetState(unsigned output_id = 0) const { return EL_STATE_FALSE; }
+
+	virtual void Proceed(unsigned level, unsigned limit) {}
 
 	friend class ELEMENTS_SET;
 };
