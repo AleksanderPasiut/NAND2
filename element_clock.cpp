@@ -4,14 +4,14 @@
 #include "master.h"
 
 ELEMENT_CLOCK::ELEMENT_CLOCK(ID2D1HwndRenderTarget* target,
-							   BRUSH_SET* brush_set,
-							   float pos_x,
-							   float pos_y,
-							   float width,
-							   float height,
-							   unsigned in_elapse,
-							   MASTER* in_Master,
-							   IDWriteTextFormat* in_text_format)
+							 BRUSH_SET* brush_set,
+							 float pos_x,
+							 float pos_y,
+							 float width,
+							 float height,
+							 unsigned in_elapse,
+							 MASTER* in_Master,
+							 IDWriteTextFormat* in_text_format)
 	: ELEMENT(target, brush_set, pos_x, pos_y, width, height)
 {
 	state = EL_STATE_FALSE;
@@ -24,8 +24,6 @@ ELEMENT_CLOCK::ELEMENT_CLOCK(ID2D1HwndRenderTarget* target,
 ELEMENT_CLOCK::~ELEMENT_CLOCK()
 {
 	KillTimer(target->GetHwnd(), reinterpret_cast<UINT_PTR>(this));
-
-	if (text_format) text_format->Release();
 }
 
 D2D1_POINT_2F ELEMENT_CLOCK::RetControlPoint() const
@@ -56,14 +54,14 @@ void ELEMENT_CLOCK::RetOutputEllipse(D2D1_ELLIPSE& out) const
 }
 
 ELEMENT_CLOCK* ELEMENT_CLOCK::Create(ID2D1HwndRenderTarget* target,
-									   BRUSH_SET* brush_set,
-									   float pos_x,
-									   float pos_y,
-									   float width,
-									   float height,
-									   unsigned in_elapse,
-									   MASTER* Master,
-									   IDWriteTextFormat* text_format)
+									 BRUSH_SET* brush_set,
+									 float pos_x,
+									 float pos_y,
+									 float width,
+									 float height,
+									 unsigned in_elapse,
+									 MASTER* Master,
+									 IDWriteTextFormat* text_format)
 {
 	ELEMENT_CLOCK* ret = new ELEMENT_CLOCK(target,
 											 brush_set,

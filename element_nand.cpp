@@ -158,16 +158,23 @@ bool ELEMENT_NAND::RetOutputPoint(D2D1_POINT_2F& out, unsigned id) const
 	return true;
 }
 
-bool ELEMENT_NAND::ComputeState()
+void ELEMENT_NAND::RecursiveStateCompute()
 {
-	EL_STATE old_state = state;
+	if (!computation_flag)
+		return;
+
+	computation_flag = false;
+
+	for (unsigned i = 0; i < ia; i++)
+		if (input[i].target)
+			input[i].target->RecursiveStateCompute();
 
 	for (unsigned i = 0; i < ia; i++)
 		if (input[i].target)
 			if (input[i].target->RetState(input[i].id) == EL_STATE_FALSE)
 			{	state = EL_STATE_TRUE;
-				return old_state != state;	}
+				return;	}
 
 	state = EL_STATE_FALSE;
-	return old_state != state;
+	return;
 }

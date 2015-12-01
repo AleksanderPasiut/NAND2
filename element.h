@@ -15,6 +15,9 @@ protected:
 	D2D1_POINT_2F pos;
 	D2D1_SIZE_F size;
 
+	// flaga liczenia
+	bool computation_flag;
+
 protected:
 	// konstruktory chronione - tworzenie odbywa siê poprzez Create() klas pochodnych
 	ELEMENT() {}
@@ -45,8 +48,8 @@ public:
 	virtual bool RetInputPoint(D2D1_POINT_2F& out, unsigned id) const { return false; }
 	virtual bool RetOutputPoint(D2D1_POINT_2F& out, unsigned id) const { return false; }
 
-	virtual void ResetState() {}
-	virtual bool ComputeState() { return false; }
+	void SetComputationFlag() { computation_flag = true; }
+	virtual void RecursiveStateCompute() {}
 	virtual EL_STATE RetState(unsigned output_id = 0) const { return EL_STATE_FALSE; }
 
 	friend class ELEMENTS_SET;

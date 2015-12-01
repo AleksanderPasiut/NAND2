@@ -32,8 +32,7 @@ public:
 	void RemoveInput(ELEMENT* target);
 	bool RetInputPoint(D2D1_POINT_2F& out, unsigned id) const;
 
-	bool ComputeState();
-	void ResetState() { state = EL_STATE_FALSE; }
+	void RecursiveStateCompute();
 	EL_STATE RetState(unsigned output_id = 0) const { return state; }
 
 	friend class ELEMENTS_SET;

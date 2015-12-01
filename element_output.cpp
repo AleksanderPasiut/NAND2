@@ -116,16 +116,19 @@ bool ELEMENT_OUTPUT::RetInputPoint(D2D1_POINT_2F& out, unsigned id) const
 	return true;
 }
 
-bool ELEMENT_OUTPUT::ComputeState()
+void ELEMENT_OUTPUT::RecursiveStateCompute()
 {
-	EL_STATE old_state = state;
+	if (!computation_flag)
+		return;
+
+	computation_flag = false;
 
 	if (input.target)
 	{
+		input.target->RecursiveStateCompute();
+
 		state = input.target->RetState(input.id);
-		return old_state != state;
 	}
 	
-	state = EL_STATE_FALSE;
-	return old_state != state;
+	return;
 }
