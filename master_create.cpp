@@ -36,7 +36,6 @@ MASTER* MASTER::Create(HWND hwnd)
 							if (ret->menu = MENU::Create(hwnd))
 							{
 								ret->hwnd = hwnd;
-								ret->algorithm_stable = true;
 								return ret;
 
 								delete ret->menu;

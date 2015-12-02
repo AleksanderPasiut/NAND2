@@ -12,7 +12,6 @@
 
 #include "element_source.h"
 #include "element_nand.h"
-#include "element_textbox.h"
 #include "element_clock.h"
 #include "element_output.h"
 
@@ -50,8 +49,6 @@ private:
 		LINKING() : type(EVPV_NONE), element(0), id(0), mark_all_inputs(false), mark_all_outputs(false) {}
 	};
 	LINKING linking;
-
-	bool algorithm_stable;
 
 private:
 	// master_create.cpp

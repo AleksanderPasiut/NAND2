@@ -36,13 +36,13 @@ protected:
 	static bool PointInRect(const D2D1_RECT_F&, const D2D1_POINT_2F&);
 	static bool PointInEllipse(const D2D1_ELLIPSE&, const D2D1_POINT_2F&);
 	void RetElementRect(D2D1_RECT_F&) const;
-	virtual void RetCrossRect(D2D1_RECT_F&) const;
+	void RetCrossRect(D2D1_RECT_F&) const;
 
 public:
 	virtual EVPV MouseInput(const D2D1_POINT_2F&);
 	virtual void Paint() const;
 	virtual void PaintWires() const {};
-	virtual void SetPos(D2D1_POINT_2F);
+	void SetPos(D2D1_POINT_2F);
 	D2D1_POINT_2F RetPos() const { return pos; }
 	bool RetSourceFlag() const { return source_flag; }
 
