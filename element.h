@@ -9,13 +9,17 @@
 class ELEMENT
 {
 protected:
-	// render_target i zestaw pêdzli
+	// render_target, czcionka i zestaw pêdzli
 	ID2D1HwndRenderTarget* target;
 	BRUSH_SET* brush;
+	IDWriteTextFormat* text_format;
 
 	// pozycja i rozmiar wyra¿one poprzez u³amek okna (od 0.0 do 1.0)
 	D2D1_POINT_2F pos;
 	D2D1_SIZE_F size;
+
+	// identyfikator elementu
+	unsigned id;
 
 	// flaga Ÿród³a
 	bool source_flag;
@@ -23,7 +27,7 @@ protected:
 protected:
 	// konstruktory chronione - tworzenie odbywa siê poprzez Create() klas pochodnych
 	ELEMENT() {}
-	ELEMENT(ID2D1HwndRenderTarget*, BRUSH_SET*, float pos_x, float pos_y, float width, float height, bool source_flag);
+	ELEMENT(ID2D1HwndRenderTarget*, BRUSH_SET*, IDWriteTextFormat*, float pos_x, float pos_y, float width, float height, unsigned id, bool source_flag);
 
 	// destruktor chroniony - usuwanie odbywa siê poprzez ELEMENTS_SET::remove(ELEMENT*)
 	~ELEMENT() {}

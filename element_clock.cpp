@@ -5,19 +5,19 @@
 
 ELEMENT_CLOCK::ELEMENT_CLOCK(ID2D1HwndRenderTarget* target,
 							 BRUSH_SET* brush_set,
+							 IDWriteTextFormat* text_format,
 							 float pos_x,
 							 float pos_y,
 							 float width,
 							 float height,
+							 unsigned id,
 							 unsigned in_elapse,
-							 MASTER* in_Master,
-							 IDWriteTextFormat* in_text_format)
-	: ELEMENT(target, brush_set, pos_x, pos_y, width, height, true)
+							 MASTER* in_Master)
+	: ELEMENT(target, brush_set, text_format, pos_x, pos_y, width, height, id, true)
 {
 	state = EL_STATE_FALSE;
 	elapse = in_elapse;
 	Master = in_Master;
-	text_format = in_text_format;
 
 	SetTimer(target->GetHwnd(), reinterpret_cast<UINT_PTR>(this), elapse, ClockElementTimerProc);
 }
@@ -55,23 +55,25 @@ void ELEMENT_CLOCK::RetOutputEllipse(D2D1_ELLIPSE& out) const
 
 ELEMENT_CLOCK* ELEMENT_CLOCK::Create(ID2D1HwndRenderTarget* target,
 									 BRUSH_SET* brush_set,
+									 IDWriteTextFormat* text_format,
 									 float pos_x,
 									 float pos_y,
 									 float width,
 									 float height,
+									 unsigned id,
 									 unsigned in_elapse,
-									 MASTER* Master,
-									 IDWriteTextFormat* text_format)
+									 MASTER* Master)
 {
 	ELEMENT_CLOCK* ret = new ELEMENT_CLOCK(target,
-											 brush_set,
-											 pos_x,
-											 pos_y,
-											 width,
-											 height,
-											 in_elapse,
-											 Master,
-											 text_format);
+										   brush_set,
+										   text_format,
+										   pos_x,
+										   pos_y,
+										   width,
+										   height,
+										   id,
+										   in_elapse,
+										   Master);
 
 	if (ret)
 	{

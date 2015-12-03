@@ -125,10 +125,12 @@ ELEMENT* MASTER::Nand(unsigned input_amount)
 	D2D1_SIZE_F ts = target->GetSize();
 	return ELEMENT_NAND::Create(target,
 								brush_set,
+								text_format,
 								static_cast<float>(GET_X_LPARAM(menu->RetPos()))/ts.width,
 								static_cast<float>(GET_Y_LPARAM(menu->RetPos()))/ts.height,
 								0.11f,
 								input_amount*0.04f,
+								0,
 								input_amount);
 }
 void MASTER::MenuInput(WPARAM wParam, LPARAM lParam)
@@ -146,10 +148,12 @@ void MASTER::MenuInput(WPARAM wParam, LPARAM lParam)
 		{
 			element = ELEMENT_SOURCE::Create(target,
 											 brush_set,
+											 text_format,
 											 static_cast<float>(GET_X_LPARAM(menu->RetPos()))/ts.width,
 											 static_cast<float>(GET_Y_LPARAM(menu->RetPos()))/ts.height,
 											 0.08f,
-											 0.1f);
+											 0.1f,
+											 0);
 			break;
 		}
 	case MENU_ADD_CLOCK:
@@ -158,13 +162,14 @@ void MASTER::MenuInput(WPARAM wParam, LPARAM lParam)
 			{
 				element = ELEMENT_CLOCK::Create(target,
 												brush_set,
+												text_format,
 												static_cast<float>(GET_X_LPARAM(menu->RetPos()))/ts.width,
 												static_cast<float>(GET_Y_LPARAM(menu->RetPos()))/ts.height,
 												0.08f,
 												0.15f,
+												0,
 												elapse,
-												this,
-												text_format);
+												this);
 			}
 			break;
 		}
@@ -181,10 +186,12 @@ void MASTER::MenuInput(WPARAM wParam, LPARAM lParam)
 		{
 			element = ELEMENT_OUTPUT::Create(target,
 											 brush_set,
+											 text_format,
 											 static_cast<float>(GET_X_LPARAM(menu->RetPos()))/ts.width,
 											 static_cast<float>(GET_Y_LPARAM(menu->RetPos()))/ts.height,
 											 0.08f,
-											 0.1f);
+											 0.1f,
+											 0);
 			break;
 		}
 	}

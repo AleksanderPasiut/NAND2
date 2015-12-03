@@ -10,7 +10,6 @@ private:
 	EL_STATE state;
 	unsigned elapse;
 	MASTER* Master;
-	IDWriteTextFormat* text_format;
 
 	OUTPUT_LIST output_list;
 
@@ -18,7 +17,7 @@ private:
 	ELEMENT_CLOCK(const ELEMENT_CLOCK&) {}
 	ELEMENT_CLOCK& operator= (const ELEMENT_CLOCK&) {}
 
-	ELEMENT_CLOCK(ID2D1HwndRenderTarget*, BRUSH_SET*, float pos_x, float pos_y, float width, float height, unsigned in_elapse, MASTER* Master, IDWriteTextFormat* text_format);
+	ELEMENT_CLOCK(ID2D1HwndRenderTarget*, BRUSH_SET*, IDWriteTextFormat*, float pos_x, float pos_y, float width, float height, unsigned id, unsigned in_elapse, MASTER* Master);
 	~ELEMENT_CLOCK();
 
 private:
@@ -29,7 +28,7 @@ private:
 	void PaintElapse() const;
 
 public:
-	static ELEMENT_CLOCK* Create(ID2D1HwndRenderTarget*, BRUSH_SET*, float pos_x, float pos_y, float width, float height, unsigned in_elapse, MASTER* Master, IDWriteTextFormat* text_format);
+	static ELEMENT_CLOCK* Create(ID2D1HwndRenderTarget*, BRUSH_SET*, IDWriteTextFormat*, float pos_x, float pos_y, float width, float height, unsigned id, unsigned in_elapse, MASTER* Master);
 
 	EVPV MouseInput(const D2D1_POINT_2F&);
 	void Paint() const;

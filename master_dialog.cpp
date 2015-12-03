@@ -65,39 +65,3 @@ BOOL CALLBACK AddNandDialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 	}
 	return FALSE;
 }
-
-BOOL CALLBACK AddTextboxDialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-	switch(uMsg)
-	{
-	case WM_ACTIVATE:
-		{
-			SetFocus(GetDlgItem(hwnd, CTRL_EDIT));
-			return FALSE;
-		}
-	case WM_COMMAND:
-		{
-			switch(LOWORD(wParam))
-			{
-			case CTRL_CHECKBOX:
-				{
-					return TRUE;
-				}
-			case IDOK: 
-				{
-					static ADD_TEXTBOX_RV rv;
-					GetDlgItemText(hwnd, CTRL_EDIT, rv.text, 256);
-					rv.pointer = IsDlgButtonChecked(hwnd, CTRL_CHECKBOX) == BST_CHECKED;
-					EndDialog(hwnd, reinterpret_cast<INT_PTR>(&rv));
-					return TRUE;
-				}
-			case IDCANCEL:
-				{
-					EndDialog(hwnd, 0);
-					return TRUE;
-				}
-			}
-		}
-	}
-	return FALSE;
-}

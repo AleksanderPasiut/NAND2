@@ -3,15 +3,19 @@
 
 ELEMENT::ELEMENT(ID2D1HwndRenderTarget* in_target,
 				 BRUSH_SET* brush_set,
+				 IDWriteTextFormat* format,
 				 float pos_x,
 				 float pos_y,
 				 float width,
 				 float height,
+				 unsigned element_id,
 				 bool source_flag_in) :
 	target(in_target),
 	brush(brush_set),
+	text_format(format),
 	pos(D2D1::Point2F(pos_x, pos_y)),
 	size(D2D1::SizeF(width, height)),
+	id(element_id),
 	source_flag(source_flag_in) {}
 
 bool ELEMENT::PointInRect(const D2D1_RECT_F& rect, const D2D1_POINT_2F& pt)
