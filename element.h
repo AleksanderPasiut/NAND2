@@ -1,6 +1,7 @@
 #pragma once
 
 #include <d2d1.h>
+#include <dwrite.h>
 
 #include "brush_set.h"
 #include "output_list.h"
@@ -41,6 +42,7 @@ protected:
 	static bool PointInEllipse(const D2D1_ELLIPSE&, const D2D1_POINT_2F&);
 	void RetElementRect(D2D1_RECT_F&) const;
 	void RetCrossRect(D2D1_RECT_F&) const;
+	void PaintId() const;
 
 public:
 	virtual EVPV MouseInput(const D2D1_POINT_2F&);

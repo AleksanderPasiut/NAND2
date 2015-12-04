@@ -129,7 +129,7 @@ ELEMENT* MASTER::Nand(unsigned input_amount)
 								static_cast<float>(GET_X_LPARAM(menu->RetPos()))/ts.width,
 								static_cast<float>(GET_Y_LPARAM(menu->RetPos()))/ts.height,
 								0.11f,
-								input_amount*0.04f,
+								input_amount == 2 ? 0.11f : input_amount*0.04f,
 								0,
 								input_amount);
 }

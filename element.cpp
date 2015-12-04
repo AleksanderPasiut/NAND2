@@ -59,6 +59,28 @@ void ELEMENT::RetCrossRect(D2D1_RECT_F& out) const
 	out.bottom	= (pos.y)*ts.height+ds*multiplier;
 	return;
 }
+void ELEMENT::PaintId() const
+{
+	D2D1_SIZE_F ts = target->GetSize();
+	static const float tm = 0.01f;
+	static const float lm = 0.04f;
+	static const float mh = 0.03f;
+	float multiplier = min(ts.height, ts.width);
+
+	D2D1_RECT_F rect = D2D1::RectF(0.0f, 0.0f, 4.0f, 1.0f);
+
+	float scale = multiplier*(mh-tm);
+	target->SetTransform(D2D1::Matrix3x2F::Scale(scale, scale)*
+						 D2D1::Matrix3x2F::Translation((pos.x+size.width*0.4f)*ts.width,
+														pos.y*ts.height+tm*multiplier));
+
+	
+	target->DrawRectangle(rect, brush->Red(), 0.03f);
+	text_format->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_TRAILING);
+	target->DrawTextA(L"0", 1, text_format, rect, brush->Black());
+	target->SetTransform(D2D1::IdentityMatrix());
+	return;
+}
 EVPV ELEMENT::MouseInput(const D2D1_POINT_2F& click)
 {
 	D2D1_RECT_F rect;
@@ -86,6 +108,7 @@ void ELEMENT::Paint() const
 	target->DrawLine(D2D1::Point2F(rect.left, rect.top), D2D1::Point2F(rect.right, rect.bottom), brush->Gray());
 	target->DrawLine(D2D1::Point2F(rect.left, rect.bottom), D2D1::Point2F(rect.right, rect.top), brush->Gray());
 
+	PaintId();
 	return;
 }
 void ELEMENT::SetPos(D2D1_POINT_2F new_pos)

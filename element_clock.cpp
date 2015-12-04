@@ -1,5 +1,3 @@
-#include <dwrite.h>
-#include <stdlib.h>
 #include "element_clock.h"
 #include "master.h"
 
@@ -114,7 +112,7 @@ void ELEMENT_CLOCK::PaintElapse() const
 	D2D1_RECT_F rect = D2D1::RectF(0.0f, 0.0f, 4.0f, 1.f);		
 	D2D1_SIZE_F ts = target->GetSize();		
 	float scale = min(ts.width*size.width/4.0f, ts.height*size.height*0.24f);
-	target->SetTransform(D2D1::Matrix3x2F::Scale(scale, scale, D2D1::Point2F())*		
+	target->SetTransform(D2D1::Matrix3x2F::Scale(scale, scale)*		
 						 D2D1::Matrix3x2F::Translation(D2D1::SizeF(ts.width*pos.x+(ts.width*size.width/4.0f-scale)*2.0f,		
 																   ts.height*(pos.y+0.66f*size.height))));		
 	wchar_t text[6];		
