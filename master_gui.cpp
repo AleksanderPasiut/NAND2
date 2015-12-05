@@ -8,22 +8,22 @@ void MASTER::MouseInput(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 	case WM_LBUTTONDOWN:
 		{
-			if (!elements_set.RetAmount())
-				break;
-
 			moving.click = sns.Click(lParam);
 
 			ELEMENT* element = 0;
 			EVPV evpv = EVPV_NONE;
 
-			for (unsigned i = elements_set.RetAmount()-1; ; i--)
+			if (elements_set.RetAmount())
 			{
-				if ((evpv = elements_set[i]->MouseInput(moving.click)).type != EVPV_NONE)
-				{	element = elements_set[i];
-					break;	}
+				for (unsigned i = elements_set.RetAmount()-1; ; i--)
+				{
+					if ((evpv = elements_set[i]->MouseInput(moving.click)).type != EVPV_NONE)
+					{	element = elements_set[i];
+						break;	}
 
-				if (!i)
-					break;
+					if (!i)
+						break;
+				}
 			}
 
 			if (element)
@@ -70,6 +70,15 @@ void MASTER::MouseInput(UINT uMsg, WPARAM wParam, LPARAM lParam)
 				new_pos.x = moving.old_pos.x + (new_pos.x-moving.click.x);
 				new_pos.y = moving.old_pos.y + (new_pos.y-moving.click.y);
 
+				if (new_pos.x > sns.TRANSLATION_LIMIT)
+					new_pos.x = sns.TRANSLATION_LIMIT;
+				if (new_pos.x < -sns.TRANSLATION_LIMIT)
+					new_pos.x = -sns.TRANSLATION_LIMIT;
+				if (new_pos.y > sns.TRANSLATION_LIMIT)
+					new_pos.y = sns.TRANSLATION_LIMIT;
+				if (new_pos.y < -sns.TRANSLATION_LIMIT)
+					new_pos.y = -sns.TRANSLATION_LIMIT;
+
 				moving.element->SetPos(new_pos);
 				Paint();
 			}
@@ -101,8 +110,16 @@ void MASTER::MouseInput(UINT uMsg, WPARAM wParam, LPARAM lParam)
 			POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
 			ScreenToClient(hwnd, &pt);
 			if (GET_WHEEL_DELTA_WPARAM(wParam) > 0)
-				sns.SetScale(&pt, sns.scale*1.5f);
-			else sns.SetScale(&pt, sns.scale/1.5f);
+			{
+				if (sns.scale*sns.SCALE_MULTIPLIER < sns.SCALE_LIMIT_TOP)
+					sns.SetScale(&pt, sns.scale*sns.SCALE_MULTIPLIER);
+			}
+			else 
+			{
+				if (sns.scale/sns.SCALE_MULTIPLIER > sns.SCALE_LIMIT_BOTTOM)
+					sns.SetScale(&pt, sns.scale/sns.SCALE_MULTIPLIER);
+			}
+
 			Paint();
 			break;
 		}
@@ -115,6 +132,8 @@ void MASTER::Paint()
 	target->BeginDraw();
 	target->Clear(D2D1::ColorF(D2D1::ColorF::Azure));
 	target->SetTransform(sns.transform);
+
+	target->DrawRectangle(D2D1::RectF(-sns.TRANSLATION_LIMIT, -sns.TRANSLATION_LIMIT,sns.TRANSLATION_LIMIT,sns.TRANSLATION_LIMIT), brush_set->Red(), 3.0f);
 
 	for (unsigned i = 0; i < elements_set.RetAmount(); i++)
 		elements_set[i]->Paint();

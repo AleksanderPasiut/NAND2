@@ -1,6 +1,11 @@
 #include <WindowsX.h>
 #include "master.h"
 
+const float MASTER::SCROLLING_N_SCALING::SCALE_MULTIPLIER = 1.2f;
+const float MASTER::SCROLLING_N_SCALING::SCALE_LIMIT_TOP = 12.0f;
+const float MASTER::SCROLLING_N_SCALING::SCALE_LIMIT_BOTTOM = 0.1f;
+const float MASTER::SCROLLING_N_SCALING::TRANSLATION_LIMIT = 1677721.0f; // float zachowuje w tym zakresie dok³adnoœæ do 0.1f
+
 void MASTER::SCROLLING_N_SCALING::StartMoving()
 {
 	tx = x;
@@ -31,7 +36,19 @@ void MASTER::SCROLLING_N_SCALING::SetScale(const POINT* pt, float scale)
 }
 void MASTER::SCROLLING_N_SCALING::RefreshMatrix()
 {
-	transform = D2D1::Matrix3x2F::Scale(scale, scale)*D2D1::Matrix3x2F::Translation(x,y);
+	// uwzglêdnienie limitów
+	if (x > TRANSLATION_LIMIT*scale)
+		x = TRANSLATION_LIMIT*scale;
+	if (y > TRANSLATION_LIMIT*scale)
+		y = TRANSLATION_LIMIT*scale;
+	if (x < -TRANSLATION_LIMIT*scale)
+		x = -TRANSLATION_LIMIT*scale;
+	if (y < -TRANSLATION_LIMIT*scale)
+		y = -TRANSLATION_LIMIT*scale;
+
+	// odœwie¿enie macierzy
+	D2D1_SIZE_F ts = target->GetSize();
+	transform = D2D1::Matrix3x2F::Scale(scale, scale)*D2D1::Matrix3x2F::Translation(ts.width/2+x, ts.height/2+y);
 	return;
 }
 

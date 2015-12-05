@@ -53,6 +53,12 @@ private:
 	// master_scrolling_n_scaling.cpp
 	struct SCROLLING_N_SCALING
 	{
+		static const float SCALE_MULTIPLIER;
+		static const float SCALE_LIMIT_TOP;
+		static const float SCALE_LIMIT_BOTTOM;
+		static const float TRANSLATION_LIMIT;
+
+		ID2D1HwndRenderTarget* target;
 		float x;
 		float y;
 		float tx;
@@ -61,7 +67,7 @@ private:
 		D2D1_MATRIX_3X2_F transform; // macierz transformuj¹ca z uk³adu logicznego (uk³ad elementów) do ekranu
 		bool moving;
 
-		SCROLLING_N_SCALING() : x(0.0f), y(0.0f), tx(0.0f), ty(0.0f), scale(1.0f), transform(D2D1::IdentityMatrix()), moving(false) {}
+		SCROLLING_N_SCALING() : target(0), x(0.0f), y(0.0f), tx(0.0f), ty(0.0f), scale(1.0f), transform(D2D1::IdentityMatrix()), moving(false) {}
 
 		void StartMoving();
 		void SetTranslation(float x, float y);

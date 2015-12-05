@@ -36,6 +36,8 @@ MASTER* MASTER::Create(HWND hwnd)
 							if (ret->menu = MENU::Create(hwnd))
 							{
 								ret->hwnd = hwnd;
+								ret->sns.target = ret->target;
+								ret->sns.RefreshMatrix();
 								return ret;
 
 								delete ret->menu;
