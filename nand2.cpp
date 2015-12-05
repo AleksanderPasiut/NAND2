@@ -14,6 +14,7 @@ LRESULT CALLBACK WindowEventProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 	case WM_LBUTTONUP:
 	case WM_CAPTURECHANGED:
 	case WM_RBUTTONDOWN:
+	case WM_MOUSEWHEEL:
 		{
 			if (Master)
 				Master->MouseInput(uMsg, wParam, lParam);

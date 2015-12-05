@@ -50,6 +50,28 @@ private:
 	};
 	LINKING linking;
 
+	// master_scrolling_n_scaling.cpp
+	struct SCROLLING_N_SCALING
+	{
+		float x;
+		float y;
+		float tx;
+		float ty;
+		float scale;
+		D2D1_MATRIX_3X2_F transform; // macierz transformuj¹ca z uk³adu logicznego (uk³ad elementów) do ekranu
+		bool moving;
+
+		SCROLLING_N_SCALING() : x(0.0f), y(0.0f), tx(0.0f), ty(0.0f), scale(1.0f), transform(D2D1::IdentityMatrix()), moving(false) {}
+
+		void StartMoving();
+		void SetTranslation(float x, float y);
+		void SetScale(const POINT* pt, float scale);
+		void RefreshMatrix();
+		D2D1_POINT_2F Click(LPARAM lParam) const;
+		D2D1_POINT_2F Click(const POINT* pt) const;
+	};
+	SCROLLING_N_SCALING sns;
+
 private:
 	// master_create.cpp
 	static D2D1_SIZE_U RetHwndClientSize(HWND); 

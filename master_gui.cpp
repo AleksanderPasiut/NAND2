@@ -11,11 +11,10 @@ void MASTER::MouseInput(UINT uMsg, WPARAM wParam, LPARAM lParam)
 			if (!elements_set.RetAmount())
 				break;
 
-			moving.click = D2D1::Point2F(static_cast<float>(GET_X_LPARAM(lParam)),
-										 static_cast<float>(GET_Y_LPARAM(lParam)));
+			moving.click = sns.Click(lParam);
 
 			ELEMENT* element = 0;
-			EVPV evpv;
+			EVPV evpv = EVPV_NONE;
 
 			for (unsigned i = elements_set.RetAmount()-1; ; i--)
 			{
@@ -24,14 +23,21 @@ void MASTER::MouseInput(UINT uMsg, WPARAM wParam, LPARAM lParam)
 					break;	}
 
 				if (!i)
-					return;
+					break;
 			}
 
-			elements_set.set_on_top(element);
+			if (element)
+				elements_set.set_on_top(element);
 
 			switch(evpv.type)
 			{
-			case EVPV_NONE: break;
+			case EVPV_NONE:
+				{
+					moving.click.x = static_cast<float>(GET_X_LPARAM(lParam));
+					moving.click.y = static_cast<float>(GET_Y_LPARAM(lParam));
+					sns.StartMoving();
+					break;
+				}
 			case EVPV_BODY:	
 				{
 					moving.element = element;
@@ -60,13 +66,20 @@ void MASTER::MouseInput(UINT uMsg, WPARAM wParam, LPARAM lParam)
 			if (moving.element)
 			{
 				D2D1_SIZE_F ts = target->GetSize();
-				D2D1_POINT_2F new_pos;
+				D2D1_POINT_2F new_pos = sns.Click(lParam);
 
-				new_pos.x = moving.old_pos.x + (static_cast<float>(GET_X_LPARAM(lParam))-moving.click.x)/ts.width;
-				new_pos.y = moving.old_pos.y + (static_cast<float>(GET_Y_LPARAM(lParam))-moving.click.y)/ts.height;
+				new_pos.x = moving.old_pos.x + (new_pos.x-moving.click.x)/ts.width;
+				new_pos.y = moving.old_pos.y + (new_pos.y-moving.click.y)/ts.height;
 
 				moving.element->SetPos(new_pos);
-				
+				Paint();
+			}
+			else if (sns.moving)
+			{
+				D2D1_POINT_2F pt;
+				pt.x = static_cast<float>(GET_X_LPARAM(lParam))-moving.click.x;
+				pt.y = static_cast<float>(GET_Y_LPARAM(lParam))-moving.click.y;
+				sns.SetTranslation(sns.tx+pt.x, sns.ty+pt.y);
 				Paint();
 			}
 
@@ -75,16 +88,23 @@ void MASTER::MouseInput(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	case WM_LBUTTONUP:
 		{
 			ReleaseCapture();
-			break;
-		}
-	case WM_CAPTURECHANGED:
-		{
 			moving.element = 0;
+			sns.moving = false;
 			break;
 		}
 	case WM_RBUTTONDOWN:
 		{
 			menu->Show(lParam);
+			break;
+		}
+	case WM_MOUSEWHEEL:
+		{
+			POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+			ScreenToClient(hwnd, &pt);
+			if (GET_WHEEL_DELTA_WPARAM(wParam) > 0)
+				sns.SetScale(&pt, sns.scale*1.5f);
+			else sns.SetScale(&pt, sns.scale/1.5f);
+			Paint();
 			break;
 		}
 	}
@@ -94,8 +114,8 @@ void MASTER::Paint()
 {
 	BeginPaint(hwnd, 0);
 	target->BeginDraw();
-	
 	target->Clear(D2D1::ColorF(D2D1::ColorF::Azure));
+	target->SetTransform(sns.transform);
 
 	for (unsigned i = 0; i < elements_set.RetAmount(); i++)
 		elements_set[i]->Paint();
