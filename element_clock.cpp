@@ -6,12 +6,10 @@ ELEMENT_CLOCK::ELEMENT_CLOCK(ID2D1HwndRenderTarget* target,
 							 IDWriteTextFormat* text_format,
 							 float pos_x,
 							 float pos_y,
-							 float width,
-							 float height,
 							 unsigned id,
 							 unsigned in_elapse,
 							 MASTER* in_Master)
-	: ELEMENT(target, brush_set, text_format, pos_x, pos_y, width, height, id, true)
+	: ELEMENT(target, brush_set, text_format, pos_x, pos_y, 80.0f, 70.0f, id, true)
 {
 	state = EL_STATE_FALSE;
 	elapse = in_elapse;
@@ -26,28 +24,22 @@ ELEMENT_CLOCK::~ELEMENT_CLOCK()
 
 D2D1_POINT_2F ELEMENT_CLOCK::RetControlPoint() const
 {
-	D2D1_SIZE_F ts = target->GetSize();
-	return D2D1::Point2F(ts.width*(pos.x+0.3f*size.width),
-						 ts.height*(pos.y+0.4f*size.height));
+	return D2D1::Point2F(pos.x+0.3f*size.width,
+						 pos.y+0.4f*size.height);
 }
 D2D1_POINT_2F ELEMENT_CLOCK::RetOutputPoint() const
 {
-	D2D1_SIZE_F ts = target->GetSize();
-	return D2D1::Point2F(ts.width*(pos.x+0.7f*size.width),
-						 ts.height*(pos.y+0.4f*size.height));
+	return D2D1::Point2F(pos.x+0.7f*size.width,
+						 pos.y+0.4f*size.height);
 }
 void ELEMENT_CLOCK::RetControlEllipse(D2D1_ELLIPSE& out) const
 {
-	D2D1_SIZE_F ts = target->GetSize();
-	float radius = 0.02f*min(ts.height, ts.width);
-	out = D2D1::Ellipse(RetControlPoint(), radius, radius);
+	out = D2D1::Ellipse(RetControlPoint(), CONTROL_RADIUS, CONTROL_RADIUS);
 	return;
 }
 void ELEMENT_CLOCK::RetOutputEllipse(D2D1_ELLIPSE& out) const
 {
-	D2D1_SIZE_F ts = target->GetSize();
-	float radius = 0.012f*min(ts.height, ts.width);
-	out = D2D1::Ellipse(RetOutputPoint(), radius, radius);
+	out = D2D1::Ellipse(RetOutputPoint(), PORT_RADIUS, PORT_RADIUS);
 	return;
 }
 
@@ -56,8 +48,6 @@ ELEMENT_CLOCK* ELEMENT_CLOCK::Create(ID2D1HwndRenderTarget* target,
 									 IDWriteTextFormat* text_format,
 									 float pos_x,
 									 float pos_y,
-									 float width,
-									 float height,
 									 unsigned id,
 									 unsigned in_elapse,
 									 MASTER* Master)
@@ -67,8 +57,6 @@ ELEMENT_CLOCK* ELEMENT_CLOCK::Create(ID2D1HwndRenderTarget* target,
 										   text_format,
 										   pos_x,
 										   pos_y,
-										   width,
-										   height,
 										   id,
 										   in_elapse,
 										   Master);
@@ -109,6 +97,7 @@ void ELEMENT_CLOCK::Paint() const
 }
 void ELEMENT_CLOCK::PaintElapse() const
 {
+	/*
 	D2D1_RECT_F rect = D2D1::RectF(0.0f, 0.0f, 4.0f, 1.f);		
 	D2D1_SIZE_F ts = target->GetSize();		
 	float scale = min(ts.width*size.width/4.0f, ts.height*size.height*0.24f);
@@ -119,7 +108,7 @@ void ELEMENT_CLOCK::PaintElapse() const
 	_itow_s(elapse, text, 6, 10);		
 	text_format->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
 	target->DrawTextA(text, static_cast<unsigned>(wcslen(text)), text_format, rect, brush->Black());		
-	target->SetTransform(D2D1::IdentityMatrix());
+	target->SetTransform(D2D1::IdentityMatrix());*/
 	return;
 }
 

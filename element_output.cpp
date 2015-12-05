@@ -5,38 +5,30 @@ ELEMENT_OUTPUT::ELEMENT_OUTPUT(ID2D1HwndRenderTarget* target,
 							   IDWriteTextFormat* text_format,
 							   float pos_x,
 							   float pos_y,
-							   float width,
-							   float height,
 							   unsigned id)
-	: ELEMENT(target, brush_set, text_format, pos_x, pos_y, width, height, id, false)
+	: ELEMENT(target, brush_set, text_format, pos_x, pos_y, 80.0f, 50.0f, id, false)
 {
 	state = EL_STATE_FALSE;
 }
 
 D2D1_POINT_2F ELEMENT_OUTPUT::RetControlPoint() const
 {
-	D2D1_SIZE_F ts = target->GetSize();
-	return D2D1::Point2F(ts.width*(pos.x+0.7f*size.width),
-						 ts.height*(pos.y+0.6f*size.height));
+	return D2D1::Point2F(pos.x+0.7f*size.width,
+						 pos.y+0.6f*size.height);
 }
 D2D1_POINT_2F ELEMENT_OUTPUT::RetInputPoint() const
 {
-	D2D1_SIZE_F ts = target->GetSize();
-	return D2D1::Point2F(ts.width*(pos.x+0.3f*size.width),
-						 ts.height*(pos.y+0.6f*size.height));
+	return D2D1::Point2F(pos.x+0.3f*size.width,
+						 pos.y+0.6f*size.height);
 }
 void ELEMENT_OUTPUT::RetControlEllipse(D2D1_ELLIPSE& out) const
 {
-	D2D1_SIZE_F ts = target->GetSize();
-	float radius = 0.02f*min(ts.height, ts.width);
-	out = D2D1::Ellipse(RetControlPoint(), radius, radius);
+	out = D2D1::Ellipse(RetControlPoint(), CONTROL_RADIUS, CONTROL_RADIUS);
 	return;
 }
 void ELEMENT_OUTPUT::RetInputEllipse(D2D1_ELLIPSE& out) const
 {
-	D2D1_SIZE_F ts = target->GetSize();
-	float radius = 0.012f*min(ts.height, ts.width);
-	out = D2D1::Ellipse(RetInputPoint(), radius, radius);
+	out = D2D1::Ellipse(RetInputPoint(), PORT_RADIUS, PORT_RADIUS);
 	return;
 }
 
@@ -45,8 +37,6 @@ ELEMENT_OUTPUT* ELEMENT_OUTPUT::Create(ID2D1HwndRenderTarget* target,
 									   IDWriteTextFormat* text_format,
 									   float pos_x,
 									   float pos_y,
-									   float width,
-									   float height,
 									   unsigned id)
 {
 	ELEMENT_OUTPUT* ret = new ELEMENT_OUTPUT(target,
@@ -54,8 +44,6 @@ ELEMENT_OUTPUT* ELEMENT_OUTPUT::Create(ID2D1HwndRenderTarget* target,
 											 text_format,
 											 pos_x,
 											 pos_y,
-											 width,
-											 height,
 											 id);
 
 	if (ret)

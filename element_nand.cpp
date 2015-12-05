@@ -5,11 +5,9 @@ ELEMENT_NAND::ELEMENT_NAND(ID2D1HwndRenderTarget* target,
 							   IDWriteTextFormat* text_format,
 							   float pos_x,
 							   float pos_y,
-							   float width,
-							   float height,
 							   unsigned id,
 							   unsigned input_amount)
-	: ELEMENT(target, brush_set, text_format, pos_x, pos_y, width, height, id, false)
+	: ELEMENT(target, brush_set, text_format, pos_x, pos_y, 100.0f, (input_amount+1)*18.0f, id, false)
 {
 	ia = input_amount;
 	state = EL_STATE_FALSE;
@@ -17,41 +15,32 @@ ELEMENT_NAND::ELEMENT_NAND(ID2D1HwndRenderTarget* target,
 
 D2D1_POINT_2F ELEMENT_NAND::RetControlPoint() const
 {
-	D2D1_SIZE_F ts = target->GetSize();
-	return D2D1::Point2F(ts.width*(pos.x+0.5f*size.width),
-						 ts.height*(pos.y+size.height/2));
+	return D2D1::Point2F(pos.x+0.5f*size.width,
+						 pos.y+0.5f*size.height);
 }
 D2D1_POINT_2F ELEMENT_NAND::RetInputPoint(unsigned i) const
 {
-	D2D1_SIZE_F ts = target->GetSize();
-	return D2D1::Point2F(ts.width*(pos.x+0.16f*size.width),
-						 ts.height*(pos.y+size.height*(1.1f*static_cast<float>(i+1)/static_cast<float>(ia+1)-0.05f)));
+	return D2D1::Point2F(pos.x+0.16f*size.width,
+						 pos.y+size.height*(static_cast<float>(i+1)/static_cast<float>(ia+1)));
 }
 D2D1_POINT_2F ELEMENT_NAND::RetOutputPoint() const
 {
-	D2D1_SIZE_F ts = target->GetSize();
-	return D2D1::Point2F(ts.width*(pos.x+0.84f*size.width),
-						 ts.height*(pos.y+0.6f*size.height));
+	return D2D1::Point2F(pos.x+0.84f*size.width,
+						 pos.y+size.height*(ia == 2 ? 0.6f : 0.5f));
 }
 void ELEMENT_NAND::RetControlEllipse(D2D1_ELLIPSE& out) const
 {
-	D2D1_SIZE_F ts = target->GetSize();
-	float radius = 0.02f*min(ts.height, ts.width);
-	out = D2D1::Ellipse(RetControlPoint(), radius, radius);
+	out = D2D1::Ellipse(RetControlPoint(), CONTROL_RADIUS, CONTROL_RADIUS);
 	return;
 }
 void ELEMENT_NAND::RetInputEllipse(D2D1_ELLIPSE& out, unsigned i) const
 {
-	D2D1_SIZE_F ts = target->GetSize();
-	float radius = 0.012f*min(ts.height, ts.width);
-	out = D2D1::Ellipse(RetInputPoint(i), radius, radius);
+	out = D2D1::Ellipse(RetInputPoint(i), PORT_RADIUS, PORT_RADIUS);
 	return;
 }
 void ELEMENT_NAND::RetOutputEllipse(D2D1_ELLIPSE& out) const
 {
-	D2D1_SIZE_F ts = target->GetSize();
-	float radius = 0.012f*min(ts.height, ts.width);
-	out = D2D1::Ellipse(RetOutputPoint(), radius, radius);
+	out = D2D1::Ellipse(RetOutputPoint(), PORT_RADIUS, PORT_RADIUS);
 	return;
 }
 
@@ -60,8 +49,6 @@ ELEMENT_NAND* ELEMENT_NAND::Create(ID2D1HwndRenderTarget* target,
 									   IDWriteTextFormat* text_format,
 									   float pos_x,
 									   float pos_y,
-									   float width,
-									   float height,
 									   unsigned id,
 									   unsigned input_amount)
 {
@@ -70,8 +57,6 @@ ELEMENT_NAND* ELEMENT_NAND::Create(ID2D1HwndRenderTarget* target,
 										 text_format,
 										 pos_x,
 										 pos_y,
-										 width,
-										 height,
 										 id,
 										 input_amount);
 

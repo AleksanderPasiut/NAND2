@@ -10,20 +10,20 @@
 class ELEMENT
 {
 protected:
-	// render_target, czcionka i zestaw pêdzli
 	ID2D1HwndRenderTarget* target;
 	BRUSH_SET* brush;
 	IDWriteTextFormat* text_format;
 
-	// pozycja i rozmiar wyra¿one poprzez u³amek okna (od 0.0 do 1.0)
 	D2D1_POINT_2F pos;
 	D2D1_SIZE_F size;
 
-	// identyfikator elementu
 	unsigned id;
-
-	// flaga Ÿród³a
 	bool source_flag;
+
+public:
+	static const float PORT_RADIUS;
+	static const float PORT_MARK_RADIUS;
+	static const float CONTROL_RADIUS;
 
 protected:
 	// konstruktory chronione - tworzenie odbywa siê poprzez Create() klas pochodnych

@@ -1,6 +1,10 @@
 #include <math.h>
 #include "element.h"
 
+const float ELEMENT::CONTROL_RADIUS = 10.0f;
+const float ELEMENT::PORT_RADIUS = 6.5f;
+const float ELEMENT::PORT_MARK_RADIUS = 9.0f;
+
 ELEMENT::ELEMENT(ID2D1HwndRenderTarget* in_target,
 				 BRUSH_SET* brush_set,
 				 IDWriteTextFormat* format,
@@ -40,23 +44,20 @@ bool ELEMENT::PointInEllipse(const D2D1_ELLIPSE& ellipse, const D2D1_POINT_2F& p
 }
 void ELEMENT::RetElementRect(D2D1_RECT_F& out) const
 {
-	D2D1_SIZE_F ts = target->GetSize();
-	out.left	= pos.x*ts.width;
-	out.top		= pos.y*ts.height;
-	out.right	= (pos.x+size.width)*ts.width;
-	out.bottom	= (pos.y+size.height)*ts.height;
+	out.left	= pos.x;
+	out.top		= pos.y;
+	out.right	= pos.x+size.width;
+	out.bottom	= pos.y+size.height;
 	return;
 }
 void ELEMENT::RetCrossRect(D2D1_RECT_F& out) const
 {
-	D2D1_SIZE_F ts = target->GetSize();
-	static const float ds = 0.03f;
-	static const float s = 0.01f;
-	float multiplier = min(ts.height, ts.width);
-	out.left	= (pos.x+size.width)*ts.width-ds*multiplier;
-	out.top		= (pos.y)*ts.height+s*multiplier;
-	out.right	= (pos.x+size.width)*ts.width-s*multiplier;
-	out.bottom	= (pos.y)*ts.height+ds*multiplier;
+	static const float margin = 5.0f;
+	static const float crs = 12.0f;
+	out.left	= pos.x+size.width-margin-crs;
+	out.top		= pos.y+margin;
+	out.right	= pos.x+size.width-margin;
+	out.bottom	= pos.y+margin+crs;
 	return;
 }
 void ELEMENT::PaintId() const
@@ -96,17 +97,6 @@ void ELEMENT::Paint() const
 }
 void ELEMENT::SetPos(D2D1_POINT_2F new_pos)
 {
-	// ogranicznik przed usuniêciem poza ekran
-	if (new_pos.x < -size.width/2)
-		new_pos.x = -size.width/2;
-	else if (1.0f-size.width/2 < new_pos.x)
-		new_pos.x = 1.0f-size.width/2;
-
-	if (new_pos.y < -size.height/2)
-		new_pos.y = -size.height/2;
-	else if (1.0f-size.height/2 < new_pos.y)
-		new_pos.y = 1.0f-size.height/2;
-
 	pos = new_pos;
 	return;
 }

@@ -65,11 +65,10 @@ void MASTER::MouseInput(UINT uMsg, WPARAM wParam, LPARAM lParam)
 		{
 			if (moving.element)
 			{
-				D2D1_SIZE_F ts = target->GetSize();
 				D2D1_POINT_2F new_pos = sns.Click(lParam);
 
-				new_pos.x = moving.old_pos.x + (new_pos.x-moving.click.x)/ts.width;
-				new_pos.y = moving.old_pos.y + (new_pos.y-moving.click.y)/ts.height;
+				new_pos.x = moving.old_pos.x + (new_pos.x-moving.click.x);
+				new_pos.y = moving.old_pos.y + (new_pos.y-moving.click.y);
 
 				moving.element->SetPos(new_pos);
 				Paint();
@@ -140,16 +139,13 @@ void MASTER::Size(WPARAM wParam, LPARAM lParam)
 	Paint();
 	return;
 }
-ELEMENT* MASTER::Nand(unsigned input_amount)
+ELEMENT* MASTER::Nand(unsigned input_amount, const D2D1_POINT_2F& position)
 {
-	D2D1_SIZE_F ts = target->GetSize();
 	return ELEMENT_NAND::Create(target,
 								brush_set,
 								text_format,
-								static_cast<float>(GET_X_LPARAM(menu->RetPos()))/ts.width,
-								static_cast<float>(GET_Y_LPARAM(menu->RetPos()))/ts.height,
-								0.11f,
-								input_amount == 2 ? 0.11f : input_amount*0.04f,
+								position.x,
+								position.y,
 								0,
 								input_amount);
 }
@@ -158,9 +154,11 @@ void MASTER::MenuInput(WPARAM wParam, LPARAM lParam)
 	if (HIWORD(wParam) || lParam)
 		return;
 
-	D2D1_SIZE_F ts = target->GetSize();
-
+	// dodawany element
 	ELEMENT* element = 0;
+
+	// jego po³o¿enie
+	D2D1_POINT_2F position = sns.Click(menu->RetPos());
 
 	switch(LOWORD(wParam))
 	{
@@ -169,10 +167,8 @@ void MASTER::MenuInput(WPARAM wParam, LPARAM lParam)
 			element = ELEMENT_SOURCE::Create(target,
 											 brush_set,
 											 text_format,
-											 static_cast<float>(GET_X_LPARAM(menu->RetPos()))/ts.width,
-											 static_cast<float>(GET_Y_LPARAM(menu->RetPos()))/ts.height,
-											 0.08f,
-											 0.1f,
+											 position.x,
+											 position.y,
 											 0);
 			break;
 		}
@@ -183,23 +179,21 @@ void MASTER::MenuInput(WPARAM wParam, LPARAM lParam)
 				element = ELEMENT_CLOCK::Create(target,
 												brush_set,
 												text_format,
-												static_cast<float>(GET_X_LPARAM(menu->RetPos()))/ts.width,
-												static_cast<float>(GET_Y_LPARAM(menu->RetPos()))/ts.height,
-												0.08f,
-												0.15f,
+												position.x,
+												position.y,
 												0,
 												elapse,
 												this);
 			}
 			break;
 		}
-	case MENU_ADD_NAND2: element = Nand(2); break;
-	case MENU_ADD_NAND3: element = Nand(3);	break;
-	case MENU_ADD_NAND4: element = Nand(4);	break;
+	case MENU_ADD_NAND2: element = Nand(2, position); break;
+	case MENU_ADD_NAND3: element = Nand(3, position); break;
+	case MENU_ADD_NAND4: element = Nand(4, position); break;
 	case MENU_ADD_NAND: 
 		{
 			if (unsigned i = static_cast<unsigned>(DialogBox(0, "res_dialog_add_nand", hwnd, reinterpret_cast<DLGPROC>(AddNandDialogProc))))
-				element = Nand(i);
+				element = Nand(i, position);
 			break;
 		}
 	case MENU_ADD_OUTPUT:
@@ -207,10 +201,8 @@ void MASTER::MenuInput(WPARAM wParam, LPARAM lParam)
 			element = ELEMENT_OUTPUT::Create(target,
 											 brush_set,
 											 text_format,
-											 static_cast<float>(GET_X_LPARAM(menu->RetPos()))/ts.width,
-											 static_cast<float>(GET_Y_LPARAM(menu->RetPos()))/ts.height,
-											 0.08f,
-											 0.1f,
+											 position.x,
+											 position.y,
 											 0);
 			break;
 		}

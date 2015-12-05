@@ -12,7 +12,7 @@ private:
 	ELEMENT_OUTPUT(const ELEMENT_OUTPUT&) {}
 	ELEMENT_OUTPUT& operator= (const ELEMENT_OUTPUT&) {}
 
-	ELEMENT_OUTPUT(ID2D1HwndRenderTarget*, BRUSH_SET*, IDWriteTextFormat*, float pos_x, float pos_y, float width, float height, unsigned id);
+	ELEMENT_OUTPUT(ID2D1HwndRenderTarget*, BRUSH_SET*, IDWriteTextFormat*, float pos_x, float pos_y, unsigned id);
 	~ELEMENT_OUTPUT() {}
 
 private:
@@ -22,7 +22,7 @@ private:
 	void RetInputEllipse(D2D1_ELLIPSE&) const;
 
 public:
-	static ELEMENT_OUTPUT* Create(ID2D1HwndRenderTarget*, BRUSH_SET*, IDWriteTextFormat*, float pos_x, float pos_y, float width, float height, unsigned id);
+	static ELEMENT_OUTPUT* Create(ID2D1HwndRenderTarget*, BRUSH_SET*, IDWriteTextFormat*, float pos_x, float pos_y, unsigned id);
 
 	EVPV MouseInput(const D2D1_POINT_2F&);
 	void Paint() const;

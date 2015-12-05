@@ -97,7 +97,7 @@ public:
 	void MouseInput(UINT, WPARAM, LPARAM);
 	void Paint();
 	void Size(WPARAM, LPARAM);
-	ELEMENT* Nand(unsigned);
+	ELEMENT* Nand(unsigned, const D2D1_POINT_2F&);
 	void MenuInput(WPARAM, LPARAM);
 
 	// master_proceed.cpp
