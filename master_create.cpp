@@ -5,7 +5,7 @@ D2D1_SIZE_U MASTER::RetHwndClientSize(HWND hwnd)
 	RECT rect;
 	if (GetClientRect(hwnd, &rect))
 		return D2D1::SizeU(rect.right-rect.left, rect.bottom-rect.top);
-	else return D2D1::SizeU(0,0);
+	else return D2D1::SizeU();
 }
 
 MASTER* MASTER::Create(HWND hwnd)

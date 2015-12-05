@@ -36,6 +36,7 @@ void MASTER::MouseInput(UINT uMsg, WPARAM wParam, LPARAM lParam)
 					moving.click.x = static_cast<float>(GET_X_LPARAM(lParam));
 					moving.click.y = static_cast<float>(GET_Y_LPARAM(lParam));
 					sns.StartMoving();
+					SetCapture(hwnd);
 					break;
 				}
 			case EVPV_BODY:	
@@ -108,7 +109,9 @@ void MASTER::MouseInput(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	case WM_MOUSEWHEEL:
 		{
 			POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
-			ScreenToClient(hwnd, &pt);
+			if (!ScreenToClient(hwnd, &pt))
+				break;
+
 			if (GET_WHEEL_DELTA_WPARAM(wParam) > 0)
 			{
 				if (sns.scale*sns.SCALE_MULTIPLIER < sns.SCALE_LIMIT_TOP)
@@ -155,6 +158,7 @@ void MASTER::Size(WPARAM wParam, LPARAM lParam)
 {
 	target->Resize(D2D1::SizeU(LOWORD(lParam), HIWORD(lParam)));
 
+	sns.RefreshMatrix();
 	Paint();
 	return;
 }

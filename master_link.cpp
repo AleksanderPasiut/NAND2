@@ -73,7 +73,7 @@ void MASTER::PaintInputs()
 {
 	D2D1_POINT_2F pt;
 
-	if (linking.element->RetOutputPoint(pt, linking.id))
+	if (linking.element && linking.element->RetOutputPoint(pt, linking.id))
 		target->DrawEllipse(D2D1::Ellipse(pt, ELEMENT::PORT_MARK_RADIUS, ELEMENT::PORT_MARK_RADIUS), brush_set->Red(), 2.0f);
 
 	for (unsigned i = 0; i < elements_set.RetAmount(); i++)
@@ -87,7 +87,7 @@ void MASTER::PaintOutputs()
 {
 	D2D1_POINT_2F pt;
 
-	if (linking.element->RetInputPoint(pt, linking.id))
+	if (linking.element && linking.element->RetInputPoint(pt, linking.id))
 		target->DrawEllipse(D2D1::Ellipse(pt, ELEMENT::PORT_MARK_RADIUS, ELEMENT::PORT_MARK_RADIUS), brush_set->Red(), 2.0f);
 
 	for (unsigned i = 0; i < elements_set.RetAmount(); i++)
