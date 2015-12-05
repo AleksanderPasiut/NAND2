@@ -136,8 +136,6 @@ void MASTER::Paint()
 	target->Clear(D2D1::ColorF(D2D1::ColorF::Azure));
 	target->SetTransform(sns.transform);
 
-	target->DrawRectangle(D2D1::RectF(-sns.TRANSLATION_LIMIT, -sns.TRANSLATION_LIMIT,sns.TRANSLATION_LIMIT,sns.TRANSLATION_LIMIT), brush_set->Red(), 3.0f);
-
 	for (unsigned i = 0; i < elements_set.RetAmount(); i++)
 		elements_set[i]->Paint();
 

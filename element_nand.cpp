@@ -111,7 +111,7 @@ void ELEMENT_NAND::PaintWires() const
 		if (input[i].target)
 		{	D2D1_POINT_2F end;
 			input[i].target->RetOutputPoint(end, input[i].id);
-			target->DrawLine(RetInputPoint(i), end, brush->Red(), 2.0f, 0);	}
+			target->DrawLine(RetInputPoint(i), end, brush->Red(), 2.0f, brush->Stroke());	}
 	return;
 }
 

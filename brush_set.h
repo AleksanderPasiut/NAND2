@@ -7,7 +7,9 @@ class BRUSH_SET
 private:
 	static const unsigned int BRUSH_AMOUNT = 10;
 	ID2D1SolidColorBrush* brush[BRUSH_AMOUNT];
+	ID2D1StrokeStyle* stroke;
 
+private:
 	BRUSH_SET() {}
 	BRUSH_SET(const BRUSH_SET&) {}
 	BRUSH_SET& operator= (const BRUSH_SET&) {}
@@ -27,4 +29,5 @@ public:
 	ID2D1SolidColorBrush* Yellow()		const { return brush[7]; }
 	ID2D1SolidColorBrush* Green()		const { return brush[8]; }
 	ID2D1SolidColorBrush* Orange()		const { return brush[9]; }
+	ID2D1StrokeStyle* Stroke()			const { return stroke; }
 };

@@ -83,7 +83,7 @@ void ELEMENT_OUTPUT::PaintWires() const
 	if (input.target)
 	{	D2D1_POINT_2F end;
 		input.target->RetOutputPoint(end, input.id);
-		target->DrawLine(RetInputPoint(), end, brush->Red(), 2.0f, 0);	}
+		target->DrawLine(RetInputPoint(), end, brush->Red(), 2.0f, brush->Stroke());	}
 
 	return;
 }
