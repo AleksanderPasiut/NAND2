@@ -4,23 +4,21 @@ MENU* MENU::Create(HWND hwnd)
 {
 	MENU* ret = new MENU;
 
-	if (ret)
-	{
-		if (ret->hMenu = LoadMenu(0, "res_popup_menu"))
-		{
-			if (ret->hSubMenu = GetSubMenu(ret->hMenu, 0))
-			{
-				ret->hwnd = hwnd;
-				ret->lParam = 0;
+	if (!ret)
+		return 0;
 
-				return ret;
-			}
-			DestroyMenu(ret->hMenu);
-		}
-		delete ret;
-	}
+	if (!(ret->hMenu = LoadMenu(0, "res_popup_menu")))
+	{	delete ret;
+		return 0;	}
 
-	return 0;
+	if (!(ret->hSubMenu = GetSubMenu(ret->hMenu, 0)))
+	{	delete ret;
+		return 0;	}
+
+	ret->hwnd = hwnd;
+	ret->lParam = 0;
+
+	return ret;
 }
 MENU::~MENU()
 {

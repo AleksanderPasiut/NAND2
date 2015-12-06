@@ -18,7 +18,7 @@ private:
 	ELEMENT_NAND(const ELEMENT_NAND&) {}
 	ELEMENT_NAND& operator= (const ELEMENT_NAND&) {}
 
-	ELEMENT_NAND(ID2D1HwndRenderTarget*, BRUSH_SET*, IDWriteTextFormat*, float pos_x, float pos_y, unsigned id, unsigned input_amount);
+	ELEMENT_NAND(ID2D1HwndRenderTarget*, BRUSH_SET*, float pos_x, float pos_y, unsigned id, unsigned input_amount);
 	~ELEMENT_NAND() {}
 
 private:
@@ -30,7 +30,7 @@ private:
 	void RetOutputEllipse(D2D1_ELLIPSE&) const;
 
 public:
-	static ELEMENT_NAND* Create(ID2D1HwndRenderTarget*, BRUSH_SET*, IDWriteTextFormat*, float pos_x, float pos_y, unsigned id, unsigned input_amount);
+	static ELEMENT_NAND* Create(ID2D1HwndRenderTarget*, BRUSH_SET*, float pos_x, float pos_y, unsigned id, unsigned input_amount);
 
 	EVPV MouseInput(const D2D1_POINT_2F&);
 	void Paint() const;
@@ -49,6 +49,7 @@ public:
 	EL_STATE RetState(unsigned output_id = 0) const { return state; }
 
 	void Proceed(OUTPUT_LIST&);
+	void Reset();
 
 	friend class ELEMENTS_SET;
 };

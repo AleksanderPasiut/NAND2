@@ -23,7 +23,6 @@ private:
 	IDWriteFactory* dwfactory;
 	ID2D1HwndRenderTarget* target;
 	BRUSH_SET* brush_set;
-	IDWriteTextFormat* text_format;
 	ELEMENTS_SET elements_set;
 	MENU* menu;
 
@@ -83,7 +82,7 @@ private:
 	static D2D1_SIZE_U RetHwndClientSize(HWND); 
 
 private:
-	MASTER() {}
+	MASTER() : factory(0), dwfactory(0), target(0), brush_set(0), menu(0) {}
 	MASTER(const MASTER&) {}
 	MASTER& operator= (const MASTER&) {}
 

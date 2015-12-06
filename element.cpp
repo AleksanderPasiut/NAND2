@@ -7,7 +7,6 @@ const float ELEMENT::PORT_MARK_RADIUS = 9.0f;
 
 ELEMENT::ELEMENT(ID2D1HwndRenderTarget* in_target,
 				 BRUSH_SET* brush_set,
-				 IDWriteTextFormat* format,
 				 float pos_x,
 				 float pos_y,
 				 float width,
@@ -16,7 +15,6 @@ ELEMENT::ELEMENT(ID2D1HwndRenderTarget* in_target,
 				 bool source_flag_in) :
 	target(in_target),
 	brush(brush_set),
-	text_format(format),
 	pos(D2D1::Point2F(pos_x, pos_y)),
 	size(D2D1::SizeF(width, height)),
 	id(element_id),

@@ -2,11 +2,10 @@
 
 ELEMENT_OUTPUT::ELEMENT_OUTPUT(ID2D1HwndRenderTarget* target,
 							   BRUSH_SET* brush_set,
-							   IDWriteTextFormat* text_format,
 							   float pos_x,
 							   float pos_y,
 							   unsigned id)
-	: ELEMENT(target, brush_set, text_format, pos_x, pos_y, 80.0f, 50.0f, id, false)
+	: ELEMENT(target, brush_set, pos_x, pos_y, 80.0f, 50.0f, id, false)
 {
 	state = EL_STATE_FALSE;
 }
@@ -34,14 +33,12 @@ void ELEMENT_OUTPUT::RetInputEllipse(D2D1_ELLIPSE& out) const
 
 ELEMENT_OUTPUT* ELEMENT_OUTPUT::Create(ID2D1HwndRenderTarget* target,
 									   BRUSH_SET* brush_set,
-									   IDWriteTextFormat* text_format,
 									   float pos_x,
 									   float pos_y,
 									   unsigned id)
 {
 	ELEMENT_OUTPUT* ret = new ELEMENT_OUTPUT(target,
 											 brush_set,
-											 text_format,
 											 pos_x,
 											 pos_y,
 											 id);

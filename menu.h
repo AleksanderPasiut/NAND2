@@ -20,7 +20,7 @@ private:
 	LPARAM lParam;
 
 private:
-	MENU() {}
+	MENU() { memset(this, 0, sizeof(MENU)); }
 	MENU(const MENU&) {}
 	MENU* operator= (const MENU&) {}
 

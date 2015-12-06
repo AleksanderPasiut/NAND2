@@ -12,7 +12,6 @@ class ELEMENT
 protected:
 	ID2D1HwndRenderTarget* target;
 	BRUSH_SET* brush;
-	IDWriteTextFormat* text_format;
 
 	D2D1_POINT_2F pos;
 	D2D1_SIZE_F size;
@@ -28,7 +27,7 @@ public:
 protected:
 	// konstruktory chronione - tworzenie odbywa siê poprzez Create() klas pochodnych
 	ELEMENT() {}
-	ELEMENT(ID2D1HwndRenderTarget*, BRUSH_SET*, IDWriteTextFormat*, float pos_x, float pos_y, float width, float height, unsigned id, bool source_flag);
+	ELEMENT(ID2D1HwndRenderTarget*, BRUSH_SET*, float pos_x, float pos_y, float width, float height, unsigned id, bool source_flag);
 
 	// destruktor chroniony - usuwanie odbywa siê poprzez ELEMENTS_SET::remove(ELEMENT*)
 	~ELEMENT() {}
@@ -64,6 +63,7 @@ public:
 	virtual EL_STATE RetState(unsigned output_id = 0) const { return EL_STATE_FALSE; }
 
 	virtual void Proceed(OUTPUT_LIST&) {}
+	virtual void Reset() {}
 
 	friend class ELEMENTS_SET;
 };

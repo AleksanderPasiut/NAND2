@@ -1,6 +1,7 @@
 #pragma once
 
 #include <d2d1.h>
+#include <dwrite.h>
 
 class BRUSH_SET
 {
@@ -8,14 +9,16 @@ private:
 	static const unsigned int BRUSH_AMOUNT = 10;
 	ID2D1SolidColorBrush* brush[BRUSH_AMOUNT];
 	ID2D1StrokeStyle* stroke;
+	IDWriteTextFormat* big_font;
+	IDWriteTextFormat* small_font;
 
 private:
-	BRUSH_SET() {}
+	BRUSH_SET() { memset(this, 0, sizeof(BRUSH_SET)); }
 	BRUSH_SET(const BRUSH_SET&) {}
 	BRUSH_SET& operator= (const BRUSH_SET&) {}
 
 public:
-	static BRUSH_SET* Create(ID2D1HwndRenderTarget*);
+	static BRUSH_SET* Create(ID2D1HwndRenderTarget*, IDWriteFactory*);
 	~BRUSH_SET();
 
 public:
@@ -30,4 +33,6 @@ public:
 	ID2D1SolidColorBrush* Green()		const { return brush[8]; }
 	ID2D1SolidColorBrush* Orange()		const { return brush[9]; }
 	ID2D1StrokeStyle* Stroke()			const { return stroke; }
+	IDWriteTextFormat* BigFont()		const { return big_font; }
+	IDWriteTextFormat* SmallFont()		const { return small_font; }
 };

@@ -164,7 +164,6 @@ ELEMENT* MASTER::Nand(unsigned input_amount, const D2D1_POINT_2F& position)
 {
 	return ELEMENT_NAND::Create(target,
 								brush_set,
-								text_format,
 								position.x,
 								position.y,
 								0,
@@ -187,7 +186,6 @@ void MASTER::MenuInput(WPARAM wParam, LPARAM lParam)
 		{
 			element = ELEMENT_SOURCE::Create(target,
 											 brush_set,
-											 text_format,
 											 position.x,
 											 position.y,
 											 0);
@@ -199,7 +197,6 @@ void MASTER::MenuInput(WPARAM wParam, LPARAM lParam)
 			{
 				element = ELEMENT_CLOCK::Create(target,
 												brush_set,
-												text_format,
 												position.x,
 												position.y,
 												0,
@@ -221,7 +218,6 @@ void MASTER::MenuInput(WPARAM wParam, LPARAM lParam)
 		{
 			element = ELEMENT_OUTPUT::Create(target,
 											 brush_set,
-											 text_format,
 											 position.x,
 											 position.y,
 											 0);

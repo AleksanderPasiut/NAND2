@@ -2,12 +2,11 @@
 
 ELEMENT_NAND::ELEMENT_NAND(ID2D1HwndRenderTarget* target,
 							   BRUSH_SET* brush_set,
-							   IDWriteTextFormat* text_format,
 							   float pos_x,
 							   float pos_y,
 							   unsigned id,
 							   unsigned input_amount)
-	: ELEMENT(target, brush_set, text_format, pos_x, pos_y, 100.0f, (input_amount+1)*18.0f, id, false)
+	: ELEMENT(target, brush_set, pos_x, pos_y, 100.0f, (input_amount+1)*18.0f, id, false)
 {
 	ia = input_amount;
 	state = EL_STATE_FALSE;
@@ -16,7 +15,7 @@ ELEMENT_NAND::ELEMENT_NAND(ID2D1HwndRenderTarget* target,
 D2D1_POINT_2F ELEMENT_NAND::RetControlPoint() const
 {
 	return D2D1::Point2F(pos.x+0.5f*size.width,
-						 pos.y+0.5f*size.height);
+						 pos.y+(ia == 2 ? 0.6f : 0.5f)*size.height);
 }
 D2D1_POINT_2F ELEMENT_NAND::RetInputPoint(unsigned i) const
 {
@@ -46,7 +45,6 @@ void ELEMENT_NAND::RetOutputEllipse(D2D1_ELLIPSE& out) const
 
 ELEMENT_NAND* ELEMENT_NAND::Create(ID2D1HwndRenderTarget* target,
 									   BRUSH_SET* brush_set,
-									   IDWriteTextFormat* text_format,
 									   float pos_x,
 									   float pos_y,
 									   unsigned id,
@@ -54,7 +52,6 @@ ELEMENT_NAND* ELEMENT_NAND::Create(ID2D1HwndRenderTarget* target,
 {
 	ELEMENT_NAND* ret = new ELEMENT_NAND(target,
 										 brush_set,
-										 text_format,
 										 pos_x,
 										 pos_y,
 										 id,
@@ -179,5 +176,15 @@ void ELEMENT_NAND::Proceed(OUTPUT_LIST& compute_list)
 	for (unsigned i = 0; i < output_list.retAmount(); i++)
 		compute_list.add(output_list[i]->element, output_list[i]->input);
 
+	return;
+}
+void ELEMENT_NAND::Reset()
+{
+	// reset niepod³¹czonych bramek
+	for (unsigned i = 0; i < ia; i++)
+		if (input[i].target)
+			return;
+
+	state = EL_STATE_FALSE;
 	return;
 }
