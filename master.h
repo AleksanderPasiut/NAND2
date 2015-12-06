@@ -77,6 +77,8 @@ private:
 	};
 	SCROLLING_N_SCALING sns;
 
+	static const int ELEMENT_ID_LIMIT = 10000000;
+
 private:
 	// master_create.cpp
 	static D2D1_SIZE_U RetHwndClientSize(HWND); 
@@ -102,6 +104,7 @@ public:
 	void MouseInput(UINT, WPARAM, LPARAM);
 	void Paint();
 	void Size(WPARAM, LPARAM);
+	unsigned RetNewElementId();
 	ELEMENT* Nand(unsigned, const D2D1_POINT_2F&);
 	void MenuInput(WPARAM, LPARAM);
 

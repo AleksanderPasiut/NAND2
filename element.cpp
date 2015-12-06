@@ -1,6 +1,8 @@
 #include <math.h>
 #include "element.h"
 
+const float ELEMENT::CROSS_SIZE = 11.0f;
+const float ELEMENT::CROSS_MARGIN = 3.0f;
 const float ELEMENT::CONTROL_RADIUS = 10.0f;
 const float ELEMENT::PORT_RADIUS = 6.5f;
 const float ELEMENT::PORT_MARK_RADIUS = 9.0f;
@@ -50,17 +52,24 @@ void ELEMENT::RetElementRect(D2D1_RECT_F& out) const
 }
 void ELEMENT::RetCrossRect(D2D1_RECT_F& out) const
 {
-	static const float margin = 5.0f;
-	static const float crs = 12.0f;
-	out.left	= pos.x+size.width-margin-crs;
-	out.top		= pos.y+margin;
-	out.right	= pos.x+size.width-margin;
-	out.bottom	= pos.y+margin+crs;
+	out.left	= pos.x+size.width-CROSS_MARGIN-CROSS_SIZE;
+	out.top		= pos.y+CROSS_MARGIN;
+	out.right	= pos.x+size.width-CROSS_MARGIN;
+	out.bottom	= pos.y+CROSS_MARGIN+CROSS_SIZE;
 	return;
 }
 void ELEMENT::PaintId() const
 {
-
+	static const float tw = 60.0f;
+	static const float th = 12.0f;
+	static const float thp = 2.0f;
+	D2D1_RECT_F rect = D2D1::RectF(pos.x+size.width-CROSS_MARGIN*2-CROSS_SIZE-tw,
+								   pos.y+CROSS_MARGIN-thp,
+								   pos.x+size.width-CROSS_MARGIN*2-CROSS_SIZE,
+								   pos.y+CROSS_MARGIN+th-thp);
+	wchar_t text[8];		
+	_itow_s(id, text, 8, 10);
+	target->DrawTextA(text, static_cast<unsigned>(wcslen(text)), brush->SmallFont(), rect, brush->Black());
 	return;
 }
 EVPV ELEMENT::MouseInput(const D2D1_POINT_2F& click)

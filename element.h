@@ -20,6 +20,8 @@ protected:
 	bool source_flag;
 
 public:
+	static const float CROSS_SIZE;
+	static const float CROSS_MARGIN;
 	static const float PORT_RADIUS;
 	static const float PORT_MARK_RADIUS;
 	static const float CONTROL_RADIUS;
@@ -50,6 +52,7 @@ public:
 	void SetPos(D2D1_POINT_2F);
 	D2D1_POINT_2F RetPos() const { return pos; }
 	bool RetSourceFlag() const { return source_flag; }
+	unsigned RetId() const { return id; }
 
 	virtual bool RetInputPoint(D2D1_POINT_2F& out, unsigned id) const { return false; }
 	virtual bool RetOutputPoint(D2D1_POINT_2F& out, unsigned id) const { return false; }

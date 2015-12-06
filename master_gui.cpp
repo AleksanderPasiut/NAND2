@@ -160,13 +160,30 @@ void MASTER::Size(WPARAM wParam, LPARAM lParam)
 	Paint();
 	return;
 }
+unsigned MASTER::RetNewElementId()
+{
+	unsigned ret;
+	for (ret = 1; ret < ELEMENT_ID_LIMIT; ret++)
+	{
+		bool exists = false;
+
+		for (unsigned i = 0; i < elements_set.RetAmount(); i++)
+			if (elements_set[i]->RetId() == ret)
+			{	exists = true;
+				break;	}
+
+		if (!exists)
+			return ret;
+	}
+	return 0;
+}
 ELEMENT* MASTER::Nand(unsigned input_amount, const D2D1_POINT_2F& position)
 {
 	return ELEMENT_NAND::Create(target,
 								brush_set,
 								position.x,
 								position.y,
-								0,
+								RetNewElementId(),
 								input_amount);
 }
 void MASTER::MenuInput(WPARAM wParam, LPARAM lParam)
@@ -188,7 +205,7 @@ void MASTER::MenuInput(WPARAM wParam, LPARAM lParam)
 											 brush_set,
 											 position.x,
 											 position.y,
-											 0);
+											 RetNewElementId());
 			break;
 		}
 	case MENU_ADD_CLOCK:
@@ -199,7 +216,7 @@ void MASTER::MenuInput(WPARAM wParam, LPARAM lParam)
 												brush_set,
 												position.x,
 												position.y,
-												0,
+												RetNewElementId(),
 												elapse,
 												this);
 			}
@@ -220,7 +237,7 @@ void MASTER::MenuInput(WPARAM wParam, LPARAM lParam)
 											 brush_set,
 											 position.x,
 											 position.y,
-											 0);
+											 RetNewElementId());
 			break;
 		}
 	}

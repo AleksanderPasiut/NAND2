@@ -43,6 +43,9 @@ BRUSH_SET* BRUSH_SET::Create(ID2D1HwndRenderTarget* target, IDWriteFactory* dwfa
 	{	delete ret;
 		return 0;	}
 
+	ret->big_font->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
+	ret->big_font->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+
 	if (S_OK != dwfactory->CreateTextFormat(L"Verdana",
 											0,
 											DWRITE_FONT_WEIGHT_NORMAL,
@@ -54,6 +57,8 @@ BRUSH_SET* BRUSH_SET::Create(ID2D1HwndRenderTarget* target, IDWriteFactory* dwfa
 	{	delete ret;
 		return 0;	}
 
+	ret->small_font->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_TRAILING);
+	ret->big_font->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
 	return ret;
 }
 
