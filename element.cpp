@@ -72,6 +72,7 @@ void ELEMENT::PaintId() const
 	target->DrawTextA(text, static_cast<unsigned>(wcslen(text)), brush->SmallFont(), rect, brush->Black());
 	return;
 }
+
 EVPV ELEMENT::MouseInput(const D2D1_POINT_2F& click)
 {
 	D2D1_RECT_F rect;

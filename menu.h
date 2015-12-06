@@ -8,6 +8,7 @@
 #define MENU_ADD_NAND 0x106
 #define MENU_ADD_OUTPUT 0x107
 #define MENU_ADD_FLIP_FLOP 0x108
+#define MENU_ADD_COMMENT 0x109
 
 #include <Windows.h>
 

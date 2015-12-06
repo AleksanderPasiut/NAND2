@@ -1,7 +1,7 @@
 #include <WindowsX.h>
 #include "master.h"
 
-const float MASTER::SCROLLING_N_SCALING::SCALE_MULTIPLIER = 1.2f;
+const float MASTER::SCROLLING_N_SCALING::SCALE_MULTIPLIER = 1.1f;
 const float MASTER::SCROLLING_N_SCALING::SCALE_LIMIT_TOP = 12.0f;
 const float MASTER::SCROLLING_N_SCALING::SCALE_LIMIT_BOTTOM = 0.1f;
 const float MASTER::SCROLLING_N_SCALING::TRANSLATION_LIMIT = 1677721.0f; // float zachowuje w tym zakresie dok³adnoœæ do 0.1f

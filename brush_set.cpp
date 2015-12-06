@@ -51,6 +51,17 @@ BRUSH_SET* BRUSH_SET::Create(ID2D1HwndRenderTarget* target, IDWriteFactory* dwfa
 											DWRITE_FONT_WEIGHT_NORMAL,
 											DWRITE_FONT_STYLE_NORMAL,
 											DWRITE_FONT_STRETCH_NORMAL,
+											14.0f,
+											L"pl-utf8",
+											&ret->normal_font))
+	{	delete ret;
+		return 0;	}
+
+	if (S_OK != dwfactory->CreateTextFormat(L"Verdana",
+											0,
+											DWRITE_FONT_WEIGHT_NORMAL,
+											DWRITE_FONT_STYLE_NORMAL,
+											DWRITE_FONT_STRETCH_NORMAL,
 											12.0f,
 											L"pl-utf8",
 											&ret->small_font))
@@ -70,5 +81,6 @@ BRUSH_SET::~BRUSH_SET()
 
 	if (stroke)		stroke->Release();
 	if (big_font)	big_font->Release();
+	if (normal_font)normal_font->Release();
 	if (small_font) small_font->Release();
 }

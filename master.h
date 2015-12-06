@@ -14,6 +14,7 @@
 #include "element_nand.h"
 #include "element_clock.h"
 #include "element_output.h"
+#include "element_comment.h"
 
 class MASTER
 {

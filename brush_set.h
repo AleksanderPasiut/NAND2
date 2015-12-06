@@ -10,6 +10,7 @@ private:
 	ID2D1SolidColorBrush* brush[BRUSH_AMOUNT];
 	ID2D1StrokeStyle* stroke;
 	IDWriteTextFormat* big_font;
+	IDWriteTextFormat* normal_font;
 	IDWriteTextFormat* small_font;
 
 private:
@@ -34,5 +35,6 @@ public:
 	ID2D1SolidColorBrush* Orange()		const { return brush[9]; }
 	ID2D1StrokeStyle* Stroke()			const { return stroke; }
 	IDWriteTextFormat* BigFont()		const { return big_font; }
+	IDWriteTextFormat* Font()			const { return normal_font; }
 	IDWriteTextFormat* SmallFont()		const { return small_font; }
 };

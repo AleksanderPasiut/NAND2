@@ -240,6 +240,20 @@ void MASTER::MenuInput(WPARAM wParam, LPARAM lParam)
 											 RetNewElementId());
 			break;
 		}
+	case MENU_ADD_COMMENT:
+		{
+			const COMMENT_DIALOG_RET_VALUE* cdrv = reinterpret_cast<COMMENT_DIALOG_RET_VALUE*>(DialogBox(0, "res_dialog_add_comment", hwnd, reinterpret_cast<DLGPROC>(AddCommentDialogProc)));
+			if (cdrv->text)
+			{
+				element = ELEMENT_COMMENT::Create(target,
+												  brush_set,
+												  position.x,
+												  position.y,
+												  cdrv->text,
+												  dwfactory);
+			}
+			break;
+		}
 	}
 
 	if (element)

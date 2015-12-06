@@ -23,15 +23,16 @@ void MASTER::Link(ELEMENT* element, EVPV evpv)
 				{
 					// podwójne klikniêcie na wejœciu: kasowanie po³¹czenia
 					if (element == linking.element && linking.id == evpv.param)
-					{	element->SetInput(linking.id, 0, 0);
-						linking = LINKING();	}
+						element->SetInput(linking.id, 0, 0);
+					linking = LINKING();
 					break;
 				}
 			case EVPV_OUTPUT:
 				{
 					// klikniêcie na wyjœciu, potem na wejœciu: utworzenie po³¹czenia
-					element->SetInput(evpv.param, linking.element, linking.id);
-					linking = LINKING();
+					if (linking.element != element)
+						element->SetInput(evpv.param, linking.element, linking.id);
+					linking = LINKING();	
 					break;
 				}
 			}
@@ -52,7 +53,8 @@ void MASTER::Link(ELEMENT* element, EVPV evpv)
 			case EVPV_INPUT:
 				{
 					// klikniêcie na wejœciu, potem na wyjœciu: utworzenie po³¹czenia
-					linking.element->SetInput(linking.id, element, evpv.param);
+					if (linking.element != element)
+						linking.element->SetInput(linking.id, element, evpv.param);
 					linking = LINKING();
 					break;
 				}
