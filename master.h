@@ -85,6 +85,7 @@ private:
 private:
 	// master_create.cpp
 	static D2D1_SIZE_U RetHwndClientSize(HWND); 
+	void WindowPlacing();
 
 private:
 	MASTER() : factory(0), dwfactory(0), target(0), brush_set(0), menu(0), saveload(0) {}

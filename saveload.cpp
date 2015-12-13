@@ -4,11 +4,7 @@
 
 /* 
 Schemat zapisu do pliku:
- - window maximized? (bool)
- - window pos x (int)
- - window pos y (int)
- - window width (int)
- - window height (int)
+ - WINDOWPLACEMENT
  - sns.x (float)
  - sns.y (float)
  - sns.scale (float)
@@ -53,14 +49,6 @@ template<typename T> inline T SAVELOAD::read()
 	return ret;
 }
 
-bool SAVELOAD::IsWindowMaximized(HWND hwnd)
-{
-	WINDOWPLACEMENT wpl;
-	GetWindowPlacement(hwnd, &wpl);
-	if (wpl.flags == WPF_RESTORETOMAXIMIZED || wpl.showCmd == SW_MAXIMIZE)
-		return true;
-	else return false;
-}
 wchar_t* SAVELOAD::ReadText()
 {
 	unsigned text_length = read<unsigned>();
@@ -97,22 +85,17 @@ void SAVELOAD::WriteText(const wchar_t* text)
 
 void SAVELOAD::WriteWindowPos()
 {
-	RECT rect;
-	GetWindowRect(Master->hwnd, &rect);
-	write<bool>(IsWindowMaximized(Master->hwnd));
-	write<int>(rect.left);
-	write<int>(rect.top);
-	write<int>(rect.right-rect.left);
-	write<int>(rect.bottom-rect.top);
-
+	wpl.length = sizeof(WINDOWPLACEMENT);
+	GetWindowPlacement(Master->hwnd, &wpl);
+	write<WINDOWPLACEMENT>(wpl);
 	write<float>(Master->sns.x);
 	write<float>(Master->sns.y);
 	write<float>(Master->sns.scale);
-	write<unsigned>(Master->elements_set.RetAmount());
 	return;
 }
 void SAVELOAD::WriteElements()
 {
+	write<unsigned>(Master->elements_set.RetAmount());
 	for (unsigned i = 0; i < Master->elements_set.RetAmount(); i++)
 	{
 		write<unsigned>(Master->elements_set[i]->RetId());
@@ -189,12 +172,8 @@ void SAVELOAD::WriteLinkings()
 }
 void SAVELOAD::ReadWindowPos()
 {
-	ShowWindow(Master->hwnd, read<bool>() ? SW_MAXIMIZE : SW_SHOWNORMAL);
-	int x = read<int>();
-	int y = read<int>();
-	int cx = read<int>();
-	int cy = read<int>();
-	SetWindowPos(Master->hwnd, 0, x, y, cx, cy, SWP_NOZORDER);
+	wpl = read<WINDOWPLACEMENT>();
+	SetWindowPlacement(Master->hwnd, &wpl);
 	Master->sns.x = read<float>();
 	Master->sns.y = read<float>();
 	Master->sns.scale = read<float>();
@@ -284,6 +263,13 @@ void SAVELOAD::ReadLinkings()
 {
 	return;
 }
+void SAVELOAD::FinishWindowPosSetting()
+{
+	Master->target->Resize(MASTER::RetHwndClientSize(Master->hwnd));
+	Master->sns.RefreshMatrix();
+	ShowWindow(Master->hwnd, wpl.showCmd);
+	return;
+}
 
 // g³ówne funkcje
 SAVELOAD* SAVELOAD::Create(MASTER* ptr)
@@ -314,19 +300,20 @@ SAVELOAD* SAVELOAD::Create(MASTER* ptr)
 	memcpy(ret->savepath+(savepath_length-7), L"config", 7*sizeof(wchar_t));
 	return ret;
 }
-void SAVELOAD::Load() 
+bool SAVELOAD::Load() 
 {
 	fs.open(savepath, std::fstream::in | std::fstream::binary);
 
 	if (!fs)
-		return;
+		return false;
 
 	ReadWindowPos();
 	ReadElements();
 	ReadLinkings();
+	FinishWindowPosSetting();
 
 	fs.close();
-	return;
+	return true;
 }
 void SAVELOAD::Save()
 {

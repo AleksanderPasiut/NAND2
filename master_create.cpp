@@ -44,7 +44,8 @@ MASTER* MASTER::Create(HWND hwnd)
 	ret->hwnd = hwnd;
 	ret->sns.target = ret->target;
 	ret->sns.RefreshMatrix();
-	ret->saveload->Load();
+	if (!ret->saveload->Load())
+		ShowWindow(hwnd, SW_SHOWNORMAL);
 	return ret;
 }
 

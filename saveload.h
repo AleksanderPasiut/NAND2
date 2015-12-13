@@ -12,6 +12,7 @@ private:
 	MASTER* Master;
 	wchar_t* savepath;
 	std::fstream fs;
+	WINDOWPLACEMENT wpl;
 
 	enum ELEMENT_TYPE
 	{
@@ -31,7 +32,6 @@ private:
 	template<typename T> inline void write(const T ptr);
 	template<typename T> inline T read();
 
-	bool IsWindowMaximized(HWND);
 	wchar_t* ReadText();
 	void WriteOutputList(const OUTPUT_LIST& ptr);
 	void WriteText(const wchar_t* ptr);
@@ -42,11 +42,12 @@ private:
 	void ReadWindowPos();
 	void ReadElements();
 	void ReadLinkings();
+	void FinishWindowPosSetting();
 
 public:
 	static SAVELOAD* Create(MASTER* Master);
 	~SAVELOAD() { delete[] savepath; }
 
-	void Load();
+	bool Load();
 	void Save();
 };

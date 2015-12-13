@@ -103,8 +103,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow)
 		{
 			if (Master = MASTER::Create(hwnd))
 			{
-				ShowWindow(hwnd, nCmdShow);
-
 				MSG msg;
 				while(GetMessage(&msg, 0, 0, 0))
 				{	TranslateMessage(&msg);
