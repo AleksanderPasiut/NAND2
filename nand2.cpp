@@ -80,7 +80,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow)
 	wc.lpfnWndProc = WindowEventProc;
 	wc.lpszClassName = ClassName;
 	wc.hInstance = hInstance;
-	wc.hIcon = LoadIcon(0, IDI_APPLICATION);
+	wc.hIcon = LoadIcon(hInstance, "res_icon_main");
+	wc.hIconSm = LoadIcon(hInstance, "res_icon_main");
 	wc.hCursor = LoadCursor(0, IDC_ARROW);
 	wc.hbrBackground = reinterpret_cast<HBRUSH>(GetStockObject(BLACK_BRUSH));
 	
