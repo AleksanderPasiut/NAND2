@@ -45,13 +45,11 @@ MASTER* MASTER::Create(HWND hwnd)
 	ret->sns.target = ret->target;
 	ret->sns.RefreshMatrix();
 	ret->saveload->Load();
-
 	return ret;
 }
 
 MASTER::~MASTER()
 {
-	saveload->Save();
 	delete saveload;
 	delete menu;
 	delete brush_set;

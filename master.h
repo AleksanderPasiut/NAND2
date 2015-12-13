@@ -114,5 +114,7 @@ public:
 	// master_proceed.cpp
 	void Proceed();
 
+	void Save() { saveload->Save(); }
+
 	friend class SAVELOAD;
 };

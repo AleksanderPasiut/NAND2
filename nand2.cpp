@@ -42,9 +42,27 @@ LRESULT CALLBACK WindowEventProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 
 			break;
 		}
-	case WM_DESTROY:
+	case WM_ENDSESSION:
 		{
+			Master->Save();
 			PostQuitMessage(0);
+			break;
+		}
+	case WM_SYSCOMMAND:
+		{
+			switch(wParam)
+			{
+			case SC_CLOSE:
+				{
+					if (IDOK == MessageBox(hwnd, "Czy na pewno chcesz zakoñczyæ?", "NAND2", MB_OKCANCEL))
+					{
+						Master->Save();
+						PostQuitMessage(0);
+						return 0;
+					}
+					else return 0;
+				}
+			}
 			break;
 		}
 	}

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <fstream>
+#include <Windows.h>
 
 class MASTER;
 class OUTPUT_LIST;
@@ -30,9 +31,17 @@ private:
 	template<typename T> inline void write(const T ptr);
 	template<typename T> inline T read();
 
+	bool IsWindowMaximized(HWND);
 	wchar_t* ReadText();
 	void WriteOutputList(const OUTPUT_LIST& ptr);
 	void WriteText(const wchar_t* ptr);
+
+	void WriteWindowPos();
+	void WriteElements();
+	void WriteLinkings();
+	void ReadWindowPos();
+	void ReadElements();
+	void ReadLinkings();
 
 public:
 	static SAVELOAD* Create(MASTER* Master);

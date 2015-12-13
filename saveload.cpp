@@ -4,7 +4,11 @@
 
 /* 
 Schemat zapisu do pliku:
-
+ - window maximized? (bool)
+ - window pos x (int)
+ - window pos y (int)
+ - window width (int)
+ - window height (int)
  - sns.x (float)
  - sns.y (float)
  - sns.scale (float)
@@ -48,6 +52,15 @@ template<typename T> inline T SAVELOAD::read()
 	fs.read(reinterpret_cast<char*>(&ret), sizeof(T));
 	return ret;
 }
+
+bool SAVELOAD::IsWindowMaximized(HWND hwnd)
+{
+	WINDOWPLACEMENT wpl;
+	GetWindowPlacement(hwnd, &wpl);
+	if (wpl.flags == WPF_RESTORETOMAXIMIZED || wpl.showCmd == SW_MAXIMIZE)
+		return true;
+	else return false;
+}
 wchar_t* SAVELOAD::ReadText()
 {
 	unsigned text_length = read<unsigned>();
@@ -82,46 +95,114 @@ void SAVELOAD::WriteText(const wchar_t* text)
 	return;
 }
 
-SAVELOAD* SAVELOAD::Create(MASTER* ptr)
+void SAVELOAD::WriteWindowPos()
 {
-	SAVELOAD* ret = new SAVELOAD;
+	RECT rect;
+	GetWindowRect(Master->hwnd, &rect);
+	write<bool>(IsWindowMaximized(Master->hwnd));
+	write<int>(rect.left);
+	write<int>(rect.top);
+	write<int>(rect.right-rect.left);
+	write<int>(rect.bottom-rect.top);
 
-	if (!ret)
-		return 0;
-
-	ret->Master = ptr;
-
-	// wyodrêbnienie œcie¿ki do aplikacji
-	wchar_t* command_line = GetCommandLineW();
-	int savepath_length = 1;
-	while(command_line[savepath_length] != L'"')
-		savepath_length++;
-	while(command_line[savepath_length] != L'\\')
-		savepath_length--;
-	savepath_length += 7;
-	ret->savepath = new wchar_t [savepath_length];
-
-	if (!ret->savepath)
-	{	delete ret;
-		return 0;	}
-
-	memset(ret->savepath, 0, savepath_length*sizeof(wchar_t));
-	memcpy(ret->savepath, command_line+1, savepath_length*sizeof(wchar_t));
-	memcpy(ret->savepath+(savepath_length-7), L"config", 7*sizeof(wchar_t));
-	return ret;
+	write<float>(Master->sns.x);
+	write<float>(Master->sns.y);
+	write<float>(Master->sns.scale);
+	write<unsigned>(Master->elements_set.RetAmount());
+	return;
 }
-void SAVELOAD::Load() 
+void SAVELOAD::WriteElements()
 {
-	fs.open(savepath, std::fstream::in | std::fstream::binary);
+	for (unsigned i = 0; i < Master->elements_set.RetAmount(); i++)
+	{
+		write<unsigned>(Master->elements_set[i]->RetId());
+		D2D1_POINT_2F pos = Master->elements_set[i]->RetPos();
+		write<float>(pos.x);
+		write<float>(pos.y);
 
-	if (!fs)
-		return;
-
+		if (ELEMENT_SOURCE* ptr = dynamic_cast<ELEMENT_SOURCE*>(Master->elements_set[i]))
+		{
+			write<ELEMENT_TYPE>(ELEMENT_TYPE_SOURCE);
+			write<EL_STATE>(ptr->RetState());
+		}
+		else if (ELEMENT_CLOCK* ptr = dynamic_cast<ELEMENT_CLOCK*>(Master->elements_set[i]))
+		{
+			write<ELEMENT_TYPE>(ELEMENT_TYPE_CLOCK);
+			write<unsigned>(ptr->RetElapse());
+		}
+		else if (ELEMENT_NAND* ptr = dynamic_cast<ELEMENT_NAND*>(Master->elements_set[i]))
+		{
+			write<ELEMENT_TYPE>(ELEMENT_TYPE_NAND);
+			write<unsigned>(ptr->RetInputAmount());
+		}
+		else if (ELEMENT_OUTPUT* ptr = dynamic_cast<ELEMENT_OUTPUT*>(Master->elements_set[i]))
+		{
+			write<ELEMENT_TYPE>(ELEMENT_TYPE_OUTPUT);
+		}
+		else if (ELEMENT_COMMENT* ptr = dynamic_cast<ELEMENT_COMMENT*>(Master->elements_set[i]))
+		{
+			write<ELEMENT_TYPE>(ELEMENT_TYPE_COMMENT);
+			WriteText(ptr->RetText());
+		}
+	}
+	return;
+}
+void SAVELOAD::WriteLinkings()
+{
+	for (unsigned i = 0; i < Master->elements_set.RetAmount(); i++)
+	{
+		if (ELEMENT_SOURCE* ptr = dynamic_cast<ELEMENT_SOURCE*>(Master->elements_set[i]))
+		{
+			const OUTPUT_LIST& optlst = ptr->RetOutputList();
+			for (unsigned j = 0; j < optlst.retAmount(); j++)
+			{
+				write<unsigned>(ptr->RetId());
+				write<unsigned>(0);
+				write<unsigned>(optlst[j]->element->RetId());
+				write<unsigned>(optlst[j]->input);
+			}
+		}
+		else if (ELEMENT_CLOCK* ptr = dynamic_cast<ELEMENT_CLOCK*>(Master->elements_set[i]))
+		{
+			const OUTPUT_LIST& optlst = ptr->RetOutputList();
+			for (unsigned j = 0; j < optlst.retAmount(); j++)
+			{
+				write<unsigned>(ptr->RetId());
+				write<unsigned>(0);
+				write<unsigned>(optlst[j]->element->RetId());
+				write<unsigned>(optlst[j]->input);
+			}
+		}
+		else if (ELEMENT_NAND* ptr = dynamic_cast<ELEMENT_NAND*>(Master->elements_set[i]))
+		{
+			const OUTPUT_LIST& optlst = ptr->RetOutputList();
+			for (unsigned j = 0; j < optlst.retAmount(); j++)
+			{
+				write<unsigned>(ptr->RetId());
+				write<unsigned>(0);
+				write<unsigned>(optlst[j]->element->RetId());
+				write<unsigned>(optlst[j]->input);
+			}
+		}
+	}
+	return;
+}
+void SAVELOAD::ReadWindowPos()
+{
+	ShowWindow(Master->hwnd, read<bool>() ? SW_MAXIMIZE : SW_SHOWNORMAL);
+	int x = read<int>();
+	int y = read<int>();
+	int cx = read<int>();
+	int cy = read<int>();
+	SetWindowPos(Master->hwnd, 0, x, y, cx, cy, SWP_NOZORDER);
 	Master->sns.x = read<float>();
 	Master->sns.y = read<float>();
 	Master->sns.scale = read<float>();
 	Master->sns.RefreshMatrix();
-
+	return;
+}
+void SAVELOAD::ReadElements()
+{
 	unsigned elements_amount = read<unsigned>();
 	for(unsigned i = 0; i < elements_amount; i++)
 	{
@@ -197,6 +278,52 @@ void SAVELOAD::Load()
 
 		Master->elements_set.add(added_element);
 	}
+	return;
+}
+void SAVELOAD::ReadLinkings()
+{
+	return;
+}
+
+// g³ówne funkcje
+SAVELOAD* SAVELOAD::Create(MASTER* ptr)
+{
+	SAVELOAD* ret = new SAVELOAD;
+
+	if (!ret)
+		return 0;
+
+	ret->Master = ptr;
+
+	// wyodrêbnienie œcie¿ki do aplikacji
+	wchar_t* command_line = GetCommandLineW();
+	int savepath_length = 1;
+	while(command_line[savepath_length] != L'"')
+		savepath_length++;
+	while(command_line[savepath_length] != L'\\')
+		savepath_length--;
+	savepath_length += 7;
+	ret->savepath = new wchar_t [savepath_length];
+
+	if (!ret->savepath)
+	{	delete ret;
+		return 0;	}
+
+	memset(ret->savepath, 0, savepath_length*sizeof(wchar_t));
+	memcpy(ret->savepath, command_line+1, savepath_length*sizeof(wchar_t));
+	memcpy(ret->savepath+(savepath_length-7), L"config", 7*sizeof(wchar_t));
+	return ret;
+}
+void SAVELOAD::Load() 
+{
+	fs.open(savepath, std::fstream::in | std::fstream::binary);
+
+	if (!fs)
+		return;
+
+	ReadWindowPos();
+	ReadElements();
+	ReadLinkings();
 
 	fs.close();
 	return;
@@ -208,80 +335,9 @@ void SAVELOAD::Save()
 	if (!fs)
 		return;
 
-	write<float>(Master->sns.x);
-	write<float>(Master->sns.y);
-	write<float>(Master->sns.scale);
-	write<unsigned>(Master->elements_set.RetAmount());
-
-	for (unsigned i = 0; i < Master->elements_set.RetAmount(); i++)
-	{
-		write<unsigned>(Master->elements_set[i]->RetId());
-		D2D1_POINT_2F pos = Master->elements_set[i]->RetPos();
-		write<float>(pos.x);
-		write<float>(pos.y);
-
-		if (ELEMENT_SOURCE* ptr = dynamic_cast<ELEMENT_SOURCE*>(Master->elements_set[i]))
-		{
-			write<ELEMENT_TYPE>(ELEMENT_TYPE_SOURCE);
-			write<EL_STATE>(ptr->RetState());
-		}
-		else if (ELEMENT_CLOCK* ptr = dynamic_cast<ELEMENT_CLOCK*>(Master->elements_set[i]))
-		{
-			write<ELEMENT_TYPE>(ELEMENT_TYPE_CLOCK);
-			write<unsigned>(ptr->RetElapse());
-		}
-		else if (ELEMENT_NAND* ptr = dynamic_cast<ELEMENT_NAND*>(Master->elements_set[i]))
-		{
-			write<ELEMENT_TYPE>(ELEMENT_TYPE_NAND);
-			write<unsigned>(ptr->RetInputAmount());
-		}
-		else if (ELEMENT_OUTPUT* ptr = dynamic_cast<ELEMENT_OUTPUT*>(Master->elements_set[i]))
-		{
-			write<ELEMENT_TYPE>(ELEMENT_TYPE_OUTPUT);
-		}
-		else if (ELEMENT_COMMENT* ptr = dynamic_cast<ELEMENT_COMMENT*>(Master->elements_set[i]))
-		{
-			write<ELEMENT_TYPE>(ELEMENT_TYPE_COMMENT);
-			WriteText(ptr->RetText());
-		}
-	}
-
-	for (unsigned i = 0; i < Master->elements_set.RetAmount(); i++)
-	{
-		if (ELEMENT_SOURCE* ptr = dynamic_cast<ELEMENT_SOURCE*>(Master->elements_set[i]))
-		{
-			const OUTPUT_LIST& optlst = ptr->RetOutputList();
-			for (unsigned j = 0; j < optlst.retAmount(); j++)
-			{
-				write<unsigned>(ptr->RetId());
-				write<unsigned>(0);
-				write<unsigned>(optlst[j]->element->RetId());
-				write<unsigned>(optlst[j]->input);
-			}
-		}
-		else if (ELEMENT_CLOCK* ptr = dynamic_cast<ELEMENT_CLOCK*>(Master->elements_set[i]))
-		{
-			const OUTPUT_LIST& optlst = ptr->RetOutputList();
-			for (unsigned j = 0; j < optlst.retAmount(); j++)
-			{
-				write<unsigned>(ptr->RetId());
-				write<unsigned>(0);
-				write<unsigned>(optlst[j]->element->RetId());
-				write<unsigned>(optlst[j]->input);
-			}
-		}
-		else if (ELEMENT_NAND* ptr = dynamic_cast<ELEMENT_NAND*>(Master->elements_set[i]))
-		{
-			const OUTPUT_LIST& optlst = ptr->RetOutputList();
-			for (unsigned j = 0; j < optlst.retAmount(); j++)
-			{
-				write<unsigned>(ptr->RetId());
-				write<unsigned>(0);
-				write<unsigned>(optlst[j]->element->RetId());
-				write<unsigned>(optlst[j]->input);
-			}
-		}
-	}
+	WriteWindowPos();
+	WriteElements();
+	WriteLinkings();
 
 	fs.close();
 	return;
