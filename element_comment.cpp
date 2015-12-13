@@ -21,6 +21,7 @@ ELEMENT_COMMENT::ELEMENT_COMMENT(ID2D1HwndRenderTarget* target,
 ELEMENT_COMMENT::~ELEMENT_COMMENT()
 {
 	if (text_layout) text_layout->Release();
+	delete[] text;
 }
 
 ELEMENT_COMMENT* ELEMENT_COMMENT::Create(ID2D1HwndRenderTarget* target,
@@ -32,6 +33,7 @@ ELEMENT_COMMENT* ELEMENT_COMMENT::Create(ID2D1HwndRenderTarget* target,
 {
 	unsigned text_length = static_cast<unsigned>(strlen(text));
 	wchar_t* wtext = new wchar_t [text_length+1];
+	wtext[text_length] = 0;
 	if (!wtext)
 		return 0;
 	MultiByteToWideChar(CP_ACP, 0, text, text_length, wtext, text_length+1);
@@ -61,9 +63,52 @@ ELEMENT_COMMENT* ELEMENT_COMMENT::Create(ID2D1HwndRenderTarget* target,
 	{	layout->Release();
 		return 0;	}
 
+	ret->text = wtext;
 	ret->text_layout = layout;
+	return ret;
+}
 
-	delete[] wtext;
+ELEMENT_COMMENT* ELEMENT_COMMENT::Create(ID2D1HwndRenderTarget* target,
+										 BRUSH_SET* brush_set,
+										 float pos_x,
+										 float pos_y,
+										 const wchar_t* text,
+										 IDWriteFactory* dwfactory)
+{
+	unsigned text_length = static_cast<unsigned>(wcslen(text));
+	wchar_t* wtext = new wchar_t [text_length+1];
+	wtext[text_length] = 0;
+	if (!wtext)
+		return 0;
+	memcpy(wtext, text, (text_length+1)*sizeof(wchar_t));
+
+	IDWriteTextLayout* layout;
+	static const float max_width = 250.0f;
+	static const float max_height = 5000.0f;
+	if (S_OK != dwfactory->CreateTextLayout(wtext,
+											text_length,
+											brush_set->Font(),
+											max_width,
+											max_height,
+											&layout))
+		return 0;
+
+	DWRITE_TEXT_METRICS metrics;
+	layout->GetMetrics(&metrics);
+
+	ELEMENT_COMMENT* ret = new ELEMENT_COMMENT(target,
+											   brush_set,
+											   pos_x,
+											   pos_y,
+											   metrics.width+2*TEXT_MARGIN,
+											   metrics.height+TEXT_MARGIN_TOP+TEXT_MARGIN);
+	
+	if (!ret)
+	{	layout->Release();
+		return 0;	}
+
+	ret->text = wtext;
+	ret->text_layout = layout;
 	return ret;
 }
 

@@ -37,15 +37,22 @@ MASTER* MASTER::Create(HWND hwnd)
 	{	delete ret;
 		return 0;	}
 
+	if (!(ret->saveload = SAVELOAD::Create(ret)))
+	{	delete ret;
+		return 0;	}
+
 	ret->hwnd = hwnd;
 	ret->sns.target = ret->target;
 	ret->sns.RefreshMatrix();
+	ret->saveload->Load();
 
 	return ret;
 }
 
 MASTER::~MASTER()
 {
+	saveload->Save();
+	delete saveload;
 	delete menu;
 	delete brush_set;
 	if (target)			target->Release();

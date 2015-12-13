@@ -139,14 +139,14 @@ void MASTER::Paint()
 	for (unsigned i = 0; i < elements_set.RetAmount(); i++)
 		elements_set[i]->Paint();
 
-	for (unsigned i = 0; i < elements_set.RetAmount(); i++)
-		elements_set[i]->PaintWires();
-
 	if (linking.mark_all_inputs)
 		PaintInputs();
 
 	if (linking.mark_all_outputs)
 		PaintOutputs();
+
+	for (unsigned i = 0; i < elements_set.RetAmount(); i++)
+		elements_set[i]->PaintWires();
 
 	target->EndDraw();
 	EndPaint(hwnd, 0);

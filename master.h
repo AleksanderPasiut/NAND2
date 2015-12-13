@@ -9,6 +9,7 @@
 #include "brush_set.h"
 #include "elements_set.h"
 #include "menu.h"
+#include "saveload.h"
 
 #include "element_source.h"
 #include "element_nand.h"
@@ -26,6 +27,7 @@ private:
 	BRUSH_SET* brush_set;
 	ELEMENTS_SET elements_set;
 	MENU* menu;
+	SAVELOAD* saveload;
 
 	struct MOVING
 	{
@@ -85,7 +87,7 @@ private:
 	static D2D1_SIZE_U RetHwndClientSize(HWND); 
 
 private:
-	MASTER() : factory(0), dwfactory(0), target(0), brush_set(0), menu(0) {}
+	MASTER() : factory(0), dwfactory(0), target(0), brush_set(0), menu(0), saveload(0) {}
 	MASTER(const MASTER&) {}
 	MASTER& operator= (const MASTER&) {}
 
@@ -111,4 +113,6 @@ public:
 
 	// master_proceed.cpp
 	void Proceed();
+
+	friend class SAVELOAD;
 };

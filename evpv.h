@@ -31,10 +31,10 @@ class ELEMENT;
 struct EL_INPUT
 {
 	ELEMENT* target;
-	unsigned id;
+	unsigned output;
 
 	EL_INPUT(ELEMENT* in_target = 0,
-			 unsigned in_id = 0) :
+			 unsigned in_output = 0) :
 			target(in_target),
-			id(in_id) {}
+			output(in_output) {}
 };

@@ -32,9 +32,11 @@ public:
 
 	void AddOutput(unsigned this_output_id, ELEMENT* target, unsigned input) { output_list.add(target, input); return; }
 	void DelOutput(unsigned this_output_id, ELEMENT* target, unsigned input) { output_list.remove(target, input); return; }
+	const OUTPUT_LIST& RetOutputList() const { return output_list; }
 	
 	void RemoveLinkage(ELEMENT* target) { output_list.remove(target); return; }
 
+	void SetState(EL_STATE state) { this->state = state; }
 	EL_STATE RetState(unsigned output_id = 0) const { return state; }
 
 	void Proceed(OUTPUT_LIST&);

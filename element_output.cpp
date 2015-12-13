@@ -79,7 +79,7 @@ void ELEMENT_OUTPUT::PaintWires() const
 {
 	if (input.target)
 	{	D2D1_POINT_2F end;
-		input.target->RetOutputPoint(end, input.id);
+		input.target->RetOutputPoint(end, input.output);
 		target->DrawLine(RetInputPoint(), end, brush->Red(), 2.0f, brush->Stroke());	}
 
 	return;
@@ -94,19 +94,19 @@ bool ELEMENT_OUTPUT::RetInputPoint(D2D1_POINT_2F& out, unsigned id) const
 	return true;
 }
 
-void ELEMENT_OUTPUT::SetInput(unsigned id, ELEMENT* target, unsigned target_id)
+void ELEMENT_OUTPUT::SetInput(unsigned id, ELEMENT* target, unsigned target_output)
 {
 	// usuniêcie starego outputa
 	if (input.target)
-		input.target->DelOutput(input.id, this, 0);
+		input.target->DelOutput(input.output, this, 0);
 
 	// ustawienie nowego inputa
 	input.target = target;
-	input.id = target_id;
+	input.output = target_output;
 
 	// ustawienie nowego outputa
 	if (input.target)
-		input.target->AddOutput(input.id, this, 0);
+		input.target->AddOutput(input.output, this, 0);
 
 	return;
 }
@@ -114,7 +114,7 @@ void ELEMENT_OUTPUT::RemoveLinkage(ELEMENT* target)
 {
 	if (input.target == target)
 	{	input.target = 0;
-		input.id = 0;	}
+		input.output = 0;	}
 	return;
 }
 
@@ -125,7 +125,7 @@ void ELEMENT_OUTPUT::Proceed(OUTPUT_LIST& compute_list)
 		return;
 	
 	// ustawia swój stan
-	state = input.target ? input.target->RetState(input.id) : EL_STATE_FALSE;
+	state = input.target ? input.target->RetState(input.output) : EL_STATE_FALSE;
 	return;
 }
 
