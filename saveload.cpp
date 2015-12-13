@@ -26,14 +26,13 @@ Schemat zapisu do pliku:
 			* ELEMENT_COMMENT
 				- text_length (unsigned, rozmiar tekstu wraz z koñcz¹cym zerem)
 				- text (wchar_t array, koñczona zerem)
-		|| koñc¹cze 0 (4 bajty)
 
 	Pêtla po³aczeñ:
 		- id Ÿród³a
 		- output Ÿród³a
 		- id celu
 		- input celu
-		|| koñcz¹ce 0 (4 bajty)
+	|| koñcz¹ce 0 (4 bajty)
 */
 
 // funkcje pomocnicze
@@ -168,6 +167,7 @@ void SAVELOAD::WriteLinkings()
 			}
 		}
 	}
+	write<unsigned>(0);
 	return;
 }
 void SAVELOAD::ReadWindowPos()
@@ -261,6 +261,24 @@ void SAVELOAD::ReadElements()
 }
 void SAVELOAD::ReadLinkings()
 {
+	for(;;)
+	{
+		unsigned source_id = read<unsigned>();		if (!source_id || !fs) break;
+		unsigned source_output = read<unsigned>();
+		unsigned dest_id = read<unsigned>();
+		unsigned dest_input = read<unsigned>();
+
+		ELEMENT* element_source = Master->elements_set(source_id);
+		ELEMENT* element_dest = Master->elements_set(dest_id);
+
+		if (element_source && element_dest && element_source != element_dest)
+		{
+			element_source->AddOutput(source_output, element_dest, dest_input);
+			element_dest->SetInput(dest_input, element_source, source_output);
+		}
+	}
+
+	Master->Proceed();
 	return;
 }
 void SAVELOAD::FinishWindowPosSetting()

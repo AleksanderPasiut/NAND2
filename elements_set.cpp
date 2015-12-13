@@ -79,4 +79,11 @@ ELEMENT* ELEMENTS_SET::operator[] (unsigned arg)
 		return 0;
 	else return set[arg];
 }
+ELEMENT* ELEMENTS_SET::operator() (unsigned arg)
+{
+	for (unsigned i = 0; i < amount; i++)
+		if (set[i]->id == arg)
+			return set[i];
+	return 0;
+}
 

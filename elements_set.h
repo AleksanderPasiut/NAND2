@@ -20,7 +20,8 @@ public:
 	bool add(ELEMENT*);
 	bool remove(ELEMENT*);
 	bool set_on_top(ELEMENT*);
-	ELEMENT* operator[] (unsigned);
+	ELEMENT* operator[] (unsigned);	// zwraca element wed³ug kolejnoœci w elements_set
+	ELEMENT* operator() (unsigned); // zwraca element wed³ug id
 
 	unsigned RetAmount() const { return amount; }
 };
