@@ -24,6 +24,30 @@ bool OUTPUT_LIST::add(ELEMENT* element, unsigned input)
 	return true;
 }
 
+bool OUTPUT_LIST::add_if_new(ELEMENT* element, unsigned input)
+{
+	OUTPUT* new_tab = new OUTPUT[amount+1];
+
+	if (!new_tab)
+		return false;
+
+	for (unsigned i = 0; i < amount; i++)
+	{
+		if (tab[i].element == element && tab[i].input == input)
+		{
+			delete[] new_tab;
+			return false;
+		}
+		new_tab[i] = tab[i];
+	}
+
+	new_tab[amount] = OUTPUT(element, input);
+	amount++;
+	delete[] tab;
+	tab = new_tab;
+	return true;
+}
+
 bool OUTPUT_LIST::remove_first_element()
 {
 	if (!amount)

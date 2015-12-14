@@ -17,7 +17,7 @@ void MASTER::Proceed()
 	}
 
 	// uruchomienie obliczania
-	for (unsigned i = 0; i < 2*elements_amount && compute_list.retAmount(); i++)
+	for (unsigned i = 0; i < 1000 && compute_list.retAmount(); i++)
 		compute_list[0]->element->Proceed(compute_list);
 
 	Paint();

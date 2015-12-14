@@ -129,7 +129,7 @@ void ELEMENT_CLOCK::Proceed(OUTPUT_LIST& compute_list)
 
 	// dodaje do listy wszystkie swoje outputy
 	for (unsigned i = 0; i < output_list.retAmount(); i++)
-		compute_list.add(output_list[i]->element, output_list[i]->input);
+		compute_list.add_if_new(output_list[i]->element, output_list[i]->input);
 
 	return;
 }

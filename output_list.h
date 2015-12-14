@@ -22,6 +22,7 @@ public:
 	~OUTPUT_LIST();
 
 	bool add(ELEMENT*, unsigned);
+	bool add_if_new(ELEMENT*, unsigned);
 	bool remove_first_element();
 	bool remove(ELEMENT* target);
 	bool remove(ELEMENT* target, unsigned id);
