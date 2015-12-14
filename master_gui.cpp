@@ -8,6 +8,7 @@ void MASTER::MouseInput(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 	case WM_LBUTTONDOWN:
 		{
+			unstable_system_notification = false;
 			moving.click = sns.Click(lParam);
 
 			ELEMENT* element = 0;
@@ -157,6 +158,12 @@ void MASTER::Size(WPARAM wParam, LPARAM lParam)
 	target->Resize(D2D1::SizeU(LOWORD(lParam), HIWORD(lParam)));
 
 	sns.RefreshMatrix();
+	Paint();
+	return;
+}
+void MASTER::ShowWindow()
+{
+	target->Resize(RetHwndClientSize(hwnd));
 	Paint();
 	return;
 }

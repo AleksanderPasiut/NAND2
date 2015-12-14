@@ -65,8 +65,10 @@ public:
 
 	virtual EL_STATE RetState(unsigned output_id = 0) const { return EL_STATE_FALSE; }
 
-	virtual void Proceed(OUTPUT_LIST&) {}
 	virtual void Reset() {}
+	virtual bool UpdateState(unsigned i = 0) { return true; }
+	virtual void Proceed(OUTPUT_LIST*, unsigned input = 0) {}
+	virtual void SetInternalInput(unsigned input, EL_STATE state) {}
 
 	friend class ELEMENTS_SET;
 };

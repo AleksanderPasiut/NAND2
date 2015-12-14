@@ -29,6 +29,8 @@ private:
 	MENU* menu;
 	SAVELOAD* saveload;
 
+	bool unstable_system_notification;
+
 	struct MOVING
 	{
 		ELEMENT* element;
@@ -88,7 +90,7 @@ private:
 	void WindowPlacing();
 
 private:
-	MASTER() : factory(0), dwfactory(0), target(0), brush_set(0), menu(0), saveload(0) {}
+	MASTER() : factory(0), dwfactory(0), target(0), brush_set(0), menu(0), saveload(0), unstable_system_notification(false) {}
 	MASTER(const MASTER&) {}
 	MASTER& operator= (const MASTER&) {}
 
@@ -111,6 +113,7 @@ public:
 	unsigned RetNewElementId();
 	ELEMENT* Nand(unsigned, const D2D1_POINT_2F&);
 	void MenuInput(WPARAM, LPARAM);
+	void ShowWindow();
 
 	// master_proceed.cpp
 	void Proceed();

@@ -39,7 +39,7 @@ public:
 	void SetState(EL_STATE state) { this->state = state; }
 	EL_STATE RetState(unsigned output_id = 0) const { return state; }
 
-	void Proceed(OUTPUT_LIST&);
+	void Proceed(OUTPUT_LIST*, unsigned input = 0);
 
 	friend class ELEMENTS_SET;
 };

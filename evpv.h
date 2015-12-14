@@ -23,6 +23,7 @@ struct EVPV
 
 enum EL_STATE
 {
+	EL_STATE_UNKNOWN = -1,
 	EL_STATE_TRUE = 1,
 	EL_STATE_FALSE = 0
 };
@@ -32,9 +33,11 @@ struct EL_INPUT
 {
 	ELEMENT* target;
 	unsigned output;
+	EL_STATE state;
 
 	EL_INPUT(ELEMENT* in_target = 0,
 			 unsigned in_output = 0) :
 			target(in_target),
-			output(in_output) {}
+			output(in_output),
+			state(EL_STATE_UNKNOWN) {}
 };

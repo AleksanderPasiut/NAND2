@@ -45,7 +45,7 @@ public:
 	EL_STATE RetState(unsigned output_id = 0) const { return state; }
 	unsigned RetElapse() const { return elapse; }
 
-	void Proceed(OUTPUT_LIST&);
+	void Proceed(OUTPUT_LIST*, unsigned input = 0);
 
 	friend class ELEMENTS_SET;
 	friend VOID CALLBACK ClockElementTimerProc(HWND, UINT, UINT_PTR, DWORD);

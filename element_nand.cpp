@@ -160,11 +160,23 @@ void ELEMENT_NAND::RemoveLinkage(ELEMENT* target)
 	return;
 }
 
-void ELEMENT_NAND::Proceed(OUTPUT_LIST& compute_list)
+void ELEMENT_NAND::Reset()
 {
-	// usuwa siebie z listy (je¿eli siebie nie by³o, to przerywa funkcje)
-	if (!compute_list.remove_first_element())
-		return;
+	// ustawienie wewnêtrznych stanów input na EL_STATE_UNKNOWN
+	for (unsigned i = 0; i < ia; i++)
+		input[i].state = EL_STATE_UNKNOWN;
+
+	// reset niepod³¹czonych bramek
+	for (unsigned i = 0; i < ia; i++)
+		if (input[i].target)
+			return;
+
+	state = EL_STATE_FALSE;
+	return;
+}
+bool ELEMENT_NAND::UpdateState(unsigned input_id)
+{
+	EL_STATE old_state = state;
 
 	// ustawia swój stan
 	state = EL_STATE_FALSE;
@@ -172,19 +184,24 @@ void ELEMENT_NAND::Proceed(OUTPUT_LIST& compute_list)
 		if (input[i].target && input[i].target->RetState(input[i].output) == EL_STATE_FALSE)
 			state = EL_STATE_TRUE;
 
-	// dodaje do listy wszystkie swoje outputy
+	return state != old_state;
+}
+void ELEMENT_NAND::Proceed(OUTPUT_LIST* compute_list, unsigned i)
+{
+	// dodaje do listy wszystkie swoje outputy i ustawia im stany wejœciowe
 	for (unsigned i = 0; i < output_list.retAmount(); i++)
-		compute_list.add_if_new(output_list[i]->element, output_list[i]->input);
+	{
+		compute_list->add_if_new(output_list[i]->element, output_list[i]->input);
+		output_list[i]->element->SetInternalInput(output_list[i]->input, state);
+	}
 
 	return;
 }
-void ELEMENT_NAND::Reset()
+void ELEMENT_NAND::SetInternalInput(unsigned input_id, EL_STATE in_state)
 {
-	// reset niepod³¹czonych bramek
-	for (unsigned i = 0; i < ia; i++)
-		if (input[i].target)
-			return;
+	if (input_id > ia)
+		return;
 
-	state = EL_STATE_FALSE;
+	input[input_id].state = in_state;
 	return;
 }
