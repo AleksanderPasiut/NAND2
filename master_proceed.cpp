@@ -15,8 +15,10 @@ void MASTER::Proceed()
 
 	// utworzenie listy startowej
 	for (unsigned i = 0; i < elements_set.RetAmount(); i++)
+	{
 		if (elements_set[i]->RetSourceFlag())
 			current_list->add(elements_set[i], 0);
+	}
 
 	// g³ówna pêtla
 	unsigned i;
@@ -44,7 +46,7 @@ void MASTER::Proceed()
 	}
 
 
-	if (i == elements_set.RetAmount()*2 && !unstable_system_notification)
+	if (i && i == elements_set.RetAmount()*2 && !unstable_system_notification)
 	{
 		MessageBox(hwnd, "Podany uk³ad jest niestabilny.", "NAND2", MB_OK);
 		unstable_system_notification = true;

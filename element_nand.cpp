@@ -181,8 +181,17 @@ bool ELEMENT_NAND::UpdateState(unsigned input_id)
 	// ustawia swój stan
 	state = EL_STATE_FALSE;
 	for (unsigned i = 0; i < ia; i++)
-		if (input[i].target && input[i].target->RetState(input[i].output) == EL_STATE_FALSE)
-			state = EL_STATE_TRUE;
+	{
+		if (input[i].target)
+		{
+			if (input[i].state == EL_STATE_UNKNOWN)
+				input[i].state = input[i].target->RetState(input[i].output);
+
+			if (input[i].state == EL_STATE_FALSE)
+			{	state = EL_STATE_TRUE;
+				break; }
+		}
+	}
 
 	return state != old_state;
 }

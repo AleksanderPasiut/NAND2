@@ -35,13 +35,6 @@ LRESULT CALLBACK WindowEventProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 
 			break;
 		}
-	case WM_SHOWWINDOW:
-		{
-			if (Master && wParam == TRUE)
-				Master->ShowWindow();
-
-			break;
-		}
 	case WM_COMMAND:
 		{
 			if (Master)

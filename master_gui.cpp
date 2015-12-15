@@ -164,6 +164,7 @@ void MASTER::Size(WPARAM wParam, LPARAM lParam)
 void MASTER::ShowWindow()
 {
 	target->Resize(RetHwndClientSize(hwnd));
+	sns.RefreshMatrix();
 	Paint();
 	return;
 }
