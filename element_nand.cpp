@@ -57,12 +57,8 @@ ELEMENT_NAND* ELEMENT_NAND::Create(ID2D1HwndRenderTarget* target,
 										 id,
 										 input_amount);
 
-	if (ret)
-	{
-		return ret;
-	}
 	
-	return 0;
+	return ret;
 }
 
 EVPV ELEMENT_NAND::MouseInput(const D2D1_POINT_2F& click)
@@ -160,57 +156,18 @@ void ELEMENT_NAND::RemoveLinkage(ELEMENT* target)
 	return;
 }
 
-void ELEMENT_NAND::Reset()
+bool ELEMENT_NAND::Proceed(bool forced)
 {
-	// ustawienie wewnêtrznych stanów input na EL_STATE_UNKNOWN
-	for (unsigned i = 0; i < ia; i++)
-		input[i].state = EL_STATE_UNKNOWN;
+	if (!forced)
+		for (unsigned i = 0; i < ia; i++)
+			if (input[i].target && !(input[i].target->computed()))
+				return false;
 
-	// reset niepod³¹czonych bramek
 	for (unsigned i = 0; i < ia; i++)
-		if (input[i].target)
-			return;
+		if (input[i].target && input[i].target->RetState() == EL_STATE_FALSE)
+		{	state = EL_STATE_TRUE;
+			return computed_flag = true;	}
 
 	state = EL_STATE_FALSE;
-	return;
-}
-bool ELEMENT_NAND::UpdateState(unsigned input_id)
-{
-	EL_STATE old_state = state;
-
-	// ustawia swój stan
-	state = EL_STATE_FALSE;
-	for (unsigned i = 0; i < ia; i++)
-	{
-		if (input[i].target)
-		{
-			if (input[i].state == EL_STATE_UNKNOWN)
-				input[i].state = input[i].target->RetState(input[i].output);
-
-			if (input[i].state == EL_STATE_FALSE)
-			{	state = EL_STATE_TRUE;
-				break; }
-		}
-	}
-
-	return state != old_state;
-}
-void ELEMENT_NAND::Proceed(OUTPUT_LIST* compute_list, unsigned i)
-{
-	// dodaje do listy wszystkie swoje outputy i ustawia im stany wejœciowe
-	for (unsigned i = 0; i < output_list.retAmount(); i++)
-	{
-		compute_list->add_if_new(output_list[i]->element, output_list[i]->input);
-		output_list[i]->element->SetInternalInput(output_list[i]->input, state);
-	}
-
-	return;
-}
-void ELEMENT_NAND::SetInternalInput(unsigned input_id, EL_STATE in_state)
-{
-	if (input_id > ia)
-		return;
-
-	input[input_id].state = in_state;
-	return;
+	return computed_flag = true;
 }

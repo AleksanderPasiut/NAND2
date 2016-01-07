@@ -118,10 +118,13 @@ void ELEMENT_OUTPUT::RemoveLinkage(ELEMENT* target)
 	return;
 }
 
-bool ELEMENT_OUTPUT::UpdateState(unsigned i)
+bool ELEMENT_OUTPUT::Proceed(bool force)
 {
-	// ustawia swój stan
-	state = input.target ? input.target->RetState(input.output) : EL_STATE_FALSE;
-	return false;
-}
+	if (input.target->computed())
+	{
+		state = input.target->RetState();
+		computed() = input.target->computed();
+	}
 
+	return input.target->computed();
+}

@@ -36,7 +36,7 @@ public:
 
 	EL_STATE RetState(unsigned output_id = 0) const { return state; }
 
-	bool UpdateState(unsigned input = 0);
+	bool Proceed(bool);
 
 	friend class ELEMENTS_SET;
 };

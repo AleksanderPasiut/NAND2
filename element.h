@@ -18,6 +18,7 @@ protected:
 
 	unsigned id;
 	bool source_flag;
+	bool computed_flag;
 
 public:
 	static const float CROSS_SIZE;
@@ -49,10 +50,13 @@ public:
 	virtual EVPV MouseInput(const D2D1_POINT_2F&);
 	virtual void Paint() const;
 	virtual void PaintWires() const {};
+
 	void SetPos(D2D1_POINT_2F);
 	D2D1_POINT_2F RetPos() const { return pos; }
 	bool RetSourceFlag() const { return source_flag; }
 	unsigned RetId() const { return id; }
+
+	bool& computed() { return computed_flag; }
 
 	virtual bool RetInputPoint(D2D1_POINT_2F& out, unsigned id) const { return false; }
 	virtual bool RetOutputPoint(D2D1_POINT_2F& out, unsigned id) const { return false; }
@@ -65,10 +69,7 @@ public:
 
 	virtual EL_STATE RetState(unsigned output_id = 0) const { return EL_STATE_FALSE; }
 
-	virtual void Reset() {}
-	virtual bool UpdateState(unsigned i = 0) { return true; }
-	virtual void Proceed(OUTPUT_LIST*, unsigned input = 0) {}
-	virtual void SetInternalInput(unsigned input, EL_STATE state) {}
+	virtual bool Proceed(bool force) { return true; }
 
 	friend class ELEMENTS_SET;
 };

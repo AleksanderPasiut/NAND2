@@ -51,10 +51,7 @@ public:
 	void SetState(EL_STATE state) { this->state = state; }
 	EL_STATE RetState(unsigned output_id = 0) const { return state; }
 
-	void Reset();
-	bool UpdateState(unsigned input = 0);
-	void Proceed(OUTPUT_LIST*, unsigned input = 0);
-	void SetInternalInput(unsigned input, EL_STATE state);
+	bool Proceed(bool);
 
 	friend class ELEMENTS_SET;
 };

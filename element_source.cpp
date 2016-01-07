@@ -88,15 +88,3 @@ bool ELEMENT_SOURCE::RetOutputPoint(D2D1_POINT_2F& out, unsigned id) const
 	out = RetOutputPoint();
 	return true;
 }
-
-void ELEMENT_SOURCE::Proceed(OUTPUT_LIST* compute_list, unsigned i)
-{
-	// dodaje do listy wszystkie swoje outputy i ustawia im stany wejœciowe
-	for (unsigned i = 0; i < output_list.retAmount(); i++)
-	{
-		compute_list->add_if_new(output_list[i]->element, output_list[i]->input);
-		output_list[i]->element->SetInternalInput(output_list[i]->input, state);
-	}
-
-	return;
-}
