@@ -4,13 +4,11 @@
 
 class ELEMENTS_SET
 {
+	NONCOPYABLE(ELEMENTS_SET)
+
 private:
 	ELEMENT** set;
 	unsigned amount;
-
-private:
-	ELEMENTS_SET(const ELEMENTS_SET&) {}
-	ELEMENTS_SET& operator= (const ELEMENTS_SET&) {}
 
 public:
 	ELEMENTS_SET();

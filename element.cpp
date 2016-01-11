@@ -22,21 +22,21 @@ ELEMENT::ELEMENT(ID2D1HwndRenderTarget* in_target,
 	id(element_id),
 	source_flag(source_flag_in) {}
 
-bool ELEMENT::PointInRect(const D2D1_RECT_F& rect, const D2D1_POINT_2F& pt)
+bool ELEMENT::IsPointInRect(const D2D1_RECT_F& rect, const D2D1_POINT_2F& pt)
 {
 	if (pt.x < rect.left || rect.right < pt.x || pt.y < rect.top || rect.bottom < pt.y)
 		return false;
 	else return true;
 }
-bool ELEMENT::PointInEllipse(const D2D1_ELLIPSE& ellipse, const D2D1_POINT_2F& pt)
+bool ELEMENT::IsPointInEllipse(const D2D1_ELLIPSE& ellipse, const D2D1_POINT_2F& pt)
 {
 	const float a = min(ellipse.radiusX, ellipse.radiusY); // pó³oœ ma³a elipsy
 	const float b = max(ellipse.radiusX, ellipse.radiusY); // pó³oœ wielka elipsy
-	const float c = 2*b; // suma odleg³oœci od ognisk elipsy (sta³a elipsy)
-	const float u = sqrt(b*b-a*a); // odleg³oœæ ogniska od œrodka elipsy
-	const float c1 = ellipse.radiusX > ellipse.radiusY ? sqrt((ellipse.point.x-u-pt.x)*(ellipse.point.x-u-pt.x)+(ellipse.point.y-pt.y)*(ellipse.point.y-pt.y))
+	const double c = 2*b; // suma odleg³oœci od ognisk elipsy (sta³a elipsy)
+	const double u = sqrt(b*b-a*a); // odleg³oœæ ogniska od œrodka elipsy
+	const double c1 = ellipse.radiusX > ellipse.radiusY ? sqrt((ellipse.point.x-u-pt.x)*(ellipse.point.x-u-pt.x)+(ellipse.point.y-pt.y)*(ellipse.point.y-pt.y))
 													   : sqrt((ellipse.point.y-u-pt.y)*(ellipse.point.y-u-pt.y)+(ellipse.point.x-pt.x)*(ellipse.point.x-pt.x));
-	const float c2 = ellipse.radiusX > ellipse.radiusY ? sqrt((ellipse.point.x+u-pt.x)*(ellipse.point.x+u-pt.x)+(ellipse.point.y-pt.y)*(ellipse.point.y-pt.y))
+	const double c2 = ellipse.radiusX > ellipse.radiusY ? sqrt((ellipse.point.x+u-pt.x)*(ellipse.point.x+u-pt.x)+(ellipse.point.y-pt.y)*(ellipse.point.y-pt.y))
 													   : sqrt((ellipse.point.y+u-pt.y)*(ellipse.point.y+u-pt.y)+(ellipse.point.x-pt.x)*(ellipse.point.x-pt.x));
 	if (c1+c2 <= c)
 		return true;
@@ -78,11 +78,11 @@ EVPV ELEMENT::MouseInput(const D2D1_POINT_2F& click)
 	D2D1_RECT_F rect;
 
 	RetCrossRect(rect);
-	if (PointInRect(rect, click))
+	if (IsPointInRect(rect, click))
 		return EVPV(EVPV_CROSS);
 
 	RetElementRect(rect);
-	if (PointInRect(rect, click))
+	if (IsPointInRect(rect, click))
 		return EVPV(EVPV_BODY);
 
 	return EVPV(EVPV_NONE);

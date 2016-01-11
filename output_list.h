@@ -1,5 +1,7 @@
 #pragma once
 
+#include "noncopyable.h"
+
 class ELEMENT;
 
 struct OUTPUT
@@ -13,6 +15,8 @@ struct OUTPUT
 
 class OUTPUT_LIST
 {
+	NONCOPYABLE(OUTPUT_LIST)
+
 private:
 	OUTPUT* tab;
 	unsigned amount;

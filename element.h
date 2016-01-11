@@ -3,12 +3,15 @@
 #include <d2d1.h>
 #include <dwrite.h>
 
+#include "noncopyable.h"
 #include "brush_set.h"
 #include "output_list.h"
 #include "evpv.h"
 
 class ELEMENT
 {
+	NONCOPYABLE(ELEMENT)
+
 protected:
 	ID2D1HwndRenderTarget* target;
 	BRUSH_SET* brush;
@@ -35,13 +38,9 @@ protected:
 	// destruktor chroniony - usuwanie odbywa siê poprzez ELEMENTS_SET::remove(ELEMENT*)
 	~ELEMENT() {}
 
-private:
-	ELEMENT(const ELEMENT&) {}
-	ELEMENT* operator= (const ELEMENT&) {}
-
 protected:
-	static bool PointInRect(const D2D1_RECT_F&, const D2D1_POINT_2F&);
-	static bool PointInEllipse(const D2D1_ELLIPSE&, const D2D1_POINT_2F&);
+	static bool IsPointInRect(const D2D1_RECT_F&, const D2D1_POINT_2F&);
+	static bool IsPointInEllipse(const D2D1_ELLIPSE&, const D2D1_POINT_2F&);
 	void RetElementRect(D2D1_RECT_F&) const;
 	void RetCrossRect(D2D1_RECT_F&) const;
 	void PaintId() const;
@@ -53,21 +52,21 @@ public:
 
 	void SetPos(D2D1_POINT_2F);
 	D2D1_POINT_2F RetPos() const { return pos; }
-	bool RetSourceFlag() const { return source_flag; }
-	unsigned RetId() const { return id; }
 
+	unsigned RetId() const { return id; }
+	bool RetSourceFlag() const { return source_flag; }
 	bool& computed() { return computed_flag; }
 
-	virtual bool RetInputPoint(D2D1_POINT_2F& out, unsigned id) const { return false; }
-	virtual bool RetOutputPoint(D2D1_POINT_2F& out, unsigned id) const { return false; }
+	virtual bool RetInputPortPoint(D2D1_POINT_2F& out, unsigned port_id) const { return false; }
+	virtual bool RetOutputPortPoint(D2D1_POINT_2F& out, unsigned port_id) const { return false; }
 
-	virtual void SetInput(unsigned this_input_id, ELEMENT* target, unsigned input) {}
+	virtual void SetInput(unsigned this_input_port_id, ELEMENT* target, unsigned target_output_port_id) {}
 
-	virtual void AddOutput(unsigned this_output_id, ELEMENT* target, unsigned input) {}
-	virtual void DelOutput(unsigned this_output_id, ELEMENT* target, unsigned input) {}
+	virtual void AddOutput(unsigned this_output_port_id, ELEMENT* target, unsigned target_input_port_id) {}
+	virtual void DelOutput(unsigned this_output_port_id, ELEMENT* target, unsigned target_input_port_id) {}
 	virtual void RemoveLinkage(ELEMENT* target) {}
 
-	virtual EL_STATE RetState(unsigned output_id = 0) const { return EL_STATE_FALSE; }
+	virtual EL_STATE RetState(unsigned output_port_id = 0) const { return EL_STATE_FALSE; }
 
 	virtual bool Proceed(bool force) { return true; }
 

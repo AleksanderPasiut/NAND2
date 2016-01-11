@@ -75,11 +75,11 @@ void MASTER::PaintInputs()
 {
 	D2D1_POINT_2F pt;
 
-	if (linking.element && linking.element->RetOutputPoint(pt, linking.id))
+	if (linking.element && linking.element->RetOutputPortPoint(pt, linking.id))
 		target->DrawEllipse(D2D1::Ellipse(pt, ELEMENT::PORT_MARK_RADIUS, ELEMENT::PORT_MARK_RADIUS), brush_set->Red(), 2.0f);
 
 	for (unsigned i = 0; i < elements_set.RetAmount(); i++)
-		for (unsigned j = 0; elements_set[i]->RetInputPoint(pt, j); j++)
+		for (unsigned j = 0; elements_set[i]->RetInputPortPoint(pt, j); j++)
 			if (linking.element != elements_set[i])
 				target->DrawEllipse(D2D1::Ellipse(pt, ELEMENT::PORT_MARK_RADIUS, ELEMENT::PORT_MARK_RADIUS), brush_set->Green(), 2.0f);
 	return;
@@ -89,11 +89,11 @@ void MASTER::PaintOutputs()
 {
 	D2D1_POINT_2F pt;
 
-	if (linking.element && linking.element->RetInputPoint(pt, linking.id))
+	if (linking.element && linking.element->RetInputPortPoint(pt, linking.id))
 		target->DrawEllipse(D2D1::Ellipse(pt, ELEMENT::PORT_MARK_RADIUS, ELEMENT::PORT_MARK_RADIUS), brush_set->Red(), 2.0f);
 
 	for (unsigned i = 0; i < elements_set.RetAmount(); i++)
-		for (unsigned j = 0; elements_set[i]->RetOutputPoint(pt, j); j++)
+		for (unsigned j = 0; elements_set[i]->RetOutputPortPoint(pt, j); j++)
 			if (linking.element != elements_set[i])
 				target->DrawEllipse(D2D1::Ellipse(pt, ELEMENT::PORT_MARK_RADIUS, ELEMENT::PORT_MARK_RADIUS), brush_set->Green(), 2.0f);
 	return;

@@ -17,12 +17,12 @@ D2D1_POINT_2F ELEMENT_NAND::RetControlPoint() const
 	return D2D1::Point2F(pos.x+0.5f*size.width,
 						 pos.y+(ia == 2 ? 0.6f : 0.5f)*size.height);
 }
-D2D1_POINT_2F ELEMENT_NAND::RetInputPoint(unsigned i) const
+D2D1_POINT_2F ELEMENT_NAND::RetInputPortPoint(unsigned i) const
 {
 	return D2D1::Point2F(pos.x+0.16f*size.width,
 						 pos.y+size.height*(static_cast<float>(i+1)/static_cast<float>(ia+1)));
 }
-D2D1_POINT_2F ELEMENT_NAND::RetOutputPoint() const
+D2D1_POINT_2F ELEMENT_NAND::RetOutputPortPoint() const
 {
 	return D2D1::Point2F(pos.x+0.84f*size.width,
 						 pos.y+size.height*(ia == 2 ? 0.6f : 0.5f));
@@ -32,14 +32,14 @@ void ELEMENT_NAND::RetControlEllipse(D2D1_ELLIPSE& out) const
 	out = D2D1::Ellipse(RetControlPoint(), CONTROL_RADIUS, CONTROL_RADIUS);
 	return;
 }
-void ELEMENT_NAND::RetInputEllipse(D2D1_ELLIPSE& out, unsigned i) const
+void ELEMENT_NAND::RetInputPortEllipse(D2D1_ELLIPSE& out, unsigned i) const
 {
-	out = D2D1::Ellipse(RetInputPoint(i), PORT_RADIUS, PORT_RADIUS);
+	out = D2D1::Ellipse(RetInputPortPoint(i), PORT_RADIUS, PORT_RADIUS);
 	return;
 }
-void ELEMENT_NAND::RetOutputEllipse(D2D1_ELLIPSE& out) const
+void ELEMENT_NAND::RetOutputPortEllipse(D2D1_ELLIPSE& out) const
 {
-	out = D2D1::Ellipse(RetOutputPoint(), PORT_RADIUS, PORT_RADIUS);
+	out = D2D1::Ellipse(RetOutputPortPoint(), PORT_RADIUS, PORT_RADIUS);
 	return;
 }
 
@@ -65,12 +65,12 @@ EVPV ELEMENT_NAND::MouseInput(const D2D1_POINT_2F& click)
 {
 	D2D1_ELLIPSE ellipse;
 	for (unsigned i = 0; i < ia; i++)
-	{	RetInputEllipse(ellipse, i);
-		if (PointInEllipse(ellipse, click))
+	{	RetInputPortEllipse(ellipse, i);
+		if (IsPointInEllipse(ellipse, click))
 			return EVPV(EVPV_INPUT, i);		}
 
-	RetOutputEllipse(ellipse);
-	if (PointInEllipse(ellipse, click))
+	RetOutputPortEllipse(ellipse);
+	if (IsPointInEllipse(ellipse, click))
 		return EVPV(EVPV_OUTPUT);
 
 	return ELEMENT::MouseInput(click);
@@ -85,13 +85,13 @@ void ELEMENT_NAND::Paint() const
 	target->FillEllipse(ellipse, state == EL_STATE_TRUE ? brush->Red() : brush->DarkRed());
 	target->DrawEllipse(ellipse, brush->Gray());
 
-	RetOutputEllipse(ellipse);
+	RetOutputPortEllipse(ellipse);
 	target->FillEllipse(ellipse, brush->Black());
 	target->DrawEllipse(ellipse, brush->Gray());
 
 	for (unsigned i = 0; i < ia; i++)
 	{
-		RetInputEllipse(ellipse, i);
+		RetInputPortEllipse(ellipse, i);
 		target->FillEllipse(ellipse, brush->Black());
 		target->DrawEllipse(ellipse, brush->Gray());
 	}
@@ -103,25 +103,25 @@ void ELEMENT_NAND::PaintWires() const
 	for (unsigned i = 0; i < ia; i++)
 		if (input[i].target)
 		{	D2D1_POINT_2F end;
-			input[i].target->RetOutputPoint(end, input[i].output);
-			target->DrawLine(RetInputPoint(i), end, brush->Red(), 2.0f, brush->Stroke());	}
+			input[i].target->RetOutputPortPoint(end, input[i].output);
+			target->DrawLine(RetInputPortPoint(i), end, brush->Red(), 2.0f, brush->Stroke());	}
 	return;
 }
 
-bool ELEMENT_NAND::RetInputPoint(D2D1_POINT_2F& out, unsigned id) const
+bool ELEMENT_NAND::RetInputPortPoint(D2D1_POINT_2F& out, unsigned id) const
 {
 	if (id >= ia)
 		return false;
 
-	out = RetInputPoint(id);
+	out = RetInputPortPoint(id);
 	return true;
 }
-bool ELEMENT_NAND::RetOutputPoint(D2D1_POINT_2F& out, unsigned id) const
+bool ELEMENT_NAND::RetOutputPortPoint(D2D1_POINT_2F& out, unsigned id) const
 {
 	if (id)
 		return false;
 
-	out = RetOutputPoint();
+	out = RetOutputPortPoint();
 	return true;
 }
 

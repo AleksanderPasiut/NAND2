@@ -19,6 +19,8 @@
 
 class MASTER
 {
+	NONCOPYABLE(MASTER)
+
 private:
 	HWND hwnd;
 	ID2D1Factory* factory;
@@ -87,12 +89,9 @@ private:
 private:
 	// master_create.cpp
 	static D2D1_SIZE_U RetHwndClientSize(HWND); 
-	void WindowPlacing();
 
 private:
 	MASTER() : factory(0), dwfactory(0), target(0), brush_set(0), menu(0), saveload(0), unstable_system_notification(false) {}
-	MASTER(const MASTER&) {}
-	MASTER& operator= (const MASTER&) {}
 
 private:
 	// master_link.cpp

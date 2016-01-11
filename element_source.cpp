@@ -15,7 +15,7 @@ D2D1_POINT_2F ELEMENT_SOURCE::RetControlPoint() const
 	return D2D1::Point2F(pos.x+0.3f*size.width,
 						 pos.y+0.6f*size.height);
 }
-D2D1_POINT_2F ELEMENT_SOURCE::RetOutputPoint() const
+D2D1_POINT_2F ELEMENT_SOURCE::RetOutputPortPoint() const
 {
 	return D2D1::Point2F(pos.x+0.7f*size.width,
 						 pos.y+0.6f*size.height);
@@ -25,9 +25,9 @@ void ELEMENT_SOURCE::RetControlEllipse(D2D1_ELLIPSE& out) const
 	out = D2D1::Ellipse(RetControlPoint(), CONTROL_RADIUS, CONTROL_RADIUS);
 	return;
 }
-void ELEMENT_SOURCE::RetOutputEllipse(D2D1_ELLIPSE& out) const
+void ELEMENT_SOURCE::RetOutputPortEllipse(D2D1_ELLIPSE& out) const
 {
-	out = D2D1::Ellipse(RetOutputPoint(), PORT_RADIUS, PORT_RADIUS);
+	out = D2D1::Ellipse(RetOutputPortPoint(), PORT_RADIUS, PORT_RADIUS);
 	return;
 }
 
@@ -54,12 +54,12 @@ EVPV ELEMENT_SOURCE::MouseInput(const D2D1_POINT_2F& click)
 {
 	D2D1_ELLIPSE ellipse;
 	RetControlEllipse(ellipse);
-	if (PointInEllipse(ellipse, click))
+	if (IsPointInEllipse(ellipse, click))
 	{	state = static_cast<EL_STATE>(!static_cast<int>(state));
 		return EVPV(EVPV_CONTROL); }
 
-	RetOutputEllipse(ellipse);
-	if (PointInEllipse(ellipse, click))
+	RetOutputPortEllipse(ellipse);
+	if (IsPointInEllipse(ellipse, click))
 		return EVPV(EVPV_OUTPUT);
 
 	return ELEMENT::MouseInput(click);
@@ -74,17 +74,17 @@ void ELEMENT_SOURCE::Paint() const
 	target->FillEllipse(ellipse, state == EL_STATE_TRUE ? brush->Red() : brush->DarkRed());
 	target->DrawEllipse(ellipse, brush->Gray());
 
-	RetOutputEllipse(ellipse);
+	RetOutputPortEllipse(ellipse);
 	target->FillEllipse(ellipse, brush->Black());
 	target->DrawEllipse(ellipse, brush->Gray());
 	return;
 }
 
-bool ELEMENT_SOURCE::RetOutputPoint(D2D1_POINT_2F& out, unsigned id) const
+bool ELEMENT_SOURCE::RetOutputPortPoint(D2D1_POINT_2F& out, unsigned id) const
 {
 	if (id)
 		return false;
 
-	out = RetOutputPoint();
+	out = RetOutputPortPoint();
 	return true;
 }

@@ -3,8 +3,12 @@
 #include <d2d1.h>
 #include <dwrite.h>
 
+#include "noncopyable.h"
+
 class BRUSH_SET
 {
+	NONCOPYABLE(BRUSH_SET)
+
 private:
 	static const unsigned int BRUSH_AMOUNT = 10;
 	ID2D1SolidColorBrush* brush[BRUSH_AMOUNT];
@@ -15,8 +19,6 @@ private:
 
 private:
 	BRUSH_SET() { memset(this, 0, sizeof(BRUSH_SET)); }
-	BRUSH_SET(const BRUSH_SET&) {}
-	BRUSH_SET& operator= (const BRUSH_SET&) {}
 
 public:
 	static BRUSH_SET* Create(ID2D1HwndRenderTarget*, IDWriteFactory*);

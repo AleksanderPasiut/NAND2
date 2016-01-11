@@ -4,6 +4,8 @@
 
 class ELEMENT_COMMENT : public ELEMENT
 {
+	NONCOPYABLE(ELEMENT_COMMENT)
+
 private:
 	wchar_t* text;
 	IDWriteTextLayout* text_layout;

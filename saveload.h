@@ -3,11 +3,15 @@
 #include <fstream>
 #include <Windows.h>
 
+#include "noncopyable.h"
+
 class MASTER;
 class OUTPUT_LIST;
 
 class SAVELOAD
 {
+	NONCOPYABLE(SAVELOAD)
+
 private:
 	MASTER* Master;
 	wchar_t* savepath;
@@ -25,8 +29,6 @@ private:
 
 private:
 	SAVELOAD() { savepath = 0; }
-	SAVELOAD(SAVELOAD&) {}
-	SAVELOAD& operator= (SAVELOAD&) {}
 
 private:
 	template<typename T> inline void write(const T ptr);
