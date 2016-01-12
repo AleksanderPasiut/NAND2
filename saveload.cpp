@@ -278,7 +278,7 @@ void SAVELOAD::ReadLinkings()
 		}
 	}
 
-	Master->Proceed();
+	Master->Proceed(0);
 	return;
 }
 void SAVELOAD::FinishWindowPosSetting()

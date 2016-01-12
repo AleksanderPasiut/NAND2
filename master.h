@@ -115,7 +115,7 @@ public:
 	void ShowWindow();
 
 	// master_proceed.cpp
-	void Proceed();
+	void Proceed(ELEMENT* starting_element);
 
 	void Save() { saveload->Save(); }
 

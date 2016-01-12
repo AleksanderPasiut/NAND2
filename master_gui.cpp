@@ -47,20 +47,27 @@ void MASTER::MouseInput(UINT uMsg, WPARAM wParam, LPARAM lParam)
 					SetCapture(hwnd);
 					break;
 				}
+			case EVPV_CONTROL:
+				{
+					if (element->RetSourceFlag())
+						Proceed(element);
+					break;
+				}
 			case EVPV_CROSS:
 				{
 					RemoveElement(element);
+					Proceed(0);
 					break;
 				}
 			case EVPV_INPUT:
 			case EVPV_OUTPUT:
 				{
 					Link(element, evpv);
+					Proceed(0);
 					break;
 				}
 			}
 
-			Proceed();
 			break;
 		}
 	case WM_MOUSEMOVE:

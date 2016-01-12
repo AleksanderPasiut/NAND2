@@ -113,11 +113,19 @@ bool ELEMENT_CLOCK::RetOutputPortPoint(D2D1_POINT_2F& out, unsigned id) const
 	return true;
 }
 
+bool ELEMENT_CLOCK::Proceed(OUTPUT_LIST* next_list, unsigned int)
+{
+	for (unsigned i = 0; i < output_list.retAmount(); i++)
+		next_list->add(output_list[i]->element, output_list[i]->input);
+
+	return true;
+}
+
 VOID CALLBACK ClockElementTimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
 {
 	ELEMENT_CLOCK* elc = reinterpret_cast<ELEMENT_CLOCK*>(idEvent);
 	elc->state = static_cast<EL_STATE>(!static_cast<int>(elc->state));
-	elc->Master->Proceed();
+	elc->Master->Proceed(elc);
 	return;
 }
 

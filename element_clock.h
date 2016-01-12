@@ -44,6 +44,8 @@ public:
 	EL_STATE RetState(unsigned output_port_id = 0) const { return state; }
 	unsigned RetElapse() const { return elapse; }
 
+	bool Proceed(OUTPUT_LIST* sucessing_elements_list, unsigned input_port_id = 0);
+
 	friend class ELEMENTS_SET;
 	friend VOID CALLBACK ClockElementTimerProc(HWND, UINT, UINT_PTR, DWORD);
 };

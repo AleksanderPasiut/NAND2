@@ -1,60 +1,63 @@
-#include "master.h"
+﻿#include "master.h"
 
-void InitProcessing(ELEMENTS_SET& elements_set)
+void InitProcessing(ELEMENT* starting_element, ELEMENTS_SET& elements_set, OUTPUT_LIST* current_list)
 {
-	for (unsigned i = 0; i < elements_set.RetAmount(); i++)
-		elements_set[i]->computed() = !(elements_set[i]->RetId()) || elements_set[i]->RetSourceFlag();
-}
-
-bool NormalProcessing(ELEMENTS_SET& elements_set)
-{
-	bool ret = false;
-
-	for (unsigned i = 0; i < elements_set.RetAmount(); i++)
-		if (!(elements_set[i]->computed()))
-		{
-			bool flag = elements_set[i]->Proceed(false);
-			ret |= flag;
-		}
-
-	return ret;
-}
-
-void ForcedProcessing(ELEMENTS_SET& elements_set)
-{
-	for (unsigned i = 0; i < elements_set.RetAmount(); i++)
-		if (!(elements_set[i]->computed()))
-			elements_set[i]->Proceed(true);
-}
-
-bool IsProcessingDone(ELEMENTS_SET& elements_set)
-{
-	for (unsigned i = 0; i < elements_set.RetAmount(); i++)
-		if (!(elements_set[i]->computed()))
-			return false;
-
-	return true;
-}
-
-void MASTER::Proceed()
-{
-	InitProcessing(elements_set);
-
-	for (unsigned i = 0; i < elements_set.RetAmount(); i++)
+	if (starting_element)
+		current_list->add(starting_element, 0);
+	else
 	{
-		if (!NormalProcessing(elements_set))
-			ForcedProcessing(elements_set);
+		for (unsigned i = 0; i < elements_set.RetAmount(); i++)
+			if (elements_set[i]->RetSourceFlag())
+				current_list->add(elements_set[i], 0);
+	}
+}
 
-		if (IsProcessingDone(elements_set))
-			break;
+void SwitchLists(OUTPUT_LIST*& current_list, OUTPUT_LIST*& next_list)
+{
+	OUTPUT_LIST* tmp = current_list;
+	current_list = next_list;
+	next_list = tmp;
+	next_list->clear();
+}
+
+void MASTER::Proceed(ELEMENT* starting_element)
+{
+	// listy u¿ywane podczas obliczeñ
+	OUTPUT_LIST list1;
+	OUTPUT_LIST list2;
+	OUTPUT_LIST* current_list = &list1;
+	OUTPUT_LIST* next_list = &list2;
+
+	// utworzenie listy startowej
+	InitProcessing(starting_element, elements_set, current_list);
+
+	// g³ówna pêtla
+	unsigned i;
+	for (i = 0; i < elements_set.RetAmount() * 2; i++)
+	{
+		bool state_changed = false;
+
+		// właściwe działanie elementów 
+		// (dla NANDÓW jest to albo odczytanie stanów wejściowych i propagacja 
+		// albo ustalenie stanu i wysłanie sygnału do nowych elementów (czyli dodanie ich do next_list)
+		// dla pozostałych elementów jest to po prostu ustalenie stanu
+		for (unsigned j = 0; j < current_list->retAmount(); j++)
+			(*current_list)[j]->element->Proceed(next_list, (*current_list)[j]->input);
+
+		// zamiana wskaźników
+		SwitchLists(current_list, next_list);
+
+		// je¿eli stan żadnego elementu nie został zmieniony, to czas zakończyć obliczenia
+		//if (!state_changed)
+		//	break;
 	}
 
-	if (!IsProcessingDone(elements_set) && !unstable_system_notification)
-	{
-		MessageBox(hwnd, "Podany uk�ad jest niestabilny.", "NAND2", MB_OK);
-		unstable_system_notification = true;
-	}
 
+	//if (i && i == elements_set.RetAmount() * 2 && !unstable_system_notification)
+	//{
+	//	MessageBox(hwnd, "Podany układ jest niestabilny.", "NAND2", MB_OK);
+	//	unstable_system_notification = true;
+	//}
 	Paint();
 	return;
 }

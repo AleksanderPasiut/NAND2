@@ -38,5 +38,7 @@ public:
 	void SetState(EL_STATE state) { this->state = state; }
 	EL_STATE RetState(unsigned output_port_id = 0) const { return state; }
 
+	bool Proceed(OUTPUT_LIST* sucessing_elements_list, unsigned input_port_id = 0);
+
 	friend class ELEMENTS_SET;
 };

@@ -9,6 +9,7 @@ ELEMENT_NAND::ELEMENT_NAND(ID2D1HwndRenderTarget* target,
 	: ELEMENT(target, brush_set, pos_x, pos_y, 100.0f, (input_amount+1)*18.0f, id, false)
 {
 	ia = input_amount;
+	propagation = false;
 	state = EL_STATE_FALSE;
 }
 
@@ -156,18 +157,30 @@ void ELEMENT_NAND::RemoveLinkage(ELEMENT* target)
 	return;
 }
 
-bool ELEMENT_NAND::Proceed(bool forced)
+bool ELEMENT_NAND::Proceed(OUTPUT_LIST* next_list, unsigned int)
 {
-	if (!forced)
+	if (!propagation)
+	{
+		propagation = true;
 		for (unsigned i = 0; i < ia; i++)
-			if (input[i].target && !(input[i].target->computed()))
-				return false;
+			if (input[i].target)
+				input[i].state = input[i].target->RetState();
 
+		next_list->add(this, 0);
+
+		return true;
+	}
+	
+	EL_STATE old_state = state;
+
+	propagation = false;
+	state = EL_STATE_FALSE;
 	for (unsigned i = 0; i < ia; i++)
 		if (input[i].target && input[i].target->RetState() == EL_STATE_FALSE)
-		{	state = EL_STATE_TRUE;
-			return computed_flag = true;	}
+			state = EL_STATE_TRUE;
+	
+	for (unsigned i = 0; i < output_list.retAmount(); i++)
+		next_list->add_if_new(output_list[i]->element, output_list[i]->input);
 
-	state = EL_STATE_FALSE;
-	return computed_flag = true;
+	return old_state != state;
 }

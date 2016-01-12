@@ -16,6 +16,8 @@ private:
 
 	OUTPUT_LIST output_list;
 
+	bool propagation;
+
 private:
 	ELEMENT_NAND(ID2D1HwndRenderTarget*, BRUSH_SET*, float pos_x, float pos_y, unsigned id, unsigned input_amount);
 	~ELEMENT_NAND() {}
@@ -50,7 +52,7 @@ public:
 	void SetState(EL_STATE state) { this->state = state; }
 	EL_STATE RetState(unsigned output_id = 0) const { return state; }
 
-	bool Proceed(bool);
+	bool Proceed(OUTPUT_LIST* sucessing_elements_list, unsigned input_port_id = 0);
 
 	friend class ELEMENTS_SET;
 };
