@@ -9,6 +9,7 @@
 #define MENU_ADD_OUTPUT 0x107
 #define MENU_ADD_FLIP_FLOP 0x108
 #define MENU_ADD_COMMENT 0x109
+#define MENU_CLEAR_BOARD 0x10a
 
 #include <Windows.h>
 

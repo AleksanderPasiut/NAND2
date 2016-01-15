@@ -42,14 +42,14 @@ void MASTER::Proceed(ELEMENT* starting_element)
 		// albo ustalenie stanu i wysłanie sygnału do nowych elementów (czyli dodanie ich do next_list)
 		// dla pozostałych elementów jest to po prostu ustalenie stanu
 		for (unsigned j = 0; j < current_list->retAmount(); j++)
-			(*current_list)[j]->element->Proceed(next_list, (*current_list)[j]->input);
+			state_changed |= (*current_list)[j]->element->Proceed(next_list, (*current_list)[j]->input);
 
 		// zamiana wskaźników
 		SwitchLists(current_list, next_list);
 
 		// je¿eli stan żadnego elementu nie został zmieniony, to czas zakończyć obliczenia
-		//if (!state_changed)
-		//	break;
+		if (starting_element && !state_changed)
+			break;
 	}
 
 

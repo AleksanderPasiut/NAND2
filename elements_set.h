@@ -18,6 +18,7 @@ public:
 	bool add(ELEMENT*);
 	bool remove(ELEMENT*);
 	bool set_on_top(ELEMENT*);
+	void clear();
 	ELEMENT* operator[] (unsigned);	// zwraca element wed³ug kolejnoœci w elements_set
 	ELEMENT* operator() (unsigned); // zwraca element wed³ug id
 

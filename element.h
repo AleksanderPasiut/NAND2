@@ -21,7 +21,6 @@ protected:
 
 	unsigned id;
 	bool source_flag;
-	bool computed_flag;
 
 public:
 	static const float CROSS_SIZE;
@@ -55,7 +54,6 @@ public:
 
 	unsigned RetId() const { return id; }
 	bool RetSourceFlag() const { return source_flag; }
-	bool& computed() { return computed_flag; }
 
 	virtual bool RetInputPortPoint(D2D1_POINT_2F& out, unsigned port_id) const { return false; }
 	virtual bool RetOutputPortPoint(D2D1_POINT_2F& out, unsigned port_id) const { return false; }

@@ -6,9 +6,7 @@ ELEMENTS_SET::ELEMENTS_SET() :
 {}
 ELEMENTS_SET::~ELEMENTS_SET()
 {
-	for (unsigned i = 0; i < amount; i++)
-		delete set[i];
-	delete[] set;
+	clear();
 }
 
 bool ELEMENTS_SET::add(ELEMENT* element)
@@ -73,6 +71,15 @@ bool ELEMENTS_SET::set_on_top(ELEMENT* element)
 	set[i] = element;
 	return true;
 }
+void ELEMENTS_SET::clear()
+{
+	for (unsigned i = 0; i < amount; i++)
+		delete set[i];
+	delete[] set;
+	set = 0;
+	amount = 0;
+}
+
 ELEMENT* ELEMENTS_SET::operator[] (unsigned arg)
 {
 	if (arg >= amount)

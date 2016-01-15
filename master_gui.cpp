@@ -269,6 +269,12 @@ void MASTER::MenuInput(WPARAM wParam, LPARAM lParam)
 			}
 			break;
 		}
+	case MENU_CLEAR_BOARD:
+		{
+			if (IDYES == MessageBox(hwnd, "Czy na pewno chcesz usun¹æ wszystkie elementy?", "Usuwanie elementów", MB_YESNO))
+				elements_set.clear();
+			break;
+		}
 	}
 
 	if (element)
