@@ -66,7 +66,7 @@ public:
 
 	virtual EL_STATE RetState(unsigned output_port_id = 0) const { return EL_STATE_FALSE; }
 
-	virtual bool Proceed(OUTPUT_LIST* sucessing_elements_list, unsigned input_port_id) { return false; }
+	virtual bool Proceed(OUTPUT_LIST* sucessing_elements_list) { return false; }
 
 	friend class ELEMENTS_SET;
 };

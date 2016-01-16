@@ -32,7 +32,7 @@ bool OUTPUT_LIST::add_if_new(ELEMENT* element, unsigned input)
 
 	for (unsigned i = 0; i < amount; i++)
 	{
-		if (tab[i].element == element && tab[i].input == input)
+		if (tab[i].element == element)
 		{
 			delete[] new_tab;
 			return false;

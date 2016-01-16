@@ -69,7 +69,7 @@ bool ELEMENT_SOURCE::RetOutputPortPoint(D2D1_POINT_2F& out, unsigned id) const
 	return true;
 }
 
-bool ELEMENT_SOURCE::Proceed(OUTPUT_LIST* next_list, unsigned int)
+bool ELEMENT_SOURCE::Proceed(OUTPUT_LIST* next_list)
 {
 	for (unsigned i = 0; i < output_list.retAmount(); i++)
 		next_list->add_if_new(output_list[i]->element, output_list[i]->input);

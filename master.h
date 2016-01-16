@@ -14,6 +14,7 @@
 #include "element_source.h"
 #include "element_nand.h"
 #include "element_clock.h"
+#include "element_jk.h"
 #include "element_output.h"
 #include "element_comment.h"
 

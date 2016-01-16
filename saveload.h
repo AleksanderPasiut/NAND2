@@ -25,6 +25,7 @@ private:
 		ELEMENT_TYPE_NAND = 3,
 		ELEMENT_TYPE_OUTPUT = 4,
 		ELEMENT_TYPE_COMMENT = 5,
+		ELEMENT_TYPE_JK = 6,
 	};
 
 private:
@@ -44,7 +45,7 @@ private:
 	void FinishWindowPosSetting();
 
 public:
-	SAVELOAD::SAVELOAD(MASTER* Master);
+	SAVELOAD(MASTER* Master);
 	~SAVELOAD() { delete[] savepath; }
 
 	bool Load();

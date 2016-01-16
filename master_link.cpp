@@ -24,6 +24,7 @@ void MASTER::Link(ELEMENT* element, EVPV evpv)
 					// podwójne klikniêcie na wejœciu: kasowanie po³¹czenia
 					if (element == linking.element && linking.id == evpv.param)
 						element->SetInput(linking.id, 0, 0);
+
 					linking = LINKING();
 					break;
 				}

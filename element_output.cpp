@@ -98,10 +98,10 @@ void ELEMENT_OUTPUT::RemoveLinkage(ELEMENT* target)
 	return;
 }
 
-bool ELEMENT_OUTPUT::Proceed(OUTPUT_LIST*, unsigned int)
+bool ELEMENT_OUTPUT::Proceed(OUTPUT_LIST*)
 {
 	if (input.target)
-		state = input.target->RetState();
+		state = input.target->RetState(input.output);
 
 	return true;
 }

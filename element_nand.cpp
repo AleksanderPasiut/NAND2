@@ -139,14 +139,14 @@ void ELEMENT_NAND::RemoveLinkage(ELEMENT* target)
 	return;
 }
 
-bool ELEMENT_NAND::Proceed(OUTPUT_LIST* next_list, unsigned)
+bool ELEMENT_NAND::Proceed(OUTPUT_LIST* next_list)
 {
 	if (!propagation)
 	{
 		propagation = true;
 		for (unsigned i = 0; i < ia; i++)
 			if (input[i].target)
-				input[i].state = input[i].target->RetState();
+				input[i].state = input[i].target->RetState(input[i].output);
 
 		next_list->add(this, 0);
 
@@ -158,7 +158,7 @@ bool ELEMENT_NAND::Proceed(OUTPUT_LIST* next_list, unsigned)
 	propagation = false;
 	state = EL_STATE_FALSE;
 	for (unsigned i = 0; i < ia; i++)
-		if (input[i].target && input[i].target->RetState() == EL_STATE_FALSE)
+		if (input[i].target && input[i].state == EL_STATE_FALSE)
 			state = EL_STATE_TRUE;
 	
 	for (unsigned i = 0; i < output_list.retAmount(); i++)

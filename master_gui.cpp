@@ -248,6 +248,15 @@ void MASTER::MenuInput(WPARAM wParam, LPARAM lParam)
 					element = Nand(i, position);
 				break;
 			}
+		case MENU_ADD_FLIP_FLOP:
+			{
+				element = new ELEMENT_JK(target,
+										brush_set,
+										position.x,
+										position.y,
+										RetNewElementId());
+				break;
+			}
 		case MENU_ADD_OUTPUT:
 			{
 				element = new ELEMENT_OUTPUT(target,

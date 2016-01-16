@@ -117,6 +117,10 @@ void SAVELOAD::WriteElements()
 			write<ELEMENT_TYPE>(ELEMENT_TYPE_NAND);
 			write<unsigned>(ptr->RetInputAmount());
 		}
+		else if (ELEMENT_JK* ptr = dynamic_cast<ELEMENT_JK*>(Master->elements_set[i]))
+		{
+			write<ELEMENT_TYPE>(ELEMENT_TYPE_JK);
+		}
 		else if (ELEMENT_OUTPUT* ptr = dynamic_cast<ELEMENT_OUTPUT*>(Master->elements_set[i]))
 		{
 			write<ELEMENT_TYPE>(ELEMENT_TYPE_OUTPUT);
@@ -164,6 +168,20 @@ void SAVELOAD::WriteLinkings()
 				write<unsigned>(0);
 				write<unsigned>(optlst[j]->element->RetId());
 				write<unsigned>(optlst[j]->input);
+			}
+		}
+		else if (ELEMENT_JK* ptr = dynamic_cast<ELEMENT_JK*>(Master->elements_set[i]))
+		{
+			for (unsigned k = 0; k < 2; k++)
+			{
+				const OUTPUT_LIST& optlst = ptr->RetOutputList(k);
+				for (unsigned j = 0; j < optlst.retAmount(); j++)
+				{
+					write<unsigned>(ptr->RetId());
+					write<unsigned>(k);
+					write<unsigned>(optlst[j]->element->RetId());
+					write<unsigned>(optlst[j]->input);
+				}
 			}
 		}
 	}
@@ -227,6 +245,16 @@ void SAVELOAD::ReadElements()
 														 pos_y,
 														 id,
 														 input_amount);
+				added_element = reinterpret_cast<ELEMENT*>(element);
+				break;
+			}
+		case ELEMENT_TYPE_JK:
+			{
+				ELEMENT_JK* element = new ELEMENT_JK(Master->target,
+					Master->brush_set,
+					pos_x,
+					pos_y,
+					id);
 				added_element = reinterpret_cast<ELEMENT*>(element);
 				break;
 			}
