@@ -77,7 +77,6 @@ bool OUTPUT_LIST::remove(ELEMENT* element)
 		return false;
 
 	OUTPUT* new_tab;
-	
 	try { new_tab = new OUTPUT[amount-del_amount]; }
 	catch(...) { return false; }
 

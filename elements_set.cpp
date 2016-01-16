@@ -39,6 +39,8 @@ bool ELEMENTS_SET::remove(ELEMENT* element)
 	try { new_set = new ELEMENT* [amount-1]; }
 	catch(...) { return false; }
 
+	amount--;
+
 	unsigned i = 0;
 	for (; i < index; i++)
 		new_set[i] = set[i];
@@ -46,7 +48,6 @@ bool ELEMENTS_SET::remove(ELEMENT* element)
 	for (; i < amount; i++)
 		new_set[i] = set[i+1];
 
-	amount--;
 	delete[] set;
 	set = new_set;
 	return true;

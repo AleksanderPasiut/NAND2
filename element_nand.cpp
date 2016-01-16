@@ -139,7 +139,7 @@ void ELEMENT_NAND::RemoveLinkage(ELEMENT* target)
 	return;
 }
 
-bool ELEMENT_NAND::Proceed(OUTPUT_LIST* next_list, unsigned int)
+bool ELEMENT_NAND::Proceed(OUTPUT_LIST* next_list, unsigned)
 {
 	if (!propagation)
 	{
