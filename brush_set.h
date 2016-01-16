@@ -17,11 +17,8 @@ private:
 	IDWriteTextFormat* normal_font;
 	IDWriteTextFormat* small_font;
 
-private:
-	BRUSH_SET() { memset(this, 0, sizeof(BRUSH_SET)); }
-
 public:
-	static BRUSH_SET* Create(ID2D1HwndRenderTarget*, IDWriteFactory*);
+	BRUSH_SET(ID2D1HwndRenderTarget*, IDWriteFactory*);
 	~BRUSH_SET();
 
 public:

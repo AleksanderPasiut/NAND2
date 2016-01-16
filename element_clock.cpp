@@ -42,30 +42,6 @@ void ELEMENT_CLOCK::RetOutputPortEllipse(D2D1_ELLIPSE& out) const
 	return;
 }
 
-ELEMENT_CLOCK* ELEMENT_CLOCK::Create(ID2D1HwndRenderTarget* target,
-									 BRUSH_SET* brush_set,
-									 float pos_x,
-									 float pos_y,
-									 unsigned id,
-									 unsigned in_elapse,
-									 MASTER* Master)
-{
-	ELEMENT_CLOCK* ret = new ELEMENT_CLOCK(target,
-										   brush_set,
-										   pos_x,
-										   pos_y,
-										   id,
-										   in_elapse,
-										   Master);
-
-	if (ret)
-	{
-		return ret;
-	}
-	
-	return 0;
-}
-
 EVPV ELEMENT_CLOCK::MouseInput(const D2D1_POINT_2F& click)
 {
 	D2D1_ELLIPSE ellipse;
@@ -113,7 +89,7 @@ bool ELEMENT_CLOCK::RetOutputPortPoint(D2D1_POINT_2F& out, unsigned id) const
 	return true;
 }
 
-bool ELEMENT_CLOCK::Proceed(OUTPUT_LIST* next_list, unsigned int)
+bool ELEMENT_CLOCK::Proceed(OUTPUT_LIST* next_list, unsigned)
 {
 	for (unsigned i = 0; i < output_list.retAmount(); i++)
 		next_list->add_if_new(output_list[i]->element, output_list[i]->input);

@@ -5,10 +5,9 @@ ELEMENT_SOURCE::ELEMENT_SOURCE(ID2D1HwndRenderTarget* target,
 							   float pos_x,
 							   float pos_y,
 							   unsigned id)
-	: ELEMENT(target, brush_set, pos_x, pos_y, 80.0f, 50.0f, id, true)
-{
-	state = EL_STATE_FALSE;
-}
+	: ELEMENT(target, brush_set, pos_x, pos_y, 80.0f, 50.0f, id, true),
+	  state(EL_STATE_FALSE)
+{}
 
 D2D1_POINT_2F ELEMENT_SOURCE::RetControlPoint() const
 {
@@ -29,25 +28,6 @@ void ELEMENT_SOURCE::RetOutputPortEllipse(D2D1_ELLIPSE& out) const
 {
 	out = D2D1::Ellipse(RetOutputPortPoint(), PORT_RADIUS, PORT_RADIUS);
 	return;
-}
-
-ELEMENT_SOURCE* ELEMENT_SOURCE::Create(ID2D1HwndRenderTarget* target,
-									   BRUSH_SET* brush_set,
-									   float pos_x,
-									   float pos_y,
-									   unsigned id)
-{
-	ELEMENT_SOURCE* ret = new ELEMENT_SOURCE(target,
-											 brush_set,
-											 pos_x,
-											 pos_y,
-											 id);
-	if (ret)
-	{
-		return ret;
-	}
-	
-	return 0;
 }
 
 EVPV ELEMENT_SOURCE::MouseInput(const D2D1_POINT_2F& click)

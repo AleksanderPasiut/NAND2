@@ -1,24 +1,29 @@
+#include <stdexcept>
+
 #include "menu.h"
 
-MENU* MENU::Create(HWND hwnd)
+MENU::MENU(HWND in_hwnd)
+	: hwnd(in_hwnd),
+	  lParam(0)
 {
-	MENU* ret = new MENU;
+	try
+	{
+		hMenu = LoadMenu(0, "res_popup_menu");
+		if (!hMenu)
+			throw 0;
 
-	if (!ret)
-		return 0;
-
-	if (!(ret->hMenu = LoadMenu(0, "res_popup_menu")))
-	{	delete ret;
-		return 0;	}
-
-	if (!(ret->hSubMenu = GetSubMenu(ret->hMenu, 0)))
-	{	delete ret;
-		return 0;	}
-
-	ret->hwnd = hwnd;
-	ret->lParam = 0;
-
-	return ret;
+		hSubMenu = GetSubMenu(hMenu, 0);
+		if (!hSubMenu)
+			throw 1;
+	}
+	catch(int error_code)
+	{
+		switch(error_code)
+		{
+		case 1: DestroyMenu(hMenu);
+		case 0: throw std::bad_alloc();
+		}
+	}
 }
 MENU::~MENU()
 {

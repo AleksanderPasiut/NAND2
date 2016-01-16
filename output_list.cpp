@@ -9,10 +9,10 @@ OUTPUT_LIST::~OUTPUT_LIST()
 
 bool OUTPUT_LIST::add(ELEMENT* element, unsigned input)
 {
-	OUTPUT* new_tab = new OUTPUT[amount+1];
-
-	if (!new_tab)
-		return false;
+	OUTPUT* new_tab;
+	
+	try { new_tab = new OUTPUT[amount+1]; }
+	catch(...) { return false; }
 
 	for (unsigned i = 0; i < amount; i++)
 		new_tab[i] = tab[i];
@@ -26,10 +26,9 @@ bool OUTPUT_LIST::add(ELEMENT* element, unsigned input)
 
 bool OUTPUT_LIST::add_if_new(ELEMENT* element, unsigned input)
 {
-	OUTPUT* new_tab = new OUTPUT[amount+1];
-
-	if (!new_tab)
-		return false;
+	OUTPUT* new_tab;
+	try { new_tab = new OUTPUT[amount+1]; }
+	catch(...) { return false; }
 
 	for (unsigned i = 0; i < amount; i++)
 	{
@@ -53,10 +52,10 @@ bool OUTPUT_LIST::remove_first_element()
 	if (!amount)
 		return false;
 
-	OUTPUT* new_tab = new OUTPUT[amount-1];
-
-	if (!new_tab)
-		return false;
+	OUTPUT* new_tab;
+	
+	try { new_tab = new OUTPUT[amount-1]; }
+	catch(...) { return false; }
 
 	for (unsigned i = 1; i < amount; i++)
 		new_tab[i-1] = tab[i];
@@ -77,10 +76,10 @@ bool OUTPUT_LIST::remove(ELEMENT* element)
 	if (!del_amount)
 		return false;
 
-	OUTPUT* new_tab = new OUTPUT[amount-del_amount];
-
-	if (!new_tab)
-		return false;
+	OUTPUT* new_tab;
+	
+	try { new_tab = new OUTPUT[amount-del_amount]; }
+	catch(...) { return false; }
 
 	unsigned j = 0;
 	for (unsigned i = 0; i < amount; i++)
@@ -103,7 +102,10 @@ bool OUTPUT_LIST::remove(ELEMENT* element, unsigned input)
 	if (!del_amount)
 		return false;
 
-	OUTPUT* new_tab = new OUTPUT[amount-del_amount];
+	OUTPUT* new_tab;
+	
+	try { new_tab = new OUTPUT[amount-del_amount]; }
+	catch(...) { return false; }
 
 	if (!new_tab)
 		return false;

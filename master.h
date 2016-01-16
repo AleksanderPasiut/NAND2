@@ -91,9 +91,6 @@ private:
 	static D2D1_SIZE_U RetHwndClientSize(HWND); 
 
 private:
-	MASTER() : factory(0), dwfactory(0), target(0), brush_set(0), menu(0), saveload(0), unstable_system_notification(false) {}
-
-private:
 	// master_link.cpp
 	void Link(ELEMENT*, EVPV);
 	void PaintInputs();
@@ -102,7 +99,7 @@ private:
 
 public:
 	// master_create.cpp
-	static MASTER* Create(HWND);
+	MASTER(HWND);
 	~MASTER();
 
 	// master_gui.cpp

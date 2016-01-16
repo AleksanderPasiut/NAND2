@@ -12,7 +12,6 @@ private:
 	OUTPUT_LIST output_list;
 
 private:
-	ELEMENT_SOURCE(ID2D1HwndRenderTarget*, BRUSH_SET*, float pos_x, float pos_y, unsigned id);
 	~ELEMENT_SOURCE() {}
 
 private:
@@ -22,7 +21,7 @@ private:
 	void RetOutputPortEllipse(D2D1_ELLIPSE&) const;
 
 public:
-	static ELEMENT_SOURCE* Create(ID2D1HwndRenderTarget*, BRUSH_SET*, float pos_x, float pos_y, unsigned id);
+	ELEMENT_SOURCE(ID2D1HwndRenderTarget*, BRUSH_SET*, float pos_x, float pos_y, unsigned id);
 
 	EVPV MouseInput(const D2D1_POINT_2F&);
 	void Paint() const;

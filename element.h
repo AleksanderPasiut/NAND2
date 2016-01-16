@@ -30,12 +30,12 @@ public:
 	static const float CONTROL_RADIUS;
 
 protected:
-	// konstruktory chronione - tworzenie odbywa siê poprzez Create() klas pochodnych
+	// konstruktory chronione - tworzenie odbywa siê poprzez konstruktory klas pochodnych
 	ELEMENT() {}
 	ELEMENT(ID2D1HwndRenderTarget*, BRUSH_SET*, float pos_x, float pos_y, float width, float height, unsigned id, bool source_flag);
 
 	// destruktor chroniony - usuwanie odbywa siê poprzez ELEMENTS_SET::remove(ELEMENT*)
-	~ELEMENT() {}
+	virtual ~ELEMENT() {}
 
 protected:
 	static bool IsPointInRect(const D2D1_RECT_F&, const D2D1_POINT_2F&);

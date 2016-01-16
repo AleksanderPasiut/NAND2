@@ -196,11 +196,11 @@ void SAVELOAD::ReadElements()
 		case ELEMENT_TYPE_SOURCE:
 			{
 				EL_STATE state = read<EL_STATE>();
-				ELEMENT_SOURCE* element = ELEMENT_SOURCE::Create(Master->target,
-																 Master->brush_set,
-																 pos_x,
-																 pos_y,
-																 id);
+				ELEMENT_SOURCE* element = new ELEMENT_SOURCE(Master->target,
+															 Master->brush_set,
+															 pos_x,
+															 pos_y,
+															 id);
 				element->SetState(state);
 				added_element = reinterpret_cast<ELEMENT*>(element);
 				break;
@@ -208,35 +208,35 @@ void SAVELOAD::ReadElements()
 		case ELEMENT_TYPE_CLOCK:
 			{
 				unsigned elapse = read<unsigned>();
-				ELEMENT_CLOCK* element = ELEMENT_CLOCK::Create(Master->target,
-															   Master->brush_set,
-															   pos_x,
-															   pos_y,
-															   id,
-															   elapse,
-															   Master);
+				ELEMENT_CLOCK* element = new ELEMENT_CLOCK(Master->target,
+															Master->brush_set,
+															pos_x,
+															pos_y,
+															id,
+															elapse,
+															Master);
 				added_element = reinterpret_cast<ELEMENT*>(element);
 				break;
 			}
 		case ELEMENT_TYPE_NAND:
 			{
 				unsigned input_amount = read<unsigned>();
-				ELEMENT_NAND* element = ELEMENT_NAND::Create(Master->target,
-															 Master->brush_set,
-															 pos_x,
-															 pos_y,
-															 id,
-															 input_amount);
+				ELEMENT_NAND* element = new ELEMENT_NAND(Master->target,
+														 Master->brush_set,
+														 pos_x,
+														 pos_y,
+														 id,
+														 input_amount);
 				added_element = reinterpret_cast<ELEMENT*>(element);
 				break;
 			}
 		case ELEMENT_TYPE_OUTPUT:
 			{
-				ELEMENT_OUTPUT* element = ELEMENT_OUTPUT::Create(Master->target,
-																 Master->brush_set,
-																 pos_x,
-																 pos_y,
-																 id);
+				ELEMENT_OUTPUT* element = new ELEMENT_OUTPUT(Master->target,
+															 Master->brush_set,
+															 pos_x,
+															 pos_y,
+															 id);
 				added_element = reinterpret_cast<ELEMENT*>(element);
 				break;
 			}
@@ -290,15 +290,9 @@ void SAVELOAD::FinishWindowPosSetting()
 }
 
 // g³ówne funkcje
-SAVELOAD* SAVELOAD::Create(MASTER* ptr)
+SAVELOAD::SAVELOAD(MASTER* ptr)
+	: Master(ptr)
 {
-	SAVELOAD* ret = new SAVELOAD;
-
-	if (!ret)
-		return 0;
-
-	ret->Master = ptr;
-
 	// wyodrêbnienie œcie¿ki do aplikacji
 	wchar_t* command_line = GetCommandLineW();
 	int savepath_length = 1;
@@ -307,16 +301,11 @@ SAVELOAD* SAVELOAD::Create(MASTER* ptr)
 	while(command_line[savepath_length] != L'\\')
 		savepath_length--;
 	savepath_length += 7;
-	ret->savepath = new wchar_t [savepath_length];
+	savepath = new wchar_t [savepath_length];
 
-	if (!ret->savepath)
-	{	delete ret;
-		return 0;	}
-
-	memset(ret->savepath, 0, savepath_length*sizeof(wchar_t));
-	memcpy(ret->savepath, command_line+1, savepath_length*sizeof(wchar_t));
-	memcpy(ret->savepath+(savepath_length-7), L"config", 7*sizeof(wchar_t));
-	return ret;
+	memset(savepath, 0, savepath_length*sizeof(wchar_t));
+	memcpy(savepath, command_line+1, savepath_length*sizeof(wchar_t));
+	memcpy(savepath+(savepath_length-7), L"config", 7*sizeof(wchar_t));
 }
 bool SAVELOAD::Load() 
 {

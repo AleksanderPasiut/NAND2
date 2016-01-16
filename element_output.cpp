@@ -31,26 +31,6 @@ void ELEMENT_OUTPUT::RetInputPortEllipse(D2D1_ELLIPSE& out) const
 	return;
 }
 
-ELEMENT_OUTPUT* ELEMENT_OUTPUT::Create(ID2D1HwndRenderTarget* target,
-									   BRUSH_SET* brush_set,
-									   float pos_x,
-									   float pos_y,
-									   unsigned id)
-{
-	ELEMENT_OUTPUT* ret = new ELEMENT_OUTPUT(target,
-											 brush_set,
-											 pos_x,
-											 pos_y,
-											 id);
-
-	if (ret)
-	{
-		return ret;
-	}
-	
-	return 0;
-}
-
 EVPV ELEMENT_OUTPUT::MouseInput(const D2D1_POINT_2F& click)
 {
 	D2D1_ELLIPSE ellipse;

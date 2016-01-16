@@ -102,8 +102,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow)
 
 		if (hwnd)
 		{
-			if (Master = MASTER::Create(hwnd))
+			try
 			{
+				Master = new MASTER(hwnd);
+
 				MSG msg;
 				while(GetMessage(&msg, 0, 0, 0))
 				{	TranslateMessage(&msg);
@@ -113,6 +115,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow)
 
 				delete Master;
 			}
+			catch (...)
+			{	}
 
 			DestroyWindow(hwnd);
 		}

@@ -13,21 +13,20 @@
 
 #include <Windows.h>
 
+#include "noncopyable.h"
+
 class MENU
 {
+	NONCOPYABLE(MENU)
+
 private:
 	HWND hwnd;
 	HMENU hMenu;
 	HMENU hSubMenu;
 	LPARAM lParam;
 
-private:
-	MENU() { memset(this, 0, sizeof(MENU)); }
-	MENU(const MENU&) {}
-	MENU* operator= (const MENU&) {}
-
 public:
-	static MENU* Create(HWND);
+	MENU(HWND);
 	~MENU();
 
 	void Show(LPARAM);

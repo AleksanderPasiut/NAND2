@@ -194,12 +194,12 @@ unsigned MASTER::RetNewElementId()
 }
 ELEMENT* MASTER::Nand(unsigned input_amount, const D2D1_POINT_2F& position)
 {
-	return ELEMENT_NAND::Create(target,
-								brush_set,
-								position.x,
-								position.y,
-								RetNewElementId(),
-								input_amount);
+	return new ELEMENT_NAND(target,
+							brush_set,
+							position.x,
+							position.y,
+							RetNewElementId(),
+							input_amount);
 }
 void MASTER::MenuInput(WPARAM wParam, LPARAM lParam)
 {
@@ -212,73 +212,80 @@ void MASTER::MenuInput(WPARAM wParam, LPARAM lParam)
 	// jego po³o¿enie
 	D2D1_POINT_2F position = sns.Click(menu->RetPos());
 
-	switch(LOWORD(wParam))
+	try
 	{
-	case MENU_ADD_SOURCE:
+		switch(LOWORD(wParam))
 		{
-			element = ELEMENT_SOURCE::Create(target,
+		case MENU_ADD_SOURCE:
+			{
+				element = new ELEMENT_SOURCE(target,
 											 brush_set,
 											 position.x,
 											 position.y,
 											 RetNewElementId());
-			break;
-		}
-	case MENU_ADD_CLOCK:
-		{
-			if (unsigned elapse = static_cast<unsigned>(DialogBox(0, "res_dialog_add_clock", hwnd, reinterpret_cast<DLGPROC>(AddClockDialogProc))))
+				break;
+			}
+		case MENU_ADD_CLOCK:
 			{
-				element = ELEMENT_CLOCK::Create(target,
+				if (unsigned elapse = static_cast<unsigned>(DialogBox(0, "res_dialog_add_clock", hwnd, reinterpret_cast<DLGPROC>(AddClockDialogProc))))
+				{
+					element = new ELEMENT_CLOCK(target,
 												brush_set,
 												position.x,
 												position.y,
 												RetNewElementId(),
 												elapse,
 												this);
+				}
+				break;
 			}
-			break;
-		}
-	case MENU_ADD_NAND2: element = Nand(2, position); break;
-	case MENU_ADD_NAND3: element = Nand(3, position); break;
-	case MENU_ADD_NAND4: element = Nand(4, position); break;
-	case MENU_ADD_NAND: 
-		{
-			if (unsigned i = static_cast<unsigned>(DialogBox(0, "res_dialog_add_nand", hwnd, reinterpret_cast<DLGPROC>(AddNandDialogProc))))
-				element = Nand(i, position);
-			break;
-		}
-	case MENU_ADD_OUTPUT:
-		{
-			element = ELEMENT_OUTPUT::Create(target,
+		case MENU_ADD_NAND2: element = Nand(2, position); break;
+		case MENU_ADD_NAND3: element = Nand(3, position); break;
+		case MENU_ADD_NAND4: element = Nand(4, position); break;
+		case MENU_ADD_NAND: 
+			{
+				if (unsigned i = static_cast<unsigned>(DialogBox(0, "res_dialog_add_nand", hwnd, reinterpret_cast<DLGPROC>(AddNandDialogProc))))
+					element = Nand(i, position);
+				break;
+			}
+		case MENU_ADD_OUTPUT:
+			{
+				element = new ELEMENT_OUTPUT(target,
 											 brush_set,
 											 position.x,
 											 position.y,
 											 RetNewElementId());
-			break;
-		}
-	case MENU_ADD_COMMENT:
-		{
-			const COMMENT_DIALOG_RET_VALUE* cdrv = reinterpret_cast<COMMENT_DIALOG_RET_VALUE*>(DialogBox(0, "res_dialog_add_comment", hwnd, reinterpret_cast<DLGPROC>(AddCommentDialogProc)));
-			if (cdrv->text)
-			{
-				element = ELEMENT_COMMENT::Create(target,
-												  brush_set,
-												  position.x,
-												  position.y,
-												  cdrv->text,
-												  dwfactory);
+				break;
 			}
-			break;
+		case MENU_ADD_COMMENT:
+			{
+				const COMMENT_DIALOG_RET_VALUE* cdrv = reinterpret_cast<COMMENT_DIALOG_RET_VALUE*>(DialogBox(0, "res_dialog_add_comment", hwnd, reinterpret_cast<DLGPROC>(AddCommentDialogProc)));
+				if (cdrv->text)
+				{
+					element = ELEMENT_COMMENT::Create(target,
+													  brush_set,
+													  position.x,
+													  position.y,
+													  cdrv->text,
+													  dwfactory);
+				}
+				break;
+			}
+		case MENU_CLEAR_BOARD:
+			{
+				if (IDYES == MessageBox(hwnd, "Czy na pewno chcesz usun¹æ wszystkie elementy?", "Usuwanie elementów", MB_YESNO))
+					elements_set.clear();
+				break;
+			}
 		}
-	case MENU_CLEAR_BOARD:
-		{
-			if (IDYES == MessageBox(hwnd, "Czy na pewno chcesz usun¹æ wszystkie elementy?", "Usuwanie elementów", MB_YESNO))
-				elements_set.clear();
-			break;
-		}
-	}
 
-	if (element)
+		if (element)
 		elements_set.add(element);
+	}
+	catch(...)
+	{
+		MessageBox(hwnd, "B³¹d tworzenia elementu", "B³¹d tworzenia elementu", MB_ICONERROR | MB_OK);
+	}		
 
 	Paint();
 	return;

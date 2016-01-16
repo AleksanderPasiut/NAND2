@@ -16,7 +16,6 @@ private:
 	OUTPUT_LIST output_list;
 
 private:
-	ELEMENT_CLOCK(ID2D1HwndRenderTarget*, BRUSH_SET*, float pos_x, float pos_y, unsigned id, unsigned in_elapse, MASTER* Master);
 	~ELEMENT_CLOCK();
 
 private:
@@ -27,7 +26,7 @@ private:
 	void PaintElapse() const;
 
 public:
-	static ELEMENT_CLOCK* Create(ID2D1HwndRenderTarget*, BRUSH_SET*, float pos_x, float pos_y, unsigned id, unsigned in_elapse, MASTER* Master);
+	ELEMENT_CLOCK(ID2D1HwndRenderTarget*, BRUSH_SET*, float pos_x, float pos_y, unsigned id, unsigned in_elapse, MASTER* Master);
 
 	EVPV MouseInput(const D2D1_POINT_2F&);
 	void Paint() const;

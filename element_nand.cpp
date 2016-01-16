@@ -44,24 +44,6 @@ void ELEMENT_NAND::RetOutputPortEllipse(D2D1_ELLIPSE& out) const
 	return;
 }
 
-ELEMENT_NAND* ELEMENT_NAND::Create(ID2D1HwndRenderTarget* target,
-									   BRUSH_SET* brush_set,
-									   float pos_x,
-									   float pos_y,
-									   unsigned id,
-									   unsigned input_amount)
-{
-	ELEMENT_NAND* ret = new ELEMENT_NAND(target,
-										 brush_set,
-										 pos_x,
-										 pos_y,
-										 id,
-										 input_amount);
-
-	
-	return ret;
-}
-
 EVPV ELEMENT_NAND::MouseInput(const D2D1_POINT_2F& click)
 {
 	D2D1_ELLIPSE ellipse;

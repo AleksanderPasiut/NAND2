@@ -28,9 +28,6 @@ private:
 	};
 
 private:
-	SAVELOAD() { savepath = 0; }
-
-private:
 	template<typename T> inline void write(const T ptr);
 	template<typename T> inline T read();
 
@@ -47,7 +44,7 @@ private:
 	void FinishWindowPosSetting();
 
 public:
-	static SAVELOAD* Create(MASTER* Master);
+	SAVELOAD::SAVELOAD(MASTER* Master);
 	~SAVELOAD() { delete[] savepath; }
 
 	bool Load();

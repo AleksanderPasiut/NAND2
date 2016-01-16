@@ -11,20 +11,19 @@ ELEMENTS_SET::~ELEMENTS_SET()
 
 bool ELEMENTS_SET::add(ELEMENT* element)
 {
-	ELEMENT** new_set = new ELEMENT* [amount+1];
+	ELEMENT** new_set;
+	
+	try { new_set = new ELEMENT* [amount+1]; }
+	catch(...) { return false; }
 
-	if (new_set)
-	{
-		for (unsigned i = 0; i < amount; i++)
-			new_set[i] = set[i];
+	for (unsigned i = 0; i < amount; i++)
+		new_set[i] = set[i];
 
-		new_set[amount++] = element;
+	new_set[amount++] = element;
 
-		delete[] set;
-		set = new_set;
-		return true;
-	}
-	return false;
+	delete[] set;
+	set = new_set;
+	return true;
 }
 bool ELEMENTS_SET::remove(ELEMENT* element)
 {
@@ -36,23 +35,21 @@ bool ELEMENTS_SET::remove(ELEMENT* element)
 	if (index == amount)
 		return false;
 
-	ELEMENT** new_set = new ELEMENT* [amount-1];
+	ELEMENT** new_set;
+	try { new_set = new ELEMENT* [amount-1]; }
+	catch(...) { return false; }
 
-	if (new_set)
-	{
-		unsigned i = 0;
-		for (; i < index; i++)
-			new_set[i] = set[i];
-		delete element;
-		for (; i < amount; i++)
-			new_set[i] = set[i+1];
+	unsigned i = 0;
+	for (; i < index; i++)
+		new_set[i] = set[i];
+	delete element;
+	for (; i < amount; i++)
+		new_set[i] = set[i+1];
 
-		amount--;
-		delete[] set;
-		set = new_set;
-		return true;
-	}
-	return false;
+	amount--;
+	delete[] set;
+	set = new_set;
+	return true;
 }
 bool ELEMENTS_SET::set_on_top(ELEMENT* element)
 {

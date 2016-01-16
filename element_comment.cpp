@@ -8,19 +8,12 @@ ELEMENT_COMMENT::ELEMENT_COMMENT(ID2D1HwndRenderTarget* target,
 								 float pos_x,
 								 float pos_y,
 								 float width,
-								 float height) :
-			ELEMENT(target,
-					brush_set,
-					pos_x,
-					pos_y,
-					width,
-					height,
-					0,
-					false),
-			text_layout(0) {}
+								 float height)
+	: ELEMENT(target, brush_set, pos_x, pos_y, width, height, 0, false) {}
+
 ELEMENT_COMMENT::~ELEMENT_COMMENT()
 {
-	if (text_layout) text_layout->Release();
+	text_layout->Release();
 	delete[] text;
 }
 
@@ -52,16 +45,21 @@ ELEMENT_COMMENT* ELEMENT_COMMENT::Create(ID2D1HwndRenderTarget* target,
 	DWRITE_TEXT_METRICS metrics;
 	layout->GetMetrics(&metrics);
 
-	ELEMENT_COMMENT* ret = new ELEMENT_COMMENT(target,
-											   brush_set,
-											   pos_x,
-											   pos_y,
-											   metrics.width+2*TEXT_MARGIN,
-											   metrics.height+TEXT_MARGIN_TOP+TEXT_MARGIN);
-	
-	if (!ret)
-	{	layout->Release();
-		return 0;	}
+	ELEMENT_COMMENT* ret = 0;
+	try
+	{
+		ret = new ELEMENT_COMMENT(target,
+									brush_set,
+									pos_x,
+									pos_y,
+									metrics.width+2*TEXT_MARGIN,
+									metrics.height+TEXT_MARGIN_TOP+TEXT_MARGIN);
+	}
+	catch(...)
+	{
+		layout->Release();
+		return 0;
+	}
 
 	ret->text = wtext;
 	ret->text_layout = layout;
@@ -96,16 +94,21 @@ ELEMENT_COMMENT* ELEMENT_COMMENT::Create(ID2D1HwndRenderTarget* target,
 	DWRITE_TEXT_METRICS metrics;
 	layout->GetMetrics(&metrics);
 
-	ELEMENT_COMMENT* ret = new ELEMENT_COMMENT(target,
-											   brush_set,
-											   pos_x,
-											   pos_y,
-											   metrics.width+2*TEXT_MARGIN,
-											   metrics.height+TEXT_MARGIN_TOP+TEXT_MARGIN);
-	
-	if (!ret)
-	{	layout->Release();
-		return 0;	}
+	ELEMENT_COMMENT* ret = 0;
+	try
+	{
+		ret = new ELEMENT_COMMENT(target,
+									brush_set,
+									pos_x,
+									pos_y,
+									metrics.width+2*TEXT_MARGIN,
+									metrics.height+TEXT_MARGIN_TOP+TEXT_MARGIN);
+	}
+	catch(...)
+	{	
+		layout->Release();
+		return 0;
+	}
 
 	ret->text = wtext;
 	ret->text_layout = layout;
