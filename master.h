@@ -116,6 +116,7 @@ public:
 	void Proceed(ELEMENT* starting_element);
 
 	void Save() { saveload->Save(); }
+	HWND RetHwnd() { return hwnd; }
 
 	friend class SAVELOAD;
 };

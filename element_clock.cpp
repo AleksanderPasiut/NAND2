@@ -18,7 +18,7 @@ ELEMENT_CLOCK::ELEMENT_CLOCK(ID2D1HwndRenderTarget* target,
 }
 ELEMENT_CLOCK::~ELEMENT_CLOCK()
 {
-	KillTimer(target->GetHwnd(), reinterpret_cast<UINT_PTR>(this));
+	KillTimer(Master->RetHwnd(), reinterpret_cast<UINT_PTR>(this));
 }
 
 D2D1_POINT_2F ELEMENT_CLOCK::RetControlPoint() const
